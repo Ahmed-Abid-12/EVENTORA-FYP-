@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Confirmation | Eventora</title>
+  <meta name="description" content="Demo payment confirmation for an Eventora booking." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="../client/dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="../client/create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="../client/my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="../client/budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="../client/bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="../client/saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="../client/reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="../ai/recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="../ai/chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="../ai/review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="../client/notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="../client/profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="../client/settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Payment Confirmation</h1>
+          <p class="topbar-sub">Demo confirmation — nothing was charged</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="../client/notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="../client/profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content">
+
+      <section class="pay-result glass-card">
+        <div class="result-icon success">
+          <i class="bi bi-check2-circle" aria-hidden="true"></i>
+        </div>
+
+        <h1>Demo payment confirmation</h1>
+
+        <!-- Unambiguous: no money moved. -->
+        <p class="pr-lede"><strong>No money was charged or transferred.</strong> Payment processing is
+           not built, so this is a demonstration of what a confirmation will look like. No record was
+           written to the database and no provider was contacted.</p>
+
+        <span class="pr-ref">
+          <i class="bi bi-receipt" aria-hidden="true"></i>
+          Booking EVB-0001 · Demo transaction EVP-DEMO-000000
+        </span>
+
+        <!-- FUTURE PHP: this page is reached only after
+             POST /api/payment-create.php returns a successful provider result.
+             It must re-read the payment server-side rather than trusting any
+             query parameter — otherwise anyone could load a success page by
+             editing the URL. -->
+        <div class="pr-details">
+          <div class="pr-row">
+            <span class="pr-key">Booking reference</span>
+            <span class="pr-val">EVB-0001</span>
+          </div>
+          <div class="pr-row">
+            <span class="pr-key">Transaction ID</span>
+            <span class="pr-val ph-txn">EVP-DEMO-000000 <span class="demo-tag muted">Demo</span></span>
+          </div>
+          <div class="pr-row">
+            <span class="pr-key">Event</span>
+            <span class="pr-val">Sample Wedding</span>
+          </div>
+          <div class="pr-row">
+            <span class="pr-key">Vendor</span>
+            <span class="pr-val">Riverside Banquet Hall</span>
+          </div>
+          <div class="pr-row">
+            <span class="pr-key">Service</span>
+            <span class="pr-val">Main Hall Booking</span>
+          </div>
+          <div class="pr-row">
+            <span class="pr-key">Amount</span>
+            <span class="pr-val amount">Rs. 180,000</span>
+          </div>
+          <div class="pr-row">
+            <span class="pr-key">Payment method</span>
+            <span class="pr-val">EasyPaisa <span class="pm-enum">(<code>easypaisa</code>)</span></span>
+          </div>
+          <div class="pr-row">
+            <span class="pr-key">Payment status</span>
+            <span class="pr-val"><span class="payment-status success">success</span></span>
+          </div>
+          <div class="pr-row">
+            <span class="pr-key">Date and time</span>
+            <span class="pr-val">Not recorded — no transaction took place</span>
+          </div>
+        </div>
+
+        <div class="pr-steps">
+          <h2>What happens next</h2>
+          <div class="pr-step">
+            <span class="ps-num">1</span>
+            <p>Your vendor is notified that payment is complete and confirms the arrangements for
+               <strong>15 Dec 2026</strong>.</p>
+          </div>
+          <div class="pr-step">
+            <span class="ps-num">2</span>
+            <p>The booking stays <strong>accepted</strong> until the service is delivered. Paying does
+               not complete a booking — <strong>the vendor marks it completed</strong> afterwards.</p>
+          </div>
+          <div class="pr-step">
+            <span class="ps-num">3</span>
+            <p>Once the booking is <strong>completed</strong>, you can leave a review. One review per
+               booking.</p>
+          </div>
+        </div>
+
+        <div class="pr-actions">
+          <a href="../client/booking-detail.html?booking_id=1"
+             class="btn-eventora btn-primary">View Booking</a>
+          <a href="../client/bookings.html" class="btn-eventora btn-ghost">My Bookings</a>
+          <a href="../client/dashboard.html" class="btn-eventora btn-ghost">Dashboard</a>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

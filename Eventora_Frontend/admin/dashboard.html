@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | Eventora Admin</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Admin navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Admin</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Overview</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="reports.html"><i class="bi bi-graph-up" aria-hidden="true"></i> Reports</a></li>
+      </ul>
+
+      <p class="dash-nav-label">People</p>
+      <ul>
+        <li><a href="users.html"><i class="bi bi-people" aria-hidden="true"></i> Users</a></li>
+        <li><a href="vendors.html"><i class="bi bi-shop" aria-hidden="true"></i> Vendors</a></li>
+        <li><a href="vendor-approval.html"><i class="bi bi-patch-check" aria-hidden="true"></i> Vendor Approval
+          <span class="nav-count">6</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Platform</p>
+      <ul>
+        <li><a href="categories.html"><i class="bi bi-tags" aria-hidden="true"></i> Categories</a></li>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> Bookings</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+        <li><a href="commission.html"><i class="bi bi-percent" aria-hidden="true"></i> Commission</a></li>
+        <li><a href="chatbot-logs.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chatbot Logs</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Dashboard</h1>
+          <p class="topbar-sub">Platform overview</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="vendor-approval.html" class="icon-btn" aria-label="Vendor approvals">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="settings.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">EA</span>
+          <span>
+            <span class="who d-block">Eventora Admin</span>
+            <span class="role">Administrator</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content">
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo admin dashboard.</strong> You are not signed in. Every figure is derived from
+           the same demo data the client and vendor modules use, deduplicated across both — a booking
+           seen by a client and by its vendor is counted once.</p>
+      </div>
+
+      <div class="stat-grid">
+        <!-- FUTURE PHP: SELECT COUNT(*) FROM users -->
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value">58</p>
+          <p class="m-label">Total Users</p>
+          <p class="m-sub">37 clients · 20 vendors · 1 admin</p>
+        </div>
+
+        <!-- FUTURE PHP: SELECT COUNT(*) FROM vendor_profiles WHERE is_verified = 1 -->
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon green"><i class="bi bi-patch-check" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value">14</p>
+          <p class="m-label">Verified Vendors</p>
+          <p class="m-sub">of 20 registered</p>
+        </div>
+
+        <!-- FUTURE PHP: ... WHERE is_verified = 0 -->
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon gold"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value">6</p>
+          <p class="m-label">Awaiting Verification</p>
+          <p class="m-sub">Not listed publicly until approved</p>
+        </div>
+
+        <!-- FUTURE PHP: SELECT COUNT(*) FROM bookings -->
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon"><i class="bi bi-journal-check" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value">46</p>
+          <p class="m-label">Total Bookings</p>
+          <p class="m-sub">2 awaiting a vendor response</p>
+        </div>
+
+        <!-- FUTURE PHP: SUM(total_amount) WHERE status = 'completed' -->
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon"><i class="bi bi-graph-up" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value">Rs. 3,496,000</p>
+          <p class="m-label">Gross Booking Value</p>
+          <p class="m-sub">Across 33 completed bookings</p>
+        </div>
+
+        <!-- FUTURE PHP: SELECT SUM(commission_amount) FROM commissions -->
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon gold"><i class="bi bi-percent" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value">Rs. 349,600</p>
+          <p class="m-label">Platform Revenue</p>
+          <p class="m-sub">10% commission on completed bookings only</p>
+        </div>
+
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon green"><i class="bi bi-wallet2" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value">Rs. 3,146,400</p>
+          <p class="m-label">Paid to Vendors</p>
+          <p class="m-sub">Gross minus commission</p>
+        </div>
+
+        <!-- FUTURE PHP: SELECT COUNT(*) FROM categories WHERE is_active = 1 -->
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon"><i class="bi bi-tags" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value">7</p>
+          <p class="m-label">Active Categories</p>
+          <p class="m-sub">Soft-deleted, never removed</p>
+        </div>
+      </div>
+
+      <div class="dash-split">
+        <section class="dash-panel glass-card">
+          <div class="dash-section-head">
+            <h2>Vendors awaiting verification</h2>
+            <a href="vendor-approval.html">Review queue</a>
+          </div>
+
+          <!-- FUTURE PHP: SELECT vp.vendor_id, vp.business_name, vp.city, c.name
+                 FROM vendor_profiles vp ... WHERE vp.is_verified = 0
+                 ORDER BY vp.created_at ASC; -->
+          <div class="dash-table-wrap">
+            <table class="dash-table">
+              <thead>
+                <tr><th>Business</th><th>City</th><th>Status</th><th class="cell-actions">&nbsp;</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <span class="cell-strong">Sound Circle Entertainment</span>
+                    <span class="cell-sub">DJ</span>
+                  </td>
+                  <td>Hyderabad</td>
+                  <td><span class="verify-badge unverified">
+                    <i class="bi bi-hourglass-split" aria-hidden="true"></i> Awaiting</span></td>
+                  <td class="cell-actions"><a href="vendor-approval.html" class="link-action">Review</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="cell-strong">Campus Caterers</span>
+                    <span class="cell-sub">Catering</span>
+                  </td>
+                  <td>Jamshoro</td>
+                  <td><span class="verify-badge unverified">
+                    <i class="bi bi-hourglass-split" aria-hidden="true"></i> Awaiting</span></td>
+                  <td class="cell-actions"><a href="vendor-approval.html" class="link-action">Review</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="cell-strong">Petal &amp; Drape</span>
+                    <span class="cell-sub">Decoration</span>
+                  </td>
+                  <td>Jamshoro</td>
+                  <td><span class="verify-badge unverified">
+                    <i class="bi bi-hourglass-split" aria-hidden="true"></i> Awaiting</span></td>
+                  <td class="cell-actions"><a href="vendor-approval.html" class="link-action">Review</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="cell-strong">Rhythm &amp; Beats DJ</span>
+                    <span class="cell-sub">DJ</span>
+                  </td>
+                  <td>Larkana</td>
+                  <td><span class="verify-badge unverified">
+                    <i class="bi bi-hourglass-split" aria-hidden="true"></i> Awaiting</span></td>
+                  <td class="cell-actions"><a href="vendor-approval.html" class="link-action">Review</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="cell-strong">Desert Rose Decor</span>
+                    <span class="cell-sub">Decoration</span>
+                  </td>
+                  <td>Mirpurkhas</td>
+                  <td><span class="verify-badge unverified">
+                    <i class="bi bi-hourglass-split" aria-hidden="true"></i> Awaiting</span></td>
+                  <td class="cell-actions"><a href="vendor-approval.html" class="link-action">Review</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="panel-note mt-3">An unverified vendor is never listed in the public marketplace.
+             Verification is separate from account status — see the approval queue.</p>
+        </section>
+
+        <div>
+          <section class="dash-panel glass-card mb-3">
+            <div class="dash-section-head">
+              <h2>Bookings by status</h2>
+              <a href="bookings.html">All bookings</a>
+            </div>
+          <div class="dist-row">
+            <span>Pending</span>
+            <div class="dist-bar"><span class="pending" data-pct="4"></span></div>
+            <span>2</span>
+          </div>
+          <div class="dist-row">
+            <span>Accepted</span>
+            <div class="dist-bar"><span class="accepted" data-pct="15"></span></div>
+            <span>7</span>
+          </div>
+          <div class="dist-row">
+            <span>Completed</span>
+            <div class="dist-bar"><span class="completed" data-pct="72"></span></div>
+            <span>33</span>
+          </div>
+          <div class="dist-row">
+            <span>Rejected</span>
+            <div class="dist-bar"><span class="rejected" data-pct="4"></span></div>
+            <span>2</span>
+          </div>
+          <div class="dist-row">
+            <span>Cancelled</span>
+            <div class="dist-bar"><span class="cancelled" data-pct="4"></span></div>
+            <span>2</span>
+          </div>
+            <p class="panel-note mt-3">The five frozen booking statuses. Rejected and cancelled are
+               counted separately because they mean different things: a vendor declined, versus a
+               client withdrew.</p>
+          </section>
+
+          <section class="dash-panel glass-card mb-3">
+            <div class="dash-section-head"><h2>Revenue split</h2></div>
+            <div class="earn-row">
+              <span class="e-key">Gross booking value</span>
+              <span class="e-val">Rs. 3,496,000</span>
+            </div>
+            <div class="earn-row is-deduction">
+              <span class="e-key">Platform commission (10%)</span>
+              <span class="e-val">Rs. 349,600</span>
+            </div>
+            <div class="earn-row is-total">
+              <span class="e-key">Paid to vendors</span>
+              <span class="e-val">Rs. 3,146,400</span>
+            </div>
+            <p class="panel-note mt-3">Only completed bookings contribute. Pending, accepted,
+               rejected and cancelled bookings have earned the platform nothing.</p>
+          </section>
+
+          <section class="dash-panel glass-card">
+            <div class="dash-section-head"><h2>Quick actions</h2></div>
+            <div class="quick-actions">
+              <a href="vendor-approval.html" class="quick-action">
+                <i class="bi bi-patch-check" aria-hidden="true"></i> Approvals</a>
+              <a href="users.html" class="quick-action">
+                <i class="bi bi-people" aria-hidden="true"></i> Users</a>
+              <a href="categories.html" class="quick-action">
+                <i class="bi bi-tags" aria-hidden="true"></i> Categories</a>
+              <a href="commission.html" class="quick-action">
+                <i class="bi bi-percent" aria-hidden="true"></i> Commission</a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

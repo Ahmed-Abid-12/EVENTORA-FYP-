@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reviews | Eventora Vendor</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Vendor navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Vendor</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Business</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="business-profile.html"><i class="bi bi-shop" aria-hidden="true"></i> Business Profile</a></li>
+        <li><a href="services.html"><i class="bi bi-box-seam" aria-hidden="true"></i> Services
+          <span class="nav-count">3</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="booking-requests.html"><i class="bi bi-inbox" aria-hidden="true"></i> Booking Requests
+          <span class="nav-count">2</span></a></li>
+        <li><a href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i> Calendar</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="reviews.html"><i class="bi bi-star" aria-hidden="true"></i> Reviews</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Reviews</h1>
+          <p class="topbar-sub">What clients said after completed bookings</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="booking-requests.html" class="icon-btn" aria-label="Booking requests">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="business-profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">LL</span>
+          <span>
+            <span class="who d-block">Lens &amp; Light Studio</span>
+            <span class="role">Vendor account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-vendor-reviews>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo reviews.</strong> 31 sample reviews, one per completed booking. Your
+           public listing shows 4.9 from 31 reviews, and these
+           records reconcile with that figure.</p>
+      </div>
+
+      <section class="vr-overview glass-card">
+        <div class="vr-score-box">
+          <span class="vs-num">4.9</span>
+          <span class="vs-stars">★★★★★<span class="off"></span></span>
+          <span class="vs-count">31 reviews</span>
+        </div>
+        <div class="rating-bars">
+              <div class="rating-bar-row">
+                <span>5★</span>
+                <div class="rating-bar"><span data-pct="90"></span></div>
+                <span>28</span>
+              </div>
+              <div class="rating-bar-row">
+                <span>4★</span>
+                <div class="rating-bar"><span data-pct="10"></span></div>
+                <span>3</span>
+              </div>
+              <div class="rating-bar-row">
+                <span>3★</span>
+                <div class="rating-bar"><span data-pct="0"></span></div>
+                <span>0</span>
+              </div>
+              <div class="rating-bar-row">
+                <span>2★</span>
+                <div class="rating-bar"><span data-pct="0"></span></div>
+                <span>0</span>
+              </div>
+              <div class="rating-bar-row">
+                <span>1★</span>
+                <div class="rating-bar"><span data-pct="0"></span></div>
+                <span>0</span>
+              </div>
+        </div>
+      </section>
+
+      <div class="br-toolbar">
+        <div class="br-filters" role="group" aria-label="Filter reviews by rating">
+            <button type="button" class="faq-filter is-active" data-vr-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="faq-filter" data-vr-filter="5" aria-pressed="false">5 stars</button>
+            <button type="button" class="faq-filter" data-vr-filter="4" aria-pressed="false">4 stars</button>
+            <button type="button" class="faq-filter" data-vr-filter="3" aria-pressed="false">3 stars</button>
+            <button type="button" class="faq-filter" data-vr-filter="2" aria-pressed="false">2 stars</button>
+            <button type="button" class="faq-filter" data-vr-filter="1" aria-pressed="false">1 star</button>
+        </div>
+        <div class="bookings-search">
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <label for="vr-search" class="visually-hidden">Search reviews</label>
+          <input type="search" id="vr-search" data-vr-search
+                 placeholder="Search by client, service, event or text" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="dash-section-head">
+        <h2 data-vr-count aria-live="polite"></h2>
+        <span class="rv-meta">One review per completed booking</span>
+      </div>
+
+      <!-- FUTURE PHP:
+           SELECT r.review_id, r.rating, r.review_text, r.created_at, r.sentiment_score,
+                  b.booking_id, e.event_name, s.title, u.name AS client_name
+           FROM reviews r
+           JOIN bookings b        ON b.booking_id = r.booking_id
+           JOIN events e          ON e.event_id   = b.event_id
+           JOIN services s        ON s.service_id = b.service_id
+           JOIN client_profiles cp ON cp.client_id = r.client_id
+           JOIN users u           ON u.id = cp.user_id
+           WHERE r.vendor_id = :vendor_id
+           ORDER BY r.created_at DESC;
+
+           A review exists only where bookings.status = 'completed', and
+           reviews.booking_id is UNIQUE, so one booking can never carry two.
+           sentiment_score is written by the Python NLP module — PHP reads it,
+           never writes it, and the vendor cannot edit or remove a review. -->
+      <div class="rv-list" data-vr-list>
+          <article class="vr-card glass-card"
+                   data-booking-id="24"
+                   data-rating="5"
+                   data-client="Sample Client E"
+                   data-service="Full-Day Coverage"
+                   data-event="Sample Family Gathering">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client E</p>
+                <p class="vr-ctx">Full-Day Coverage<span class="sep">·</span>Sample Family Gathering
+                  <br />EVB-0024<span class="sep">·</span>18 Apr 2026</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Arrived early, worked around our schedule and delivered the gallery ahead of the promised date.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1001"
+                   data-rating="5"
+                   data-client="Sample Client A1"
+                   data-service="Half-Day Coverage"
+                   data-event="Sample Wedding Reception">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client A1</p>
+                <p class="vr-ctx">Half-Day Coverage<span class="sep">·</span>Sample Wedding Reception
+                  <br />EVB-1001<span class="sep">·</span>4 Jun 2026</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Very easy to coordinate with. The edits came back exactly in the style we discussed beforehand.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1002"
+                   data-rating="5"
+                   data-client="Sample Client B1"
+                   data-service="Full-Day Coverage"
+                   data-event="Sample Mehndi Night">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client B1</p>
+                <p class="vr-ctx">Full-Day Coverage<span class="sep">·</span>Sample Mehndi Night
+                  <br />EVB-1002<span class="sep">·</span>7 May 2026</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Professional throughout. Guests barely noticed the team working, which is exactly what we wanted.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1003"
+                   data-rating="4"
+                   data-client="Sample Client C1"
+                   data-service="Cinematic Film Package"
+                   data-event="Sample Corporate Gala">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client C1</p>
+                <p class="vr-ctx">Cinematic Film Package<span class="sep">·</span>Sample Corporate Gala
+                  <br />EVB-1003<span class="sep">·</span>10 Apr 2026</p>
+              </div>
+              <span class="vr-rating" aria-label="4 out of 5">★★★★<span class="off">★</span></span>
+            </div>
+            <p class="vr-body">Good coverage of every part of the day. A few shots we asked for were missed but the rest was strong.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip neutral">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Mixed · 0.68
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1004"
+                   data-rating="5"
+                   data-client="Sample Client D1"
+                   data-service="Half-Day Coverage"
+                   data-event="Sample Engagement Dinner">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client D1</p>
+                <p class="vr-ctx">Half-Day Coverage<span class="sep">·</span>Sample Engagement Dinner
+                  <br />EVB-1004<span class="sep">·</span>13 Mar 2026</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Clear communication from booking to delivery, and the final album quality was excellent.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1005"
+                   data-rating="5"
+                   data-client="Sample Client E1"
+                   data-service="Full-Day Coverage"
+                   data-event="Sample Birthday Celebration">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client E1</p>
+                <p class="vr-ctx">Full-Day Coverage<span class="sep">·</span>Sample Birthday Celebration
+                  <br />EVB-1005<span class="sep">·</span>16 Feb 2026</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Responsive to questions and flexible when our timings shifted on the day.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1006"
+                   data-rating="5"
+                   data-client="Sample Client F1"
+                   data-service="Cinematic Film Package"
+                   data-event="Sample Anniversary">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client F1</p>
+                <p class="vr-ctx">Cinematic Film Package<span class="sep">·</span>Sample Anniversary
+                  <br />EVB-1006<span class="sep">·</span>19 Jan 2026</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Arrived early, worked around our schedule and delivered the gallery ahead of the promised date.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1007"
+                   data-rating="5"
+                   data-client="Sample Client G1"
+                   data-service="Half-Day Coverage"
+                   data-event="Sample Product Launch">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client G1</p>
+                <p class="vr-ctx">Half-Day Coverage<span class="sep">·</span>Sample Product Launch
+                  <br />EVB-1007<span class="sep">·</span>22 Dec 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Very easy to coordinate with. The edits came back exactly in the style we discussed beforehand.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1008"
+                   data-rating="5"
+                   data-client="Sample Client H1"
+                   data-service="Full-Day Coverage"
+                   data-event="Sample Graduation Party">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client H1</p>
+                <p class="vr-ctx">Full-Day Coverage<span class="sep">·</span>Sample Graduation Party
+                  <br />EVB-1008<span class="sep">·</span>25 Nov 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Professional throughout. Guests barely noticed the team working, which is exactly what we wanted.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1009"
+                   data-rating="5"
+                   data-client="Sample Client I1"
+                   data-service="Cinematic Film Package"
+                   data-event="Sample Family Reunion">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client I1</p>
+                <p class="vr-ctx">Cinematic Film Package<span class="sep">·</span>Sample Family Reunion
+                  <br />EVB-1009<span class="sep">·</span>4 Oct 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Good coverage of every part of the day. A few shots we asked for were missed but the rest was strong.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1010"
+                   data-rating="5"
+                   data-client="Sample Client J1"
+                   data-service="Half-Day Coverage"
+                   data-event="Sample Award Evening">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client J1</p>
+                <p class="vr-ctx">Half-Day Coverage<span class="sep">·</span>Sample Award Evening
+                  <br />EVB-1010<span class="sep">·</span>7 Sep 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Clear communication from booking to delivery, and the final album quality was excellent.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1011"
+                   data-rating="5"
+                   data-client="Sample Client K1"
+                   data-service="Full-Day Coverage"
+                   data-event="Sample Wedding Reception">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client K1</p>
+                <p class="vr-ctx">Full-Day Coverage<span class="sep">·</span>Sample Wedding Reception
+                  <br />EVB-1011<span class="sep">·</span>10 Aug 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Responsive to questions and flexible when our timings shifted on the day.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1012"
+                   data-rating="5"
+                   data-client="Sample Client L1"
+                   data-service="Cinematic Film Package"
+                   data-event="Sample Mehndi Night">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client L1</p>
+                <p class="vr-ctx">Cinematic Film Package<span class="sep">·</span>Sample Mehndi Night
+                  <br />EVB-1012<span class="sep">·</span>13 Jul 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Arrived early, worked around our schedule and delivered the gallery ahead of the promised date.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1013"
+                   data-rating="5"
+                   data-client="Sample Client M1"
+                   data-service="Half-Day Coverage"
+                   data-event="Sample Corporate Gala">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client M1</p>
+                <p class="vr-ctx">Half-Day Coverage<span class="sep">·</span>Sample Corporate Gala
+                  <br />EVB-1013<span class="sep">·</span>16 Jun 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Very easy to coordinate with. The edits came back exactly in the style we discussed beforehand.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1014"
+                   data-rating="4"
+                   data-client="Sample Client N1"
+                   data-service="Full-Day Coverage"
+                   data-event="Sample Engagement Dinner">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client N1</p>
+                <p class="vr-ctx">Full-Day Coverage<span class="sep">·</span>Sample Engagement Dinner
+                  <br />EVB-1014<span class="sep">·</span>19 May 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="4 out of 5">★★★★<span class="off">★</span></span>
+            </div>
+            <p class="vr-body">Professional throughout. Guests barely noticed the team working, which is exactly what we wanted.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip neutral">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Mixed · 0.68
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1015"
+                   data-rating="5"
+                   data-client="Sample Client O1"
+                   data-service="Cinematic Film Package"
+                   data-event="Sample Birthday Celebration">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client O1</p>
+                <p class="vr-ctx">Cinematic Film Package<span class="sep">·</span>Sample Birthday Celebration
+                  <br />EVB-1015<span class="sep">·</span>22 Apr 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Good coverage of every part of the day. A few shots we asked for were missed but the rest was strong.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1016"
+                   data-rating="5"
+                   data-client="Sample Client P1"
+                   data-service="Half-Day Coverage"
+                   data-event="Sample Anniversary">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client P1</p>
+                <p class="vr-ctx">Half-Day Coverage<span class="sep">·</span>Sample Anniversary
+                  <br />EVB-1016<span class="sep">·</span>25 Mar 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Clear communication from booking to delivery, and the final album quality was excellent.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1017"
+                   data-rating="5"
+                   data-client="Sample Client Q1"
+                   data-service="Full-Day Coverage"
+                   data-event="Sample Product Launch">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client Q1</p>
+                <p class="vr-ctx">Full-Day Coverage<span class="sep">·</span>Sample Product Launch
+                  <br />EVB-1017<span class="sep">·</span>4 Feb 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Responsive to questions and flexible when our timings shifted on the day.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1018"
+                   data-rating="5"
+                   data-client="Sample Client R1"
+                   data-service="Cinematic Film Package"
+                   data-event="Sample Graduation Party">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client R1</p>
+                <p class="vr-ctx">Cinematic Film Package<span class="sep">·</span>Sample Graduation Party
+                  <br />EVB-1018<span class="sep">·</span>7 Jan 2025</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Arrived early, worked around our schedule and delivered the gallery ahead of the promised date.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1019"
+                   data-rating="5"
+                   data-client="Sample Client S1"
+                   data-service="Half-Day Coverage"
+                   data-event="Sample Family Reunion">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client S1</p>
+                <p class="vr-ctx">Half-Day Coverage<span class="sep">·</span>Sample Family Reunion
+                  <br />EVB-1019<span class="sep">·</span>10 Dec 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Very easy to coordinate with. The edits came back exactly in the style we discussed beforehand.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1020"
+                   data-rating="5"
+                   data-client="Sample Client T1"
+                   data-service="Full-Day Coverage"
+                   data-event="Sample Award Evening">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client T1</p>
+                <p class="vr-ctx">Full-Day Coverage<span class="sep">·</span>Sample Award Evening
+                  <br />EVB-1020<span class="sep">·</span>13 Nov 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Professional throughout. Guests barely noticed the team working, which is exactly what we wanted.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1021"
+                   data-rating="5"
+                   data-client="Sample Client U1"
+                   data-service="Cinematic Film Package"
+                   data-event="Sample Wedding Reception">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client U1</p>
+                <p class="vr-ctx">Cinematic Film Package<span class="sep">·</span>Sample Wedding Reception
+                  <br />EVB-1021<span class="sep">·</span>16 Oct 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Good coverage of every part of the day. A few shots we asked for were missed but the rest was strong.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1022"
+                   data-rating="5"
+                   data-client="Sample Client V1"
+                   data-service="Half-Day Coverage"
+                   data-event="Sample Mehndi Night">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client V1</p>
+                <p class="vr-ctx">Half-Day Coverage<span class="sep">·</span>Sample Mehndi Night
+                  <br />EVB-1022<span class="sep">·</span>19 Sep 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Clear communication from booking to delivery, and the final album quality was excellent.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1023"
+                   data-rating="5"
+                   data-client="Sample Client W1"
+                   data-service="Full-Day Coverage"
+                   data-event="Sample Corporate Gala">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client W1</p>
+                <p class="vr-ctx">Full-Day Coverage<span class="sep">·</span>Sample Corporate Gala
+                  <br />EVB-1023<span class="sep">·</span>22 Aug 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Responsive to questions and flexible when our timings shifted on the day.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1024"
+                   data-rating="5"
+                   data-client="Sample Client X1"
+                   data-service="Cinematic Film Package"
+                   data-event="Sample Engagement Dinner">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client X1</p>
+                <p class="vr-ctx">Cinematic Film Package<span class="sep">·</span>Sample Engagement Dinner
+                  <br />EVB-1024<span class="sep">·</span>25 Jul 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Arrived early, worked around our schedule and delivered the gallery ahead of the promised date.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1025"
+                   data-rating="4"
+                   data-client="Sample Client Y1"
+                   data-service="Half-Day Coverage"
+                   data-event="Sample Birthday Celebration">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client Y1</p>
+                <p class="vr-ctx">Half-Day Coverage<span class="sep">·</span>Sample Birthday Celebration
+                  <br />EVB-1025<span class="sep">·</span>4 Jun 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="4 out of 5">★★★★<span class="off">★</span></span>
+            </div>
+            <p class="vr-body">Very easy to coordinate with. The edits came back exactly in the style we discussed beforehand.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip neutral">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Mixed · 0.68
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1026"
+                   data-rating="5"
+                   data-client="Sample Client Z1"
+                   data-service="Full-Day Coverage"
+                   data-event="Sample Anniversary">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client Z1</p>
+                <p class="vr-ctx">Full-Day Coverage<span class="sep">·</span>Sample Anniversary
+                  <br />EVB-1026<span class="sep">·</span>7 May 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Professional throughout. Guests barely noticed the team working, which is exactly what we wanted.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1027"
+                   data-rating="5"
+                   data-client="Sample Client A2"
+                   data-service="Cinematic Film Package"
+                   data-event="Sample Product Launch">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client A2</p>
+                <p class="vr-ctx">Cinematic Film Package<span class="sep">·</span>Sample Product Launch
+                  <br />EVB-1027<span class="sep">·</span>10 Apr 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Good coverage of every part of the day. A few shots we asked for were missed but the rest was strong.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1028"
+                   data-rating="5"
+                   data-client="Sample Client B2"
+                   data-service="Half-Day Coverage"
+                   data-event="Sample Graduation Party">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client B2</p>
+                <p class="vr-ctx">Half-Day Coverage<span class="sep">·</span>Sample Graduation Party
+                  <br />EVB-1028<span class="sep">·</span>13 Mar 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Clear communication from booking to delivery, and the final album quality was excellent.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1029"
+                   data-rating="5"
+                   data-client="Sample Client C2"
+                   data-service="Full-Day Coverage"
+                   data-event="Sample Family Reunion">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client C2</p>
+                <p class="vr-ctx">Full-Day Coverage<span class="sep">·</span>Sample Family Reunion
+                  <br />EVB-1029<span class="sep">·</span>16 Feb 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Responsive to questions and flexible when our timings shifted on the day.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+          <article class="vr-card glass-card"
+                   data-booking-id="1030"
+                   data-rating="5"
+                   data-client="Sample Client D2"
+                   data-service="Cinematic Film Package"
+                   data-event="Sample Award Evening">
+            <div class="vr-card-head">
+              <div>
+                <p class="vr-who">Sample Client D2</p>
+                <p class="vr-ctx">Cinematic Film Package<span class="sep">·</span>Sample Award Evening
+                  <br />EVB-1030<span class="sep">·</span>19 Jan 2024</p>
+              </div>
+              <span class="vr-rating" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+            </div>
+            <p class="vr-body">Arrived early, worked around our schedule and delivered the gallery ahead of the promised date.</p>
+            <div class="vr-card-foot">
+              <span class="sentiment-chip positive">
+                <i class="bi bi-activity" aria-hidden="true"></i>
+                Positive · 0.92
+              </span>
+              <span class="demo-tag muted">Demo review</span>
+            </div>
+          </article>
+      </div>
+
+      <div class="dash-empty glass-card" data-vr-empty hidden>
+        <i class="bi bi-star" aria-hidden="true"></i>
+        <h4>No reviews match</h4>
+        <p>Try a different rating filter, or clear your search.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

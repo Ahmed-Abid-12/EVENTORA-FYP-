@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | Eventora — AI-Powered Event Planning</title>
+  <meta name="description" content="Eventora is an AI-powered event management platform connecting clients with local vendors across Hyderabad, Jamshoro and Sindh. Learn about the problem we are solving, our team, and how the platform is being built." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="inner-page">
+  <div class="auth-glow glow-primary" aria-hidden="true"></div>
+  <div class="auth-glow glow-gold" aria-hidden="true"></div>
+
+  <header class="eventora-navbar">
+    <div class="container-xl">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="vendors.html">Find Vendors</a></li>
+          <li><a href="../index.html#categories">Categories</a></li>
+          <li><a href="../index.html#ai-planner">AI Planner</a></li>
+          <li><a href="about.html" class="is-active">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-eventora btn-ghost btn-sm">Log In</a>
+        <a href="register.html" class="btn-eventora btn-primary btn-sm">Register</a>
+      </div>
+      <button type="button" class="navbar-toggler-custom" data-nav-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation">☰</button>
+    </div>
+    <nav id="mobile-menu" class="mobile-menu" data-mobile-menu aria-label="Mobile">
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="vendors.html">Find Vendors</a></li>
+        <li><a href="../index.html#categories">Categories</a></li>
+        <li><a href="../index.html#ai-planner">AI Planner</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Log In</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ====================================================================
+         HERO
+         ==================================================================== -->
+    <section class="page-hero">
+      <div class="container-xl">
+        <div class="section-heading reveal">
+          <span class="eyebrow">About Eventora</span>
+          <h2>Event planning, without <em class="accent-em">the guesswork</em>.</h2>
+          <p>We are building a centralised platform that connects people planning an event with the local vendors who can deliver it — and uses AI to make that match a good one.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         WHAT EVENTORA IS
+         ==================================================================== -->
+    <section class="section flush-top">
+      <div class="container-xl">
+        <div class="about-intro reveal">
+          <div>
+            <p>Eventora is an AI-powered event management platform. It brings clients and event-service vendors — caterers, decorators, photographers, venues, mehndi artists, DJs and event planners — into one place, from first search through to booking, payment and review.</p>
+            <p>The platform is being developed as a Final Year Project in the Department of Information Technology at the University of Sindh, Jamshoro, under Project ID SU|FET|IT|FYP|2026. It is designed from the start as a commercial product rather than a coursework exercise: the architecture, the database and the business model are all built to run in the real world.</p>
+            <p>Our focus is deliberately local. Existing platforms concentrate on Karachi and Lahore, which leaves Hyderabad, Jamshoro and the surrounding districts of Sindh without a serious digital option. That gap is where Eventora starts.</p>
+          </div>
+
+          <div class="about-pullquote glass-card">
+            <blockquote>We are not just a directory. We are an intelligent event planning co-pilot.</blockquote>
+            <cite>Eventora project proposal, 2026</cite>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         THE PROBLEM
+         Each card corresponds to a problem formally identified in Section 3
+         of the FYP proposal. No invented problems.
+         ==================================================================== -->
+    <section class="section">
+      <div class="container-xl">
+        <div class="section-heading center reveal">
+          <span class="eyebrow">The Problem</span>
+          <h2>Why planning an event locally is still so hard.</h2>
+          <p class="lede">These six issues were identified during the research phase of our project and are what the platform is built to address.</p>
+        </div>
+
+        <div class="problem-grid">
+          <div class="problem-card glass-card reveal">
+            <div class="problem-icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></div>
+            <h4>Search takes days, not minutes</h4>
+            <p>Finding and comparing vendors means phone calls, physical visits and scattered WhatsApp threads — slow, stressful and easy to get wrong.</p>
+          </div>
+
+          <div class="problem-card glass-card reveal">
+            <div class="problem-icon"><i class="bi bi-funnel" aria-hidden="true"></i></div>
+            <h4>No budget-aware filtering</h4>
+            <p>Existing platforms cannot recommend vendors against a real budget, so people either overspend or settle for the wrong service.</p>
+          </div>
+
+          <div class="problem-card glass-card reveal">
+            <div class="problem-icon"><i class="bi bi-chat-square-text" aria-hidden="true"></i></div>
+            <h4>Too many reviews to read</h4>
+            <p>Hundreds of unstructured reviews per vendor are impossible to process by hand, so genuine reliability stays hidden.</p>
+          </div>
+
+          <div class="problem-card glass-card reveal">
+            <div class="problem-icon"><i class="bi bi-robot" aria-hidden="true"></i></div>
+            <h4>No planning assistance</h4>
+            <p>No local platform offers real-time guidance to collect requirements and walk someone through their decisions.</p>
+          </div>
+
+          <div class="problem-card glass-card reveal">
+            <div class="problem-icon"><i class="bi bi-geo-alt" aria-hidden="true"></i></div>
+            <h4>Secondary cities are ignored</h4>
+            <p>Platforms operate in a handful of major cities. Hyderabad, Jamshoro and the rest of Sindh are left with offline methods.</p>
+          </div>
+
+          <div class="problem-card glass-card reveal">
+            <div class="problem-icon"><i class="bi bi-question-circle" aria-hidden="true"></i></div>
+            <h4>No transparent ranking</h4>
+            <p>Without data-driven ranking there is no reliable way to judge vendor quality, responsiveness or value for money.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         MISSION & VISION
+         ==================================================================== -->
+    <section class="section">
+      <div class="container-xl">
+        <div class="mv-grid">
+          <div class="mv-card glass-card reveal">
+            <i class="bi bi-compass mv-icon" aria-hidden="true"></i>
+            <h3>Our Mission</h3>
+            <p>To remove the manual effort from event planning by giving every client intelligent, budget-aware vendor recommendations — and to give local vendors a digital storefront that reaches customers word of mouth never could.</p>
+          </div>
+
+          <div class="mv-card glass-card reveal">
+            <i class="bi bi-stars mv-icon" aria-hidden="true"></i>
+            <h3>Our Vision</h3>
+            <p>To become Pakistan's largest AI-powered event ecosystem, where planning an event becomes as straightforward as booking a ride online — starting in Hyderabad, expanding across Sindh, and then nationwide.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PROJECT FACTS
+         Every number here is verifiable from our own project documents or
+         database schema. Nothing here is a production usage statistic,
+         because the platform has not launched.
+         ==================================================================== -->
+    <section class="section">
+      <div class="container-xl">
+        <div class="section-heading center reveal">
+          <span class="eyebrow">By the Numbers</span>
+          <h2>Where the project actually stands.</h2>
+          <p class="lede">Eventora has not launched, so these are facts about the project itself rather than customer statistics.</p>
+        </div>
+
+        <div class="facts-strip glass-card reveal">
+          <div class="fact">
+            <span class="fact-num">4</span>
+            <span class="fact-label">Team Members</span>
+          </div>
+          <div class="fact">
+            <span class="fact-num">3</span>
+            <span class="fact-label">User Roles</span>
+          </div>
+          <div class="fact">
+            <span class="fact-num">7</span>
+            <span class="fact-label">Vendor Categories</span>
+          </div>
+          <div class="fact">
+            <span class="fact-num">4</span>
+            <span class="fact-label">AI Components</span>
+          </div>
+          <div class="fact">
+            <span class="fact-num">8</span>
+            <span class="fact-label">Project Milestones</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         WHAT WE ARE BUILDING
+         Reuses the .bento-grid component from the homepage.
+         ==================================================================== -->
+    <section class="section">
+      <div class="container-xl">
+        <div class="section-heading center reveal">
+          <span class="eyebrow">What We Are Building</span>
+          <h2>Six systems, one platform.</h2>
+        </div>
+
+        <div class="bento-grid">
+          <div class="glass-card span-8 reveal">
+            <h3>AI Vendor Recommendation</h3>
+            <p>A Python recommendation engine scores every service against your event — its type, date, city, guest count and budget — alongside vendor rating and review sentiment, then returns a ranked shortlist grouped by vendor.</p>
+            <ul class="feature-list">
+              <li>Scores services, presents vendors</li>
+              <li>Budget compatibility is a ranking factor, not a filter</li>
+              <li>Requires a signed-in client and a created event</li>
+            </ul>
+          </div>
+
+          <div class="glass-card span-4 reveal">
+            <h3>AI Chatbot</h3>
+            <p>A conversational assistant that collects your requirements, answers questions and guides you through planning decisions in real time.</p>
+          </div>
+
+          <div class="glass-card span-4 reveal">
+            <h3>Review Summarisation</h3>
+            <p>NLP condenses hundreds of reviews per vendor into a readable summary with a sentiment score, so reliability is visible at a glance.</p>
+          </div>
+
+          <div class="glass-card span-4 reveal">
+            <h3>Budget Estimation</h3>
+            <p>Cost estimation that spreads your total budget sensibly across venue, food, decoration and the rest — before you commit to anything.</p>
+          </div>
+
+          <div class="glass-card span-4 reveal">
+            <h3>Vendor Marketplace</h3>
+            <p>Verified local vendors with service listings, pricing, capacity and portfolio galleries across all seven categories.</p>
+          </div>
+
+          <div class="glass-card span-12 reveal">
+            <h3>Booking, Payment &amp; Commission</h3>
+            <p>A complete booking lifecycle: request, vendor accept or reject, confirmation, secure payment, then a review once the service is delivered. Every booking belongs to an event, so a wedding with five vendors stays one coherent plan instead of five unrelated transactions. Eventora takes a platform commission on each completed booking — vendors keep the rest.</p>
+            <ul class="feature-list">
+              <li>EasyPaisa, JazzCash, bank transfer and card</li>
+              <li>Commission rate recorded at booking time, so history stays auditable</li>
+              <li>Separate dashboards for clients, vendors and admin</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TECHNOLOGY — matches the approved FYP stack exactly.
+         ==================================================================== -->
+    <section class="section">
+      <div class="container-xl">
+        <div class="section-heading center reveal">
+          <span class="eyebrow">Technology</span>
+          <h2>Built on a three-tier architecture.</h2>
+          <p class="lede">Presentation, business logic and data are kept separate, with the AI services behind their own internal API.</p>
+        </div>
+
+        <div class="tech-grid">
+          <div class="tech-card glass-card reveal">
+            <p class="tech-layer">Presentation Layer</p>
+            <h4>Frontend</h4>
+            <div class="tech-pills">
+              <span>HTML5</span><span>CSS3</span><span>Bootstrap 5</span><span>JavaScript</span>
+            </div>
+          </div>
+
+          <div class="tech-card glass-card reveal">
+            <p class="tech-layer">Business Logic Layer</p>
+            <h4>Backend</h4>
+            <div class="tech-pills">
+              <span>PHP</span><span>REST APIs</span><span>XAMPP</span>
+            </div>
+          </div>
+
+          <div class="tech-card glass-card reveal">
+            <p class="tech-layer">Data Layer</p>
+            <h4>Database</h4>
+            <div class="tech-pills">
+              <span>MySQL</span><span>InnoDB</span>
+            </div>
+          </div>
+
+          <div class="tech-card glass-card reveal">
+            <p class="tech-layer">Intelligence Layer</p>
+            <h4>AI &amp; Machine Learning</h4>
+            <div class="tech-pills">
+              <span>Python</span><span>Scikit-learn</span><span>NLTK</span><span>spaCy</span><span>Pandas</span><span>Flask / FastAPI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         ROADMAP — the eight milestones from the approved FYP proposal.
+         Status reflects genuine progress and should be updated as we go.
+         ==================================================================== -->
+    <section class="section">
+      <div class="container-xl">
+        <div class="section-heading center reveal">
+          <span class="eyebrow">Development Roadmap</span>
+          <h2>Eight milestones from proposal to deployment.</h2>
+        </div>
+
+        <div class="roadmap reveal">
+          <div class="roadmap-item is-done">
+            <p class="roadmap-when">March — April</p>
+            <h4>Requirement Analysis <span class="roadmap-status done">Complete</span></h4>
+            <p>Literature review, problem identification, and the project plan.</p>
+          </div>
+
+          <div class="roadmap-item is-done">
+            <p class="roadmap-when">April — May</p>
+            <h4>System Design <span class="roadmap-status done">Complete</span></h4>
+            <p>Architecture, use cases, workflows and the entity-relationship model.</p>
+          </div>
+
+          <div class="roadmap-item is-current">
+            <p class="roadmap-when">June — July</p>
+            <h4>User Interface Development <span class="roadmap-status current">In Progress</span></h4>
+            <p>Responsive frontend pages for the public site and all three dashboards.</p>
+          </div>
+
+          <div class="roadmap-item">
+            <p class="roadmap-when">July — September</p>
+            <h4>Backend Development</h4>
+            <p>PHP application layer, MySQL database, authentication and REST APIs.</p>
+          </div>
+
+          <div class="roadmap-item">
+            <p class="roadmap-when">September — October</p>
+            <h4>AI &amp; Chatbot Integration</h4>
+            <p>The recommendation engine and conversational assistant, served over an internal API.</p>
+          </div>
+
+          <div class="roadmap-item">
+            <p class="roadmap-when">October</p>
+            <h4>Review Analysis Module</h4>
+            <p>Sentiment analysis and automated review summarisation.</p>
+          </div>
+
+          <div class="roadmap-item">
+            <p class="roadmap-when">November</p>
+            <h4>Testing &amp; Debugging</h4>
+            <p>Unit, integration and security testing, plus user acceptance testing.</p>
+          </div>
+
+          <div class="roadmap-item">
+            <p class="roadmap-when">November — December</p>
+            <h4>Documentation &amp; Deployment</h4>
+            <p>Technical documentation, the final thesis, and the deployed system.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TEAM
+         Names, roll numbers and roles are taken from the approved FYP
+         proposal. Personal phone numbers and email addresses are
+         deliberately NOT published here — use the contact page instead.
+         ==================================================================== -->
+    <section class="section">
+      <div class="container-xl">
+        <div class="section-heading center reveal">
+          <span class="eyebrow">The Team</span>
+          <h2>Four students building a startup.</h2>
+          <p class="lede">Department of Information Technology, Faculty of Engineering and Technology, University of Sindh, Jamshoro.</p>
+        </div>
+
+        <div class="team-grid">
+          <div class="team-card glass-card reveal">
+            <div class="team-avatar" aria-hidden="true">AA</div>
+            <h4>Ahmed Abid</h4>
+            <p class="team-roll">2K23/IT/12</p>
+            <p class="team-role">Team Lead &amp; Full-Stack Developer</p>
+            <p class="team-skills">Architecture · PHP Backend · Project Strategy</p>
+          </div>
+
+          <div class="team-card glass-card reveal">
+            <div class="team-avatar" aria-hidden="true">FS</div>
+            <h4>Fawad Ali Soomro</h4>
+            <p class="team-roll">2K23/IT/46</p>
+            <p class="team-role">Frontend Developer &amp; UI/UX Lead</p>
+            <p class="team-skills">HTML · CSS · Bootstrap · User Experience</p>
+          </div>
+
+          <div class="team-card glass-card reveal">
+            <div class="team-avatar" aria-hidden="true">AH</div>
+            <h4>Aushique Hussain</h4>
+            <p class="team-roll">2K23/IT/36</p>
+            <p class="team-role">AI Engineer &amp; Technical Researcher</p>
+            <p class="team-skills">Python · Scikit-learn · NLP · ML Models</p>
+          </div>
+
+          <div class="team-card glass-card reveal">
+            <div class="team-avatar" aria-hidden="true">MA</div>
+            <h4>Mehran Ali</h4>
+            <p class="team-roll">2K23/IT/77</p>
+            <p class="team-role">Business Strategy &amp; Operations</p>
+            <p class="team-skills">Go-to-Market · Vendor Outreach · Financial Model</p>
+          </div>
+        </div>
+
+        <div class="supervisor-card glass-card reveal">
+          <i class="bi bi-mortarboard-fill sup-icon" aria-hidden="true"></i>
+          <div class="sup-text">
+            <p><strong>Supervised by Dr. Mumtaz Qabulio</strong> — Assistant Professor, Department of Information Technology, Faculty of Engineering and Technology, University of Sindh, Jamshoro.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CALL TO ACTION
+         ==================================================================== -->
+    <section class="section flush-top" id="cta">
+      <div class="container-xl">
+        <div class="final-cta glass-card reveal">
+          <h2>Want to be part of <em class="accent-em">the first launch</em>?</h2>
+          <p>We are onboarding vendors across Hyderabad and Jamshoro ahead of the pilot. Clients can create an account now and be ready when the marketplace opens.</p>
+          <div class="cta-actions">
+            <a href="register.html" class="btn-eventora btn-primary">Create an Account</a>
+            <a href="contact.html" class="btn-eventora btn-outline-gold">Talk to the Team</a>
+          </div>
+          <p class="fine-print">Free to browse · Vendors are charged a platform commission</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="eventora-footer">
+    <div class="container-xl">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="brand-mark">Eventora</span>
+          <p>AI-powered event management connecting clients and vendors across Hyderabad, Jamshoro, and beyond.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Platform</h5>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="vendors.html">Find Vendors</a></li>
+            <li><a href="../index.html#categories">Categories</a></li>
+            <li><a href="../index.html#ai-planner">AI Planner</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="vendors.html#become-a-vendor">Become a Vendor</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Account</h5>
+          <ul>
+            <li><a href="login.html">Log In</a></li>
+            <li><a href="register.html">Register</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Eventora. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Eventora on Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" aria-label="Eventora on Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" aria-label="Eventora on WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

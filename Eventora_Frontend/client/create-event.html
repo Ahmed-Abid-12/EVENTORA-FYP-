@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Event | Eventora Client</title>
+  <meta name="description" content="Create an event on Eventora — set the type, date, city, venue, guest count and budget that vendor bookings and AI recommendations will work from." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="../payment/history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="../ai/recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="../ai/chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="../ai/review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Create Event</h1>
+          <p class="topbar-sub">Step 1 — every booking belongs to an event</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content">
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo mode.</strong> You are not signed in and there is no database connected, so
+           nothing entered here is saved. The form validates exactly as it will once the backend is
+           built.</p>
+      </div>
+
+      <div class="create-layout">
+        <!-- ================================================================
+             FORM — every field maps to a column on `events`
+             ================================================================ -->
+        <form class="dash-form" data-create-event-form data-live-validate novalidate>
+
+          <!-- ---------------- Event basics ---------------- -->
+          <section class="form-section glass-card">
+            <div class="form-section-head">
+              <h2>Event basics</h2>
+              <p>What you are planning, and when it happens.</p>
+            </div>
+
+            <!-- events.event_name -->
+            <div class="form-group">
+              <label for="event-name">Event name <span class="req">*</span></label>
+              <input type="text" id="event-name" name="event_name" data-validate="text"
+                     placeholder="e.g. Ayesha &amp; Bilal's Wedding" maxlength="150" required />
+              <span class="field-hint">Only you see this — it is how you will recognise the event in your dashboard.</span>
+              <span class="field-error"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Give your event a name</span>
+            </div>
+
+            <!-- events.event_type -->
+            <div class="form-group">
+              <label>Event type <span class="req">*</span></label>
+              <div class="type-grid">
+                <div class="type-option">
+                  <input type="radio" id="type-wedding" name="event_type"
+                         value="Wedding" data-label="Wedding" checked />
+                  <label for="type-wedding">
+                    <i class="bi bi-heart" aria-hidden="true"></i> Wedding
+                  </label>
+                </div>
+                <div class="type-option">
+                  <input type="radio" id="type-birthday" name="event_type"
+                         value="Birthday" data-label="Birthday" />
+                  <label for="type-birthday">
+                    <i class="bi bi-balloon" aria-hidden="true"></i> Birthday
+                  </label>
+                </div>
+                <div class="type-option">
+                  <input type="radio" id="type-engagement" name="event_type"
+                         value="Engagement" data-label="Engagement" />
+                  <label for="type-engagement">
+                    <i class="bi bi-gem" aria-hidden="true"></i> Engagement
+                  </label>
+                </div>
+                <div class="type-option">
+                  <input type="radio" id="type-corporate" name="event_type"
+                         value="Corporate" data-label="Corporate" />
+                  <label for="type-corporate">
+                    <i class="bi bi-briefcase" aria-hidden="true"></i> Corporate
+                  </label>
+                </div>
+                <div class="type-option">
+                  <input type="radio" id="type-conference" name="event_type"
+                         value="Conference" data-label="Conference" />
+                  <label for="type-conference">
+                    <i class="bi bi-mic" aria-hidden="true"></i> Conference
+                  </label>
+                </div>
+                <div class="type-option">
+                  <input type="radio" id="type-seminar" name="event_type"
+                         value="Seminar" data-label="Seminar" />
+                  <label for="type-seminar">
+                    <i class="bi bi-easel" aria-hidden="true"></i> Seminar
+                  </label>
+                </div>
+                <div class="type-option">
+                  <input type="radio" id="type-family-gathering" name="event_type"
+                         value="Family Gathering" data-label="Family Gathering" />
+                  <label for="type-family-gathering">
+                    <i class="bi bi-people" aria-hidden="true"></i> Family Gathering
+                  </label>
+                </div>
+                <div class="type-option">
+                  <input type="radio" id="type-cultural-event" name="event_type"
+                         value="Cultural Event" data-label="Cultural Event" />
+                  <label for="type-cultural-event">
+                    <i class="bi bi-stars" aria-hidden="true"></i> Cultural Event
+                  </label>
+                </div>
+              </div>
+              <span class="field-hint">The recommendation engine weights vendors differently by event type.</span>
+            </div>
+
+            <div class="form-row">
+              <!-- events.event_date -->
+              <div class="form-group">
+                <label for="event-date">Event date <span class="req">*</span></label>
+                <input type="date" id="event-date" name="event_date" data-validate="text"
+                       data-rule="future-date" required />
+                <span class="field-error"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Choose a date that has not already passed</span>
+              </div>
+
+              <!-- events.guest_count -->
+              <div class="form-group">
+                <label for="event-guests">Guest count <span class="req">*</span></label>
+                <input type="number" id="event-guests" name="guest_count" data-validate="text"
+                       data-rule="positive-int" min="1" max="10000" step="1"
+                       placeholder="e.g. 250" required />
+                <span class="field-hint">Used to filter out venues and caterers that cannot take your numbers.</span>
+                <span class="field-error"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Enter a whole number of guests, at least 1</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- ---------------- Location ---------------- -->
+          <section class="form-section glass-card">
+            <div class="form-section-head">
+              <h2>Location</h2>
+              <p>Where the event will be held.</p>
+            </div>
+
+            <div class="form-row">
+              <!-- events.city -->
+              <div class="form-group">
+                <label for="event-city">City <span class="req">*</span></label>
+                <select class="evt-select" id="event-city" name="city" data-validate="text" required>
+                  <option value="" disabled selected>Select a city</option>
+                  <option>Hyderabad</option>
+                  <option>Jamshoro</option>
+                  <option>Sukkur</option>
+                  <option>Larkana</option>
+                  <option>Mirpurkhas</option>
+                </select>
+                <span class="field-hint">Vendors are matched against this city.</span>
+                <span class="field-error"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Select the city for your event</span>
+              </div>
+
+              <!-- events.venue — NULLable: the venue may not be chosen yet, and
+                   may itself end up being one of the vendors booked. -->
+              <div class="form-group">
+                <label for="event-venue">Venue <span class="optional">optional</span></label>
+                <input type="text" id="event-venue" name="venue"
+                       placeholder="e.g. Riverside Banquet Hall" maxlength="255" />
+                <span class="field-hint">Leave blank if you are still looking — you can book a venue later.</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- ---------------- Budget & requirements ---------------- -->
+          <section class="form-section glass-card">
+            <div class="form-section-head">
+              <h2>Budget &amp; requirements</h2>
+              <p>What you plan to spend, and anything vendors should know.</p>
+            </div>
+
+            <!-- events.total_budget -->
+            <div class="form-group">
+              <label for="event-budget">Total budget <span class="req">*</span></label>
+              <div class="input-prefix">
+                <span class="prefix">Rs.</span>
+                <input type="number" id="event-budget" name="total_budget" data-validate="text"
+                       data-rule="positive-amount" min="1" step="1000"
+                       placeholder="500000" required />
+              </div>
+              <span class="field-hint">Your overall budget for the whole event, across all vendors.</span>
+              <span class="field-error"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Enter a budget greater than zero</span>
+            </div>
+
+            <!-- events.special_requirements -->
+            <div class="form-group">
+              <label for="event-notes">Special requirements <span class="optional">optional</span></label>
+              <textarea id="event-notes" name="special_requirements"
+                        placeholder="Dietary requirements, accessibility needs, parking, timing constraints, anything vendors should know."></textarea>
+              <span class="field-hint">Shared with vendors you send booking requests to.</span>
+            </div>
+          </section>
+
+          <!-- FUTURE BACKEND INTEGRATION — POST /api/create-event.php
+                 INSERT INTO events
+                   (client_id, event_name, event_type, event_date, city, venue,
+                    guest_count, total_budget, special_requirements, status)
+                 VALUES (:client_id, ..., 'planning');
+
+               events.status starts at 'planning' and is never chosen by the
+               client, so it is deliberately not a form field.
+               client_id is resolved from the session via client_profiles —
+               never users.id (frozen ID rule).
+
+               On success, redirect to my-events.html, or return to the booking
+               wizard with the new event_id preselected (N.3). -->
+          <div class="form-actions">
+            <button type="submit" class="btn-eventora btn-primary">
+              <span class="spinner"></span>
+              <span class="btn-label">Create Event</span>
+            </button>
+            <a href="dashboard.html" class="btn-eventora btn-ghost">Cancel</a>
+          </div>
+        </form>
+
+        <!-- ================================================================
+             LIVE SUMMARY — updates as the form is filled in
+             ================================================================ -->
+        <aside class="event-preview glass-card">
+          <h3>Event summary</h3>
+          <p class="preview-sub">Updates as you type</p>
+
+          <div class="preview-row"><span class="k">Name</span><span class="v empty" data-preview="name">Not set</span></div>
+          <div class="preview-row"><span class="k">Type</span><span class="v empty" data-preview="type">Not set</span></div>
+          <div class="preview-row"><span class="k">Date</span><span class="v empty" data-preview="date">Not set</span></div>
+          <div class="preview-row"><span class="k">City</span><span class="v empty" data-preview="city">Not set</span></div>
+          <div class="preview-row"><span class="k">Venue</span><span class="v empty" data-preview="venue">Not set</span></div>
+          <div class="preview-row"><span class="k">Guests</span><span class="v empty" data-preview="guests">Not set</span></div>
+          <div class="preview-row"><span class="k">Budget</span><span class="v empty" data-preview="budget">Not set</span></div>
+
+          <!-- N.3: this is why the event comes first. -->
+          <ul class="next-steps">
+            <li><span>2.</span> Browse or get recommended vendors for this event</li>
+            <li><span>3.</span> Send booking requests — each one attaches to this event</li>
+            <li><span>4.</span> Vendors accept or reject</li>
+            <li><span>5.</span> Pay once a booking is accepted</li>
+          </ul>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

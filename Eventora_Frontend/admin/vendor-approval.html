@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendor Approval | Eventora Admin</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Admin navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Admin</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Overview</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="reports.html"><i class="bi bi-graph-up" aria-hidden="true"></i> Reports</a></li>
+      </ul>
+
+      <p class="dash-nav-label">People</p>
+      <ul>
+        <li><a href="users.html"><i class="bi bi-people" aria-hidden="true"></i> Users</a></li>
+        <li><a href="vendors.html"><i class="bi bi-shop" aria-hidden="true"></i> Vendors</a></li>
+        <li><a href="vendor-approval.html"><i class="bi bi-patch-check" aria-hidden="true"></i> Vendor Approval
+          <span class="nav-count">6</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Platform</p>
+      <ul>
+        <li><a href="categories.html"><i class="bi bi-tags" aria-hidden="true"></i> Categories</a></li>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> Bookings</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+        <li><a href="commission.html"><i class="bi bi-percent" aria-hidden="true"></i> Commission</a></li>
+        <li><a href="chatbot-logs.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chatbot Logs</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Vendor Approval</h1>
+          <p class="topbar-sub">Document review — sets is_verified</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="vendor-approval.html" class="icon-btn" aria-label="Vendor approvals">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="settings.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">EA</span>
+          <span>
+            <span class="who d-block">Eventora Admin</span>
+            <span class="role">Administrator</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-vendor-approval>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo approval queue.</strong> 6 vendors awaiting review. Approving or
+           rejecting changes this page only — nothing is saved and no vendor is notified.</p>
+      </div>
+
+      <!-- The single most important rule on this page. -->
+      <div class="pay-formula">
+        <strong>Verification is not account status.</strong>
+        <code>vendor_profiles.is_verified</code> records whether an administrator approved the
+        documents — that is what this page changes.
+        <code>vendor_profiles.status</code> records whether the account may trade, and is changed on
+        <a href="users.html">Users</a>. A verified vendor can still be blocked, and an unverified
+        vendor is never publicly listed. Merging them into one flag would make both meanings
+        unrecoverable, which is why they stay separate.
+      </div>
+
+      <div class="ad-toolbar">
+        <div class="ad-filters" role="group" aria-label="Filter vendors by verification state">
+            <button type="button" class="faq-filter is-active" data-ap-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="faq-filter" data-ap-filter="pending" aria-pressed="false">Awaiting review</button>
+            <button type="button" class="faq-filter" data-ap-filter="verified" aria-pressed="false">Verified</button>
+            <button type="button" class="faq-filter" data-ap-filter="rejected" aria-pressed="false">Rejected</button>
+        </div>
+        <div class="bookings-search">
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <label for="ap-search" class="visually-hidden">Search vendors</label>
+          <input type="search" id="ap-search" data-ap-search
+                 placeholder="Search by business, category or city" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="dash-section-head">
+        <h2 data-ap-count aria-live="polite"></h2>
+        <a href="vendors.html">All vendors</a>
+      </div>
+
+      <!-- FUTURE PHP:
+           SELECT vp.vendor_id, vp.business_name, vp.city, vp.is_verified, vp.status,
+                  c.name AS category, u.email
+           FROM vendor_profiles vp
+           JOIN users u ON u.id = vp.user_id
+           LEFT JOIN services s ON s.vendor_id = vp.vendor_id
+           LEFT JOIN categories c ON c.id = s.category_id
+           GROUP BY vp.vendor_id
+           ORDER BY vp.is_verified ASC, vp.created_at ASC;
+
+           Approving runs UPDATE vendor_profiles SET is_verified = 1
+           WHERE vendor_id = :id, guarded by an admin session. A vendor can never
+           call this endpoint — vendors cannot self-verify. -->
+      <div class="rv-list" data-ap-list>
+          <article class="ad-approval glass-card is-pending"
+                   data-vendor-id="5"
+                   data-state="pending"
+                   data-business="Sound Circle Entertainment"
+                   data-city="Hyderabad"
+                   data-category="DJ">
+            <div class="ad-approval-top">
+              <div>
+                <div class="ap-id">
+                  <span class="ap-ref">vendor_id 5</span>
+                  <span class="verify-badge unverified" data-ap-badge><i class="bi bi-hourglass-split" aria-hidden="true"></i> Awaiting verification</span>
+                  <span class="demo-tag muted">Demo</span>
+                </div>
+                <h3>Sound Circle Entertainment</h3>
+                <p class="ap-meta">DJ<span class="sep">·</span>Hyderabad
+                  <span class="sep">·</span>2 services listed</p>
+              </div>
+              <div>
+                <!-- vendor_profiles.status — the account state, NOT verification -->
+                <span class="vendor-account-status active">active</span>
+              </div>
+            </div>
+
+            <!-- FUTURE PHP: documents come from vendor_documents (extension table):
+                 SELECT document_type, file_path, status FROM vendor_documents
+                 WHERE vendor_id = :vendor_id; -->
+            <div class="ad-docs">
+              <div class="ad-doc">
+                <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">CNIC</p>
+                  <p class="d-state">On file</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Business licence</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-receipt" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Tax certificate</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="ad-approval-foot">
+              <span class="ap-meta">Reviewing sets <code>is_verified</code> only</span>
+              <div class="ad-approval-actions">
+                <button type="button" class="btn-eventora btn-reject" data-ap-action="rejected">Reject Documents</button>
+                <button type="button" class="btn-eventora btn-accept" data-ap-action="verified">Approve &amp; Publish</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="ad-approval glass-card is-pending"
+                   data-vendor-id="9"
+                   data-state="pending"
+                   data-business="Campus Caterers"
+                   data-city="Jamshoro"
+                   data-category="Catering">
+            <div class="ad-approval-top">
+              <div>
+                <div class="ap-id">
+                  <span class="ap-ref">vendor_id 9</span>
+                  <span class="verify-badge unverified" data-ap-badge><i class="bi bi-hourglass-split" aria-hidden="true"></i> Awaiting verification</span>
+                  <span class="demo-tag muted">Demo</span>
+                </div>
+                <h3>Campus Caterers</h3>
+                <p class="ap-meta">Catering<span class="sep">·</span>Jamshoro
+                  <span class="sep">·</span>3 services listed</p>
+              </div>
+              <div>
+                <!-- vendor_profiles.status — the account state, NOT verification -->
+                <span class="vendor-account-status active">active</span>
+              </div>
+            </div>
+
+            <!-- FUTURE PHP: documents come from vendor_documents (extension table):
+                 SELECT document_type, file_path, status FROM vendor_documents
+                 WHERE vendor_id = :vendor_id; -->
+            <div class="ad-docs">
+              <div class="ad-doc">
+                <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">CNIC</p>
+                  <p class="d-state">On file</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Business licence</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-receipt" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Tax certificate</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="ad-approval-foot">
+              <span class="ap-meta">Reviewing sets <code>is_verified</code> only</span>
+              <div class="ad-approval-actions">
+                <button type="button" class="btn-eventora btn-reject" data-ap-action="rejected">Reject Documents</button>
+                <button type="button" class="btn-eventora btn-accept" data-ap-action="verified">Approve &amp; Publish</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="ad-approval glass-card is-pending"
+                   data-vendor-id="11"
+                   data-state="pending"
+                   data-business="Petal &amp; Drape"
+                   data-city="Jamshoro"
+                   data-category="Decoration">
+            <div class="ad-approval-top">
+              <div>
+                <div class="ap-id">
+                  <span class="ap-ref">vendor_id 11</span>
+                  <span class="verify-badge unverified" data-ap-badge><i class="bi bi-hourglass-split" aria-hidden="true"></i> Awaiting verification</span>
+                  <span class="demo-tag muted">Demo</span>
+                </div>
+                <h3>Petal &amp; Drape</h3>
+                <p class="ap-meta">Decoration<span class="sep">·</span>Jamshoro
+                  <span class="sep">·</span>3 services listed</p>
+              </div>
+              <div>
+                <!-- vendor_profiles.status — the account state, NOT verification -->
+                <span class="vendor-account-status active">active</span>
+              </div>
+            </div>
+
+            <!-- FUTURE PHP: documents come from vendor_documents (extension table):
+                 SELECT document_type, file_path, status FROM vendor_documents
+                 WHERE vendor_id = :vendor_id; -->
+            <div class="ad-docs">
+              <div class="ad-doc">
+                <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">CNIC</p>
+                  <p class="d-state">On file</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Business licence</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-receipt" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Tax certificate</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="ad-approval-foot">
+              <span class="ap-meta">Reviewing sets <code>is_verified</code> only</span>
+              <div class="ad-approval-actions">
+                <button type="button" class="btn-eventora btn-reject" data-ap-action="rejected">Reject Documents</button>
+                <button type="button" class="btn-eventora btn-accept" data-ap-action="verified">Approve &amp; Publish</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="ad-approval glass-card is-pending"
+                   data-vendor-id="15"
+                   data-state="pending"
+                   data-business="Rhythm &amp; Beats DJ"
+                   data-city="Larkana"
+                   data-category="DJ">
+            <div class="ad-approval-top">
+              <div>
+                <div class="ap-id">
+                  <span class="ap-ref">vendor_id 15</span>
+                  <span class="verify-badge unverified" data-ap-badge><i class="bi bi-hourglass-split" aria-hidden="true"></i> Awaiting verification</span>
+                  <span class="demo-tag muted">Demo</span>
+                </div>
+                <h3>Rhythm &amp; Beats DJ</h3>
+                <p class="ap-meta">DJ<span class="sep">·</span>Larkana
+                  <span class="sep">·</span>2 services listed</p>
+              </div>
+              <div>
+                <!-- vendor_profiles.status — the account state, NOT verification -->
+                <span class="vendor-account-status active">active</span>
+              </div>
+            </div>
+
+            <!-- FUTURE PHP: documents come from vendor_documents (extension table):
+                 SELECT document_type, file_path, status FROM vendor_documents
+                 WHERE vendor_id = :vendor_id; -->
+            <div class="ad-docs">
+              <div class="ad-doc">
+                <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">CNIC</p>
+                  <p class="d-state">On file</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Business licence</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-receipt" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Tax certificate</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="ad-approval-foot">
+              <span class="ap-meta">Reviewing sets <code>is_verified</code> only</span>
+              <div class="ad-approval-actions">
+                <button type="button" class="btn-eventora btn-reject" data-ap-action="rejected">Reject Documents</button>
+                <button type="button" class="btn-eventora btn-accept" data-ap-action="verified">Approve &amp; Publish</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="ad-approval glass-card is-pending"
+                   data-vendor-id="18"
+                   data-state="pending"
+                   data-business="Desert Rose Decor"
+                   data-city="Mirpurkhas"
+                   data-category="Decoration">
+            <div class="ad-approval-top">
+              <div>
+                <div class="ap-id">
+                  <span class="ap-ref">vendor_id 18</span>
+                  <span class="verify-badge unverified" data-ap-badge><i class="bi bi-hourglass-split" aria-hidden="true"></i> Awaiting verification</span>
+                  <span class="demo-tag muted">Demo</span>
+                </div>
+                <h3>Desert Rose Decor</h3>
+                <p class="ap-meta">Decoration<span class="sep">·</span>Mirpurkhas
+                  <span class="sep">·</span>3 services listed</p>
+              </div>
+              <div>
+                <!-- vendor_profiles.status — the account state, NOT verification -->
+                <span class="vendor-account-status active">active</span>
+              </div>
+            </div>
+
+            <!-- FUTURE PHP: documents come from vendor_documents (extension table):
+                 SELECT document_type, file_path, status FROM vendor_documents
+                 WHERE vendor_id = :vendor_id; -->
+            <div class="ad-docs">
+              <div class="ad-doc">
+                <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">CNIC</p>
+                  <p class="d-state">On file</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Business licence</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-receipt" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Tax certificate</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="ad-approval-foot">
+              <span class="ap-meta">Reviewing sets <code>is_verified</code> only</span>
+              <div class="ad-approval-actions">
+                <button type="button" class="btn-eventora btn-reject" data-ap-action="rejected">Reject Documents</button>
+                <button type="button" class="btn-eventora btn-accept" data-ap-action="verified">Approve &amp; Publish</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="ad-approval glass-card is-pending"
+                   data-vendor-id="19"
+                   data-state="pending"
+                   data-business="Sunrise Photography Co."
+                   data-city="Mirpurkhas"
+                   data-category="Photography">
+            <div class="ad-approval-top">
+              <div>
+                <div class="ap-id">
+                  <span class="ap-ref">vendor_id 19</span>
+                  <span class="verify-badge unverified" data-ap-badge><i class="bi bi-hourglass-split" aria-hidden="true"></i> Awaiting verification</span>
+                  <span class="demo-tag muted">Demo</span>
+                </div>
+                <h3>Sunrise Photography Co.</h3>
+                <p class="ap-meta">Photography<span class="sep">·</span>Mirpurkhas
+                  <span class="sep">·</span>3 services listed</p>
+              </div>
+              <div>
+                <!-- vendor_profiles.status — the account state, NOT verification -->
+                <span class="vendor-account-status active">active</span>
+              </div>
+            </div>
+
+            <!-- FUTURE PHP: documents come from vendor_documents (extension table):
+                 SELECT document_type, file_path, status FROM vendor_documents
+                 WHERE vendor_id = :vendor_id; -->
+            <div class="ad-docs">
+              <div class="ad-doc">
+                <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">CNIC</p>
+                  <p class="d-state">On file</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Business licence</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-receipt" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Tax certificate</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="ad-approval-foot">
+              <span class="ap-meta">Reviewing sets <code>is_verified</code> only</span>
+              <div class="ad-approval-actions">
+                <button type="button" class="btn-eventora btn-reject" data-ap-action="rejected">Reject Documents</button>
+                <button type="button" class="btn-eventora btn-accept" data-ap-action="verified">Approve &amp; Publish</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="ad-approval glass-card"
+                   data-vendor-id="1"
+                   data-state="verified"
+                   data-business="Riverside Banquet Hall"
+                   data-city="Hyderabad"
+                   data-category="Venue">
+            <div class="ad-approval-top">
+              <div>
+                <div class="ap-id">
+                  <span class="ap-ref">vendor_id 1</span>
+                  <span class="verify-badge verified" data-ap-badge><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+                  <span class="demo-tag muted">Demo</span>
+                </div>
+                <h3>Riverside Banquet Hall</h3>
+                <p class="ap-meta">Venue<span class="sep">·</span>Hyderabad
+                  <span class="sep">·</span>3 services listed</p>
+              </div>
+              <div>
+                <!-- vendor_profiles.status — the account state, NOT verification -->
+                <span class="vendor-account-status active">active</span>
+              </div>
+            </div>
+
+            <!-- FUTURE PHP: documents come from vendor_documents (extension table):
+                 SELECT document_type, file_path, status FROM vendor_documents
+                 WHERE vendor_id = :vendor_id; -->
+            <div class="ad-docs">
+              <div class="ad-doc">
+                <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">CNIC</p>
+                  <p class="d-state">On file</p>
+                </div>
+              </div>
+              <div class="ad-doc">
+                <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Business licence</p>
+                  <p class="d-state">On file</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-receipt" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Tax certificate</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="ad-approval-foot">
+              <span class="ap-meta">Reviewing sets <code>is_verified</code> only</span>
+              <div class="ad-approval-actions">
+                <span class="ap-outcome">Approved — this vendor is now listed in the public marketplace.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="ad-approval glass-card"
+                   data-vendor-id="2"
+                   data-state="verified"
+                   data-business="Golden Spoon Catering"
+                   data-city="Hyderabad"
+                   data-category="Catering">
+            <div class="ad-approval-top">
+              <div>
+                <div class="ap-id">
+                  <span class="ap-ref">vendor_id 2</span>
+                  <span class="verify-badge verified" data-ap-badge><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+                  <span class="demo-tag muted">Demo</span>
+                </div>
+                <h3>Golden Spoon Catering</h3>
+                <p class="ap-meta">Catering<span class="sep">·</span>Hyderabad
+                  <span class="sep">·</span>3 services listed</p>
+              </div>
+              <div>
+                <!-- vendor_profiles.status — the account state, NOT verification -->
+                <span class="vendor-account-status active">active</span>
+              </div>
+            </div>
+
+            <!-- FUTURE PHP: documents come from vendor_documents (extension table):
+                 SELECT document_type, file_path, status FROM vendor_documents
+                 WHERE vendor_id = :vendor_id; -->
+            <div class="ad-docs">
+              <div class="ad-doc">
+                <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">CNIC</p>
+                  <p class="d-state">On file</p>
+                </div>
+              </div>
+              <div class="ad-doc">
+                <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Business licence</p>
+                  <p class="d-state">On file</p>
+                </div>
+              </div>
+              <div class="ad-doc is-missing">
+                <i class="bi bi-receipt" aria-hidden="true"></i>
+                <div class="d-body">
+                  <p class="d-name">Tax certificate</p>
+                  <p class="d-state">Not provided</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="ad-approval-foot">
+              <span class="ap-meta">Reviewing sets <code>is_verified</code> only</span>
+              <div class="ad-approval-actions">
+                <span class="ap-outcome">Approved — this vendor is now listed in the public marketplace.</span>
+              </div>
+            </div>
+          </article>
+      </div>
+
+      <div class="dash-empty glass-card" data-ap-empty hidden>
+        <i class="bi bi-patch-check" aria-hidden="true"></i>
+        <h4>No vendors match</h4>
+        <p>Try a different filter, or clear your search.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+  <!-- Approving publishes a business to the public marketplace, so both
+       decisions confirm first. Reuses .eventora-modal from section 24. -->
+  <div class="eventora-modal" data-approve-modal role="dialog" aria-modal="true"
+       aria-labelledby="ap-title">
+    <div class="modal-veil" data-ap-cancel></div>
+    <div class="modal-panel glass-card confirm-panel">
+      <button type="button" class="modal-close" data-ap-cancel aria-label="Close">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+
+      <div class="confirm-icon accept" data-ap-icon><i class="bi bi-patch-check"></i></div>
+      <h3 id="ap-title" data-ap-title>Confirm</h3>
+      <p class="modal-lede" data-ap-text>Are you sure?</p>
+
+      <div class="confirm-summary">
+        <p><strong data-ap-name>Vendor</strong></p>
+        <p data-ap-detail>Category · City</p>
+      </div>
+
+      <div class="confirm-actions">
+        <button type="button" class="btn-eventora btn-ghost" data-ap-cancel>Cancel</button>
+        <button type="button" class="btn-eventora btn-accept" data-ap-go>Confirm</button>
+      </div>
+
+      <p class="booking-note">Demo mode — this updates the page only. Nothing is saved and no vendor
+         is notified.</p>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

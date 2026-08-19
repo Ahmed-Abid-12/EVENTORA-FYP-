@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | Eventora Vendor</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Vendor navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Vendor</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Business</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="business-profile.html"><i class="bi bi-shop" aria-hidden="true"></i> Business Profile</a></li>
+        <li><a href="services.html"><i class="bi bi-box-seam" aria-hidden="true"></i> Services
+          <span class="nav-count">3</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="booking-requests.html"><i class="bi bi-inbox" aria-hidden="true"></i> Booking Requests
+          <span class="nav-count">2</span></a></li>
+        <li><a href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i> Calendar</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="reviews.html"><i class="bi bi-star" aria-hidden="true"></i> Reviews</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Dashboard</h1>
+          <p class="topbar-sub">Your business at a glance</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="booking-requests.html" class="icon-btn" aria-label="Booking requests">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="business-profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">LL</span>
+          <span>
+            <span class="who d-block">Lens &amp; Light Studio</span>
+            <span class="role">Vendor account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content">
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo vendor dashboard.</strong> You are not signed in. This dashboard shows
+           <strong>Lens &amp; Light Studio</strong>, the same demo vendor listed in the public
+           marketplace. Every figure below is sample data.</p>
+      </div>
+
+      <!-- ==================================================================
+           STATS — each maps to a real query against Database v1.0
+           ================================================================== -->
+      <div class="stat-grid">
+        <!-- FUTURE PHP: SELECT COUNT(*) FROM services WHERE vendor_id = :vendor_id -->
+        <div class="stat-card glass-card">
+          <div class="stat-top">
+            <span class="stat-icon"><i class="bi bi-box-seam" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="stat-value">3</p>
+          <p class="stat-label">Total Services</p>
+        </div>
+
+        <!-- FUTURE PHP: ... AND is_available = 1 -->
+        <div class="stat-card glass-card">
+          <div class="stat-top">
+            <span class="stat-icon green"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="stat-value">3</p>
+          <p class="stat-label">Active Services</p>
+        </div>
+
+        <!-- FUTURE PHP: SELECT COUNT(*) FROM bookings
+                         WHERE vendor_id = :vendor_id AND status = 'pending' -->
+        <div class="stat-card glass-card">
+          <div class="stat-top">
+            <span class="stat-icon gold"><i class="bi bi-inbox" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="stat-value">2</p>
+          <p class="stat-label">Pending Requests</p>
+        </div>
+
+        <!-- FUTURE PHP: ... AND status = 'accepted' -->
+        <div class="stat-card glass-card">
+          <div class="stat-top">
+            <span class="stat-icon"><i class="bi bi-calendar-check" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="stat-value">2</p>
+          <p class="stat-label">Accepted Bookings</p>
+        </div>
+
+        <!-- FUTURE PHP: ... AND status = 'completed' -->
+        <div class="stat-card glass-card">
+          <div class="stat-top">
+            <span class="stat-icon"><i class="bi bi-patch-check" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="stat-value">31</p>
+          <p class="stat-label">Completed Bookings</p>
+        </div>
+
+        <!-- FUTURE PHP: SELECT SUM(b.total_amount) - SUM(cm.commission_amount)
+                         FROM bookings b JOIN commissions cm ON cm.booking_id = b.booking_id
+                         WHERE b.vendor_id = :vendor_id AND b.status = 'completed' -->
+        <div class="stat-card glass-card">
+          <div class="stat-top">
+            <span class="stat-icon gold"><i class="bi bi-cash-coin" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="stat-value">Rs. 3,078,000</p>
+          <p class="stat-label">Net Earnings</p>
+        </div>
+
+        <!-- FUTURE PHP: vendor_profiles.avg_rating -->
+        <div class="stat-card glass-card">
+          <div class="stat-top">
+            <span class="stat-icon gold"><i class="bi bi-star" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="stat-value">4.9</p>
+          <p class="stat-label">Average Rating</p>
+        </div>
+
+        <div class="stat-card glass-card">
+          <div class="stat-top">
+            <span class="stat-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="stat-value">89%</p>
+          <p class="stat-label">Profile Complete</p>
+        </div>
+      </div>
+
+      <div class="dash-split">
+        <!-- ================================================================
+             RECENT BOOKING REQUESTS
+             ================================================================ -->
+        <section class="dash-panel glass-card">
+          <div class="dash-section-head">
+            <h2>Recent booking requests</h2>
+            <a href="booking-requests.html">View all</a>
+          </div>
+
+          <!-- FUTURE PHP: SELECT b.*, e.event_name, e.event_date, s.title
+                 FROM bookings b
+                 JOIN events e   ON e.event_id = b.event_id
+                 JOIN services s ON s.service_id = b.service_id
+                 WHERE b.vendor_id = :vendor_id
+                 ORDER BY b.created_at DESC LIMIT 5;
+               Accept/Reject lives on booking-requests.html (next batch). -->
+          <div class="dash-table-wrap">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>Service</th>
+                  <th>Event</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th class="cell-actions">&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <span class="cell-strong">Full-Day Coverage</span>
+                    <span class="cell-sub">EVB-0003</span>
+                  </td>
+                  <td>Sample Wedding<span class="cell-sub">15 Dec 2026</span></td>
+                  <td class="cell-strong cell-money">Rs. 110,000</td>
+                  <td><span class="booking-status pending">pending</span></td>
+                  <td class="cell-actions"><a href="booking-requests.html" class="link-action">Review</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="cell-strong">Half-Day Coverage</span>
+                    <span class="cell-sub">EVB-0021</span>
+                  </td>
+                  <td>Sample Engagement Shoot<span class="cell-sub">4 Oct 2026</span></td>
+                  <td class="cell-strong cell-money">Rs. 65,000</td>
+                  <td><span class="booking-status pending">pending</span></td>
+                  <td class="cell-actions"><a href="booking-requests.html" class="link-action">Review</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="cell-strong">Cinematic Film Package</span>
+                    <span class="cell-sub">EVB-0022</span>
+                  </td>
+                  <td>Sample Corporate Launch<span class="cell-sub">12 Sep 2026</span></td>
+                  <td class="cell-strong cell-money">Rs. 156,000</td>
+                  <td><span class="booking-status accepted">accepted</span></td>
+                  <td class="cell-actions"><a href="booking-requests.html" class="link-action">Review</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="cell-strong">Half-Day Coverage</span>
+                    <span class="cell-sub">EVB-0023</span>
+                  </td>
+                  <td>Sample Birthday Party<span class="cell-sub">22 Aug 2026</span></td>
+                  <td class="cell-strong cell-money">Rs. 65,000</td>
+                  <td><span class="booking-status accepted">accepted</span></td>
+                  <td class="cell-actions"><a href="booking-requests.html" class="link-action">Review</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="cell-strong">Full-Day Coverage</span>
+                    <span class="cell-sub">EVB-0024</span>
+                  </td>
+                  <td>Sample Family Gathering<span class="cell-sub">18 Apr 2026</span></td>
+                  <td class="cell-strong cell-money">Rs. 110,000</td>
+                  <td><span class="booking-status completed">completed</span></td>
+                  <td class="cell-actions"><a href="booking-requests.html" class="link-action">Review</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="panel-note mt-3">EVB-0003 is the same booking the demo client raised for Sample
+             Wedding, seen from your side. The others come from other demo clients.</p>
+        </section>
+
+        <div>
+          <!-- Earnings -->
+          <section class="dash-panel glass-card mb-3">
+            <div class="dash-section-head">
+              <h2>Earnings summary</h2>
+              <a href="payments.html">Payments</a>
+            </div>
+
+            <!-- Commission is deducted from the vendor payout at the rate
+                 snapshotted on the booking (D4/D5). -->
+            <div class="earn-row">
+              <span class="e-key">Gross booked (completed)</span>
+              <span class="e-val">Rs. 3,420,000</span>
+            </div>
+            <div class="earn-row is-deduction">
+              <span class="e-key">Platform commission (10%)</span>
+              <span class="e-val">&minus; Rs. 342,000</span>
+            </div>
+            <div class="earn-row is-total">
+              <span class="e-key">Net to you</span>
+              <span class="e-val">Rs. 3,078,000</span>
+            </div>
+            <p class="panel-note mt-3">Only completed bookings contribute. Pending, accepted,
+               rejected and cancelled requests are excluded &mdash; money exists once the service is
+               delivered, not when a request is made.</p>
+          </section>
+
+          <!-- Services -->
+          <section class="dash-panel glass-card mb-3">
+            <div class="dash-section-head">
+              <h2>Your services</h2>
+              <a href="services.html">Manage</a>
+            </div>
+            <div class="event-summary-item">
+              <div class="date-chip"><span class="day">1</span><span class="mon">Svc</span></div>
+              <div>
+                <p class="ev-name">Half-Day Coverage</p>
+                <p class="ev-meta">Rs. 65,000
+                  <span class="sep">·</span>Available</p>
+              </div>
+            </div>
+            <div class="event-summary-item">
+              <div class="date-chip"><span class="day">2</span><span class="mon">Svc</span></div>
+              <div>
+                <p class="ev-name">Full-Day Coverage</p>
+                <p class="ev-meta">Rs. 110,000
+                  <span class="sep">·</span>Available</p>
+              </div>
+            </div>
+            <div class="event-summary-item">
+              <div class="date-chip"><span class="day">3</span><span class="mon">Svc</span></div>
+              <div>
+                <p class="ev-name">Cinematic Film Package</p>
+                <p class="ev-meta">Rs. 156,000
+                  <span class="sep">·</span>Available</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Reviews -->
+          <section class="dash-panel glass-card mb-3">
+            <div class="dash-section-head">
+              <h2>Recent reviews</h2>
+              <a href="reviews.html">All reviews</a>
+            </div>
+            <p class="rv-stars-display" aria-label="4.9 out of 5">★★★★★</p>
+            <p class="panel-note mt-2">4.9 average across 31 demo reviews.
+               Written reviews appear here once the reviews module is connected.</p>
+          </section>
+
+          <!-- Profile completion -->
+          <section class="dash-panel glass-card mb-3">
+            <div class="dash-section-head">
+              <h2>Profile completion</h2>
+              <a href="business-profile.html">Complete</a>
+            </div>
+            <div class="budget-row">
+              <div class="budget-top"><span>8 of 9 fields</span><strong>89%</strong></div>
+              <div class="budget-track"><span data-pct="89"></span></div>
+            </div>
+            <p class="panel-note mt-2">A profile image has not been uploaded yet.</p>
+          </section>
+
+          <!-- Quick actions -->
+          <section class="dash-panel glass-card">
+            <div class="dash-section-head"><h2>Quick actions</h2></div>
+            <div class="quick-actions">
+              <a href="add-service.html" class="quick-action">
+                <i class="bi bi-plus-circle" aria-hidden="true"></i> Add Service</a>
+              <a href="booking-requests.html" class="quick-action">
+                <i class="bi bi-inbox" aria-hidden="true"></i> Requests</a>
+              <a href="business-profile.html" class="quick-action">
+                <i class="bi bi-shop" aria-hidden="true"></i> Profile</a>
+              <a href="../pages/vendor-detail.html?vendor_id=3" class="quick-action">
+                <i class="bi bi-eye" aria-hidden="true"></i> Public Page</a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

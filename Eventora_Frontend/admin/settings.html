@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings | Eventora Admin</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Admin navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Admin</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Overview</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="reports.html"><i class="bi bi-graph-up" aria-hidden="true"></i> Reports</a></li>
+      </ul>
+
+      <p class="dash-nav-label">People</p>
+      <ul>
+        <li><a href="users.html"><i class="bi bi-people" aria-hidden="true"></i> Users</a></li>
+        <li><a href="vendors.html"><i class="bi bi-shop" aria-hidden="true"></i> Vendors</a></li>
+        <li><a href="vendor-approval.html"><i class="bi bi-patch-check" aria-hidden="true"></i> Vendor Approval
+          <span class="nav-count">6</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Platform</p>
+      <ul>
+        <li><a href="categories.html"><i class="bi bi-tags" aria-hidden="true"></i> Categories</a></li>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> Bookings</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+        <li><a href="commission.html"><i class="bi bi-percent" aria-hidden="true"></i> Commission</a></li>
+        <li><a href="chatbot-logs.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chatbot Logs</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Settings</h1>
+          <p class="topbar-sub">Platform configuration and system information</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="vendor-approval.html" class="icon-btn" aria-label="Vendor approvals">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="settings.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">EA</span>
+          <span>
+            <span class="who d-block">Eventora Admin</span>
+            <span class="role">Administrator</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-admin-settings>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo settings.</strong> You are not signed in and no backend is connected. Every
+           control below resets when you reload the page.</p>
+      </div>
+
+      <!-- The rule that governs every section on this page. -->
+      <div class="pay-formula">
+        <strong>What is actually stored, and what is not.</strong>
+        Each section below is tagged. <span class="persist-tag stored">Stored in v1.0</span> means the
+        value has a real column in the frozen schema.
+        <span class="persist-tag demo-only">Demo-only</span> means the control exists in the interface
+        but has <strong>no approved database representation</strong> — it is shown to describe intended
+        behaviour, not to imply a saved preference. No column has been invented to make any toggle on
+        this page look persistent.
+      </div>
+
+      <div class="settings-layout">
+        <nav class="settings-nav glass-card" aria-label="Settings sections">
+          <ul>
+            <li><a href="#platform" class="is-active"><i class="bi bi-sliders" aria-hidden="true"></i> Platform</a></li>
+            <li><a href="#account"><i class="bi bi-person" aria-hidden="true"></i> Account</a></li>
+            <li><a href="#security"><i class="bi bi-shield-lock" aria-hidden="true"></i> Security</a></li>
+            <li><a href="#marketplace"><i class="bi bi-shop" aria-hidden="true"></i> Marketplace</a></li>
+            <li><a href="#commission"><i class="bi bi-percent" aria-hidden="true"></i> Commission</a></li>
+            <li><a href="#notifications"><i class="bi bi-bell" aria-hidden="true"></i> Notifications</a></li>
+            <li><a href="#privacy"><i class="bi bi-eye" aria-hidden="true"></i> Privacy</a></li>
+            <li><a href="#system"><i class="bi bi-info-circle" aria-hidden="true"></i> System</a></li>
+            <li><a href="#danger"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Danger zone</a></li>
+          </ul>
+        </nav>
+
+        <div>
+          <!-- ============================================================
+               PLATFORM — no settings table exists in v1.0
+               ============================================================ -->
+          <section class="settings-panel glass-card dash-form" id="platform">
+            <div class="panel-head-row">
+              <div>
+                <h2>Platform settings</h2>
+                <p class="panel-sub">Site-wide configuration</p>
+              </div>
+              <span class="persist-tag demo-only"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Demo-only — not persisted in Database v1.0</span>
+            </div>
+
+            <form data-settings-form novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="pf-name">Platform name</label>
+                  <input type="text" id="pf-name" name="platform_name" value="Eventora" />
+                </div>
+                <div class="form-group">
+                  <label for="pf-email">Support email</label>
+                  <input type="text" id="pf-email" name="support_email" value="support@eventora.local" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="avail-row">
+                  <div class="a-body">
+                    <p class="a-title">Maintenance mode</p>
+                    <p class="a-desc">Would take the public site offline while leaving admin access
+                       open. There is no column for this, and no backend to enforce it.</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" aria-label="Maintenance mode" />
+                    <span class="track"></span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Database v1.0 has no platform_settings table. Adding one to make
+                   these fields persist would be a schema change, which is frozen.
+                   Reported as a deferred decision instead. -->
+              <p class="rv-nlp-note">Database v1.0 contains no settings or configuration table, so
+                 none of these values can be saved. Adding one would be a schema change and is
+                 deferred, not assumed.</p>
+
+              <div class="settings-save-bar">
+                <button type="submit" class="btn-eventora btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </section>
+
+          <!-- ============================================================
+               ACCOUNT — users table. Real columns.
+               ============================================================ -->
+          <section class="settings-panel glass-card dash-form" id="account">
+            <div class="panel-head-row">
+              <div>
+                <h2>Administrator account</h2>
+                <p class="panel-sub">Stored on <code>users</code> where <code>role = 'admin'</code></p>
+              </div>
+              <span class="persist-tag stored"><i class="bi bi-database" aria-hidden="true"></i> Stored in v1.0</span>
+            </div>
+
+            <form data-settings-form novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="ad-name">Name</label>
+                  <input type="text" id="ad-name" name="name" value="Eventora Admin" />
+                </div>
+                <div class="form-group">
+                  <label for="ad-email">Email</label>
+                  <input type="text" id="ad-email" name="email" value="admin@eventora.local" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Account status</label>
+                <p class="panel-note">
+                  <span class="account-status active">active</span>
+                  &nbsp;<code>users.status</code>. The administrator account cannot be blocked from
+                  <a href="users.html">Users</a> — there is no public admin signup, so blocking the
+                  only admin would lock everyone out permanently.
+                </p>
+              </div>
+
+              <!-- FUTURE BACKEND: UPDATE users SET name, email WHERE id = :user_id AND role = 'admin' -->
+              <div class="settings-save-bar">
+                <button type="submit" class="btn-eventora btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </section>
+
+          <!-- ============================================================
+               SECURITY — password_hash is real; sessions and 2FA are not
+               ============================================================ -->
+          <section class="settings-panel glass-card dash-form" id="security">
+            <div class="panel-head-row">
+              <div>
+                <h2>Password &amp; security</h2>
+                <p class="panel-sub">Your password is stored only as a hash and cannot be retrieved</p>
+              </div>
+              <span class="persist-tag stored"><i class="bi bi-database" aria-hidden="true"></i> Stored in v1.0</span>
+            </div>
+
+            <form data-settings-form novalidate>
+              <div class="form-group">
+                <label for="ad-current">Current password</label>
+                <input type="password" id="ad-current" name="current_password" placeholder="••••••••" />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="ad-new">New password</label>
+                  <input type="password" id="ad-new" name="password" placeholder="At least 8 characters" />
+                </div>
+                <div class="form-group">
+                  <label for="ad-confirm">Confirm new password</label>
+                  <input type="password" id="ad-confirm" name="confirm_password" placeholder="Re-enter it" />
+                </div>
+              </div>
+              <!-- FUTURE BACKEND: password_verify() the current password, then
+                   UPDATE users SET password_hash = password_hash(:new, PASSWORD_DEFAULT). -->
+              <div class="settings-save-bar">
+                <button type="submit" class="btn-eventora btn-primary">Update Password</button>
+              </div>
+            </form>
+
+            <div class="panel-head-row mt-4">
+              <div>
+                <h2>Two-factor authentication</h2>
+                <p class="panel-sub">Not implemented</p>
+              </div>
+              <span class="persist-tag demo-only"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Demo-only — not persisted in Database v1.0</span>
+            </div>
+            <p class="rv-nlp-note">Two-factor authentication is not implemented and has no column in
+               Database v1.0. No toggle is offered here, because a switch that cannot be honoured
+               would imply the account is protected when it is not.</p>
+
+            <div class="panel-head-row mt-4">
+              <div>
+                <h2>Active sessions</h2>
+                <p class="panel-sub">Not modelled</p>
+              </div>
+              <span class="persist-tag demo-only"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Demo-only — not persisted in Database v1.0</span>
+            </div>
+            <p class="rv-nlp-note">Database v1.0 does not model sessions, so no session history is
+               shown. Displaying a device list would be fabricated. When authentication is built,
+               signing out everywhere will simply invalidate the PHP session.</p>
+          </section>
+
+          <!-- ============================================================
+               MARKETPLACE
+               ============================================================ -->
+          <section class="settings-panel glass-card" id="marketplace">
+            <div class="panel-head-row">
+              <div>
+                <h2>Marketplace configuration</h2>
+                <p class="panel-sub">Which cities the platform serves</p>
+              </div>
+              <span class="persist-tag demo-only"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Demo-only — not persisted in Database v1.0</span>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Hyderabad</p>
+                <p class="t-desc">Vendors currently registered: 7</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Hyderabad" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Jamshoro</p>
+                <p class="t-desc">Vendors currently registered: 4</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Jamshoro" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Sukkur</p>
+                <p class="t-desc">Vendors currently registered: 3</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Sukkur" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Larkana</p>
+                <p class="t-desc">Vendors currently registered: 3</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Larkana" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Mirpurkhas</p>
+                <p class="t-desc">Vendors currently registered: 3</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Mirpurkhas" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <p class="rv-nlp-note">City is stored per vendor (<code>vendor_profiles.city</code>) and
+               per event (<code>events.city</code>), but there is no table of platform-supported
+               cities. These switches describe intended behaviour only. Categories, by contrast, do
+               have real storage — manage them on <a href="categories.html">Categories</a>, where
+               deactivation is backed by <code>categories.is_active</code>.</p>
+          </section>
+
+          <!-- ============================================================
+               COMMISSION — the sensitive one
+               ============================================================ -->
+          <section class="settings-panel glass-card dash-form" id="commission">
+            <div class="panel-head-row">
+              <div>
+                <h2>Commission configuration</h2>
+                <p class="panel-sub">The current model and why the rate is not editable here</p>
+              </div>
+              <span class="persist-tag demo-only"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Demo-only — not persisted in Database v1.0</span>
+            </div>
+
+            <div class="rpt-figure">
+              <span class="f-key">Current configured rate</span>
+              <span class="f-val">10.00%</span>
+            </div>
+            <div class="rpt-figure">
+              <span class="f-key">Commission records</span>
+              <span class="f-val">33</span>
+            </div>
+            <div class="rpt-figure is-commission">
+              <span class="f-key">Commission recorded to date</span>
+              <span class="f-val">Rs. 349,600</span>
+            </div>
+
+            <div class="pay-formula mt-3">
+              <strong>Why this rate is displayed, not edited.</strong>
+              <code>vendor_profiles.commission_rate</code> exists per vendor with a default of
+              10.00%, but there is no platform-level default column in Database
+              v1.0. More importantly, changing a rate must never alter existing records:
+              <code>commissions.commission_percentage</code> is <strong>snapshotted at booking
+              time</strong>, so a booking taken at 10% keeps
+              10% permanently. A rate editor here would need a clear rule for
+              which future bookings it affects, and that rule is not yet approved.
+            </div>
+
+            <p class="rv-nlp-note">The 10% figure shown is the current
+               configured demo value used throughout the project. It has not been changed, and it
+               cannot be changed from this page.</p>
+          </section>
+
+          <!-- ============================================================
+               NOTIFICATIONS
+               ============================================================ -->
+          <section class="settings-panel glass-card" id="notifications">
+            <div class="panel-head-row">
+              <div>
+                <h2>Notifications</h2>
+                <p class="panel-sub">Which platform events you want to be told about</p>
+              </div>
+              <span class="persist-tag demo-only"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Demo-only — not persisted in Database v1.0</span>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">New vendor registrations</p>
+                <p class="t-desc">When a vendor signs up and submits documents for verification.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="New vendor registrations" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Verification queue alerts</p>
+                <p class="t-desc">When the pending verification queue grows beyond a threshold.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Verification queue alerts" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Booking disputes</p>
+                <p class="t-desc">When a client or vendor raises an issue with a booking.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Booking disputes" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Payment failures</p>
+                <p class="t-desc">When a client payment fails or is reversed.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Payment failures" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">New contact messages</p>
+                <p class="t-desc">When someone submits the public contact form.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" aria-label="New contact messages" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Weekly platform summary</p>
+                <p class="t-desc">A digest of bookings, revenue and new accounts.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" aria-label="Weekly platform summary" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <p class="rv-nlp-note">The <code>notifications</code> table stores messages, not per-user
+               delivery preferences. There is no column for any switch above, so none of these can be
+               saved. This matches the same limitation recorded on the client and vendor settings
+               pages.</p>
+          </section>
+
+          <!-- ============================================================
+               PRIVACY
+               ============================================================ -->
+          <section class="settings-panel glass-card" id="privacy">
+            <div class="panel-head-row">
+              <div>
+                <h2>Privacy and data handling</h2>
+                <p class="panel-sub">What administrators can access</p>
+              </div>
+              <span class="persist-tag demo-only"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Demo-only — not persisted in Database v1.0</span>
+            </div>
+
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Mask client contact details in admin tables</p>
+                <p class="t-desc">Would hide email and phone in list views, revealing them only on a
+                   record page.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" aria-label="Mask client contact details" />
+                <span class="track"></span>
+              </label>
+            </div>
+
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Log administrator actions</p>
+                <p class="t-desc">Would record who approved a vendor or blocked an account, and when.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" aria-label="Log administrator actions" />
+                <span class="track"></span>
+              </label>
+            </div>
+
+            <p class="rv-nlp-note">Neither has storage in v1.0. There is no audit-log table, so admin
+               actions are not currently recorded anywhere — worth knowing, because
+               <code>vendor_documents.reviewed_by</code> is the only reviewer trail that exists, and
+               it covers verification only.</p>
+          </section>
+
+          <!-- ============================================================
+               SYSTEM INFORMATION — all real, all derived
+               ============================================================ -->
+          <section class="settings-panel glass-card" id="system">
+            <div class="panel-head-row">
+              <div>
+                <h2>System information</h2>
+                <p class="panel-sub">Derived from the project and the frozen schema</p>
+              </div>
+              <span class="persist-tag stored"><i class="bi bi-database" aria-hidden="true"></i> Stored in v1.0</span>
+            </div>
+
+            <div class="sys-info">
+              <div>
+                <div class="sys-row"><span class="s-key">Database version</span>
+                  <span class="s-val">v1.0 Final (frozen)</span></div>
+                <div class="sys-row"><span class="s-key">Core tables</span>
+                  <span class="s-val">12</span></div>
+                <div class="sys-row"><span class="s-key">Support tables</span>
+                  <span class="s-val">6</span></div>
+                <div class="sys-row"><span class="s-key">Engine / charset</span>
+                  <span class="s-val"><code>InnoDB</code> / <code>utf8mb4</code></span></div>
+                <div class="sys-row"><span class="s-key">Commission rate</span>
+                  <span class="s-val">10.00%</span></div>
+              </div>
+              <div>
+                <div class="sys-row"><span class="s-key">Registered users</span>
+                  <span class="s-val">58</span></div>
+                <div class="sys-row"><span class="s-key">Vendors</span>
+                  <span class="s-val">20 (14 verified)</span></div>
+                <div class="sys-row"><span class="s-key">Categories</span>
+                  <span class="s-val">7 active</span></div>
+                <div class="sys-row"><span class="s-key">Bookings</span>
+                  <span class="s-val">46</span></div>
+                <div class="sys-row"><span class="s-key">Backend</span>
+                  <span class="s-val">Not connected — frontend only</span></div>
+              </div>
+            </div>
+
+            <p class="panel-note mt-3">Every figure here is counted from the shared demo dataset, the
+               same records the client, vendor and public pages render.</p>
+          </section>
+
+          <!-- ============================================================
+               DANGER ZONE
+               ============================================================ -->
+          <section class="settings-panel glass-card danger-zone" id="danger">
+            <h2>Danger zone</h2>
+            <p class="panel-sub">Operations that are deliberately not offered</p>
+
+            <div class="danger-row">
+              <div class="d-body">
+                <p class="d-title">No destructive platform operations</p>
+                <p class="d-desc">There is no "reset platform", "purge bookings", "delete all logs" or
+                   "wipe demo data" control here, and there will not be one. Bookings, payments,
+                   commissions and reviews hold foreign keys with <code>ON DELETE RESTRICT</code>, so
+                   the database itself refuses those deletions. Accounts are blocked, never deleted;
+                   categories are deactivated, never removed. Offering a destructive button that the
+                   schema would reject would be misleading.</p>
+              </div>
+            </div>
+
+            <div class="danger-row mt-4">
+              <div class="d-body">
+                <p class="d-title">Sign out</p>
+                <p class="d-desc">End this administrator session on this device.</p>
+              </div>
+              <!-- FUTURE BACKEND: logout.php destroys the session, then redirects to login -->
+              <a href="../pages/login.html" class="btn-eventora btn-ghost">Sign Out</a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

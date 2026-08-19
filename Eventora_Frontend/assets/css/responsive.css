@@ -1,0 +1,663 @@
+/* ==========================================================================
+   EVENTORA — Responsive Overrides
+   Breakpoints: 1200px (desktop-sm) / 992px (tablet) / 768px (mobile-lg) / 480px (mobile-sm)
+   ========================================================================== */
+
+/* ---------- 1200px and below ---------- */
+@media (max-width: 1200px) {
+  :root { --section-py: 100px; }
+
+  .ai-showcase { padding: 48px; gap: 40px; }
+}
+
+/* ---------- 992px — tablet ---------- */
+@media (max-width: 992px) {
+  :root { --section-py: 88px; }
+
+  .nav-links { display: none; }
+
+  .navbar-toggler-custom { display: flex; }
+
+  .hero-grid { grid-template-columns: 1fr; }
+
+  .hero { padding-top: 150px; }
+
+  .ai-orbit { max-width: 340px; margin-top: 40px; }
+
+  .bento-grid .span-8,
+  .bento-grid .span-4 { grid-column: span 12; }
+
+  .ai-showcase { grid-template-columns: 1fr; }
+
+  .steps-row { grid-template-columns: repeat(2, 1fr); }
+
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------- 768px — mobile landscape ---------- */
+@media (max-width: 768px) {
+  :root { --section-py: 72px; }
+
+  .hero-planner-form { flex-direction: column; }
+
+  .hero-planner-form .btn-primary { width: 100%; }
+
+  .hero-stats { gap: 26px; flex-wrap: wrap; }
+
+  .steps-row { grid-template-columns: 1fr; }
+
+  .ai-showcase { padding: 32px; border-radius: var(--radius-lg); }
+
+  .final-cta { padding: 56px 28px; }
+
+  .final-cta .cta-actions { flex-direction: column; }
+
+  .final-cta .cta-actions .btn-eventora { width: 100%; }
+
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+
+  .footer-bottom { flex-direction: column; text-align: center; }
+
+  .section-heading { margin-bottom: 44px; }
+}
+
+/* ---------- 480px — mobile small ---------- */
+@media (max-width: 480px) {
+  .container-xl { padding-inline: 18px; }
+
+  .eventora-navbar .container-xl { height: 68px; }
+
+  .brand-mark { font-size: 1.25rem; }
+
+  .nav-actions .btn-ghost { display: none; }
+
+  .hero { padding-top: 120px; padding-bottom: 60px; }
+
+  .hero-copy .lede { font-size: 1rem; }
+
+  .category-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .bento-grid > .glass-card { padding: 26px; }
+
+  .final-cta h2 { font-size: 1.8rem; }
+}
+
+/* ---------- AUTH PAGES (Login / Register) ---------- */
+@media (max-width: 1200px) {
+  .auth-hero { padding: 4rem 3rem; }
+  .auth-card { padding: 2.5rem; }
+}
+
+@media (max-width: 992px) {
+  .auth-hero-title { font-size: 2.6rem; }
+  .auth-hero { padding: 3rem; }
+  .auth-panel { padding: 2.5rem; }
+}
+
+@media (max-width: 768px) {
+  .auth-wrapper { flex-direction: column; }
+  .auth-hero { display: none; }
+  .auth-panel { width: 100%; padding: 2.5rem 1.5rem; justify-content: flex-start; }
+  .auth-mobile-brand { display: flex; margin-top: 1.5rem; justify-content: center; align-self: center; }
+  .auth-card { padding: 2rem; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .role-select { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .auth-card { padding: 1.5rem; border-radius: var(--radius-lg); }
+  .auth-card-header h2 { font-size: 1.5rem; }
+  .auth-options-row { flex-direction: column; align-items: flex-start; }
+}
+
+/* --------------------------------------------------------------------------
+   CONTACT PAGE
+   Moved out of contact.html's inline <style> block. Breakpoints match the
+   four already used throughout this file (1200 / 992 / 768 / 480).
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .contact-form-card { padding: 36px; }
+  .contact-sidebar { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .contact-info-card,
+  .social-connect-card { padding: 28px; }
+  .hours-card { grid-template-columns: 1fr; }
+  .hours-card h4 { grid-column: span 1; }
+}
+
+@media (max-width: 768px) {
+  .page-hero { padding-top: 150px; }
+  .contact-form-card { padding: 28px; }
+  .contact-form-card .form-row { grid-template-columns: 1fr; gap: 0; }
+  .contact-sidebar { grid-template-columns: 1fr; }
+  .contact-form-card .form-footer { flex-direction: column; align-items: stretch; }
+  .contact-form-card .form-footer .btn-eventora { width: 100%; }
+  .map-wrapper iframe { height: 280px; }
+}
+
+@media (max-width: 480px) {
+  .page-hero { padding-top: 120px; }
+  .contact-form-card { padding: 22px; }
+  .contact-grid { gap: 28px; }
+  .social-connect-links { flex-wrap: wrap; }
+}
+
+/* --------------------------------------------------------------------------
+   ABOUT PAGE
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .about-intro { grid-template-columns: 1fr; gap: 32px; }
+  .problem-grid { grid-template-columns: repeat(2, 1fr); }
+  .mv-grid { grid-template-columns: 1fr; }
+  .mv-card { padding: 34px; }
+  .facts-strip { padding: 32px; }
+}
+
+@media (max-width: 768px) {
+  .problem-grid { grid-template-columns: 1fr; }
+  .about-pullquote { padding: 28px; }
+  .about-pullquote blockquote { font-size: 1.15rem; }
+  .problem-card,
+  .tech-card { padding: 26px; }
+  .supervisor-card { padding: 24px; }
+}
+
+@media (max-width: 480px) {
+  .facts-strip { grid-template-columns: 1fr 1fr; gap: 22px; padding: 26px; }
+  .roadmap { padding-left: 26px; }
+  .roadmap-item::before { left: -24px; }
+  .team-card { padding: 26px 20px; }
+}
+
+/* --------------------------------------------------------------------------
+   FAQ PAGE
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .faq-filters { gap: 8px; margin-bottom: 28px; }
+  .faq-filter { font-size: 0.75rem; padding: 8px 14px; }
+  .faq-search input { padding: 0.9rem 3rem 0.9rem 3.1rem; font-size: 0.92rem; }
+  .faq-accordion { --bs-accordion-btn-padding-x: 18px; --bs-accordion-body-padding-x: 18px; }
+  .faq-accordion .accordion-button { font-size: 0.92rem; }
+}
+
+@media (max-width: 480px) {
+  .faq-filters { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 6px; }
+  .faq-filter { flex: 0 0 auto; }
+  .support-card { padding: 26px 20px; }
+}
+
+/* --------------------------------------------------------------------------
+   VENDOR LIST
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .vendor-layout { grid-template-columns: 240px 1fr; gap: 26px; }
+}
+
+@media (max-width: 992px) {
+  .vendor-layout { grid-template-columns: 1fr; }
+  .filter-panel { position: static; }
+  /* Collapsed by default so results are reachable without scrolling past
+     five filter groups on a phone. */
+  .filter-panel .filter-grid { display: none; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .filter-panel.is-open .filter-grid { display: grid; }
+  .filter-panel.is-open .filter-panel-head { margin-bottom: 22px; }
+  .filter-panel-head { margin-bottom: 0; }
+  .filter-toggle { display: inline-flex; }
+  .become-vendor { padding: 40px 32px; }
+}
+
+@media (max-width: 768px) {
+  .vendor-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  .results-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .become-vendor-inner { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 480px) {
+  .vendor-grid { grid-template-columns: 1fr; }
+  .filter-panel .filter-grid { grid-template-columns: 1fr; }
+  .filter-panel { padding: 22px 18px; }
+  .become-vendor { padding: 32px 22px; }
+}
+
+/* --------------------------------------------------------------------------
+   VENDOR DETAIL
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .detail-layout { grid-template-columns: 1fr; }
+  .booking-cta { position: static; }
+  .vendor-hero { padding: 28px; }
+  .detail-block { padding: 26px; }
+}
+
+@media (max-width: 768px) {
+  .rating-overview { grid-template-columns: 1fr; gap: 20px; }
+  .service-row { flex-direction: column; align-items: flex-start; }
+  .service-book { text-align: left; width: 100%; }
+  .service-book .btn-eventora { width: 100%; }
+  .vendor-hero-actions { width: 100%; }
+  .vendor-hero-actions .btn-eventora { flex: 1; }
+}
+
+@media (max-width: 480px) {
+  .vendor-hero { padding: 22px; }
+  .detail-block { padding: 20px; }
+  .eventora-modal .modal-panel { padding: 24px; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --------------------------------------------------------------------------
+   DASHBOARD SHELL
+   Below 992px the sidebar becomes an off-canvas drawer.
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .dash-split { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 992px) {
+  .dash-sidebar { transform: translateX(-100%); box-shadow: var(--shadow-card); }
+  .dash-sidebar.is-open { transform: translateX(0); }
+  .dash-main { margin-left: 0; }
+  .sidebar-open { display: inline-flex; align-items: center; justify-content: center; }
+  .sidebar-close { display: block; }
+  .dash-topbar { padding: 0 20px; }
+  .dash-content { padding: 22px 20px 48px; }
+}
+
+@media (max-width: 768px) {
+  .dash-topbar h1 { font-size: 1.1rem; }
+  .dash-user .who,
+  .dash-user .role { display: none; }
+  .dash-user { padding: 5px; }
+  .quick-actions { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .dash-content { padding: 18px 14px 40px; }
+  .dash-topbar { padding: 0 14px; gap: 10px; }
+  .stat-card { padding: 18px; }
+  .dash-panel { padding: 18px; }
+}
+
+/* --------------------------------------------------------------------------
+   DASHBOARD FORMS / CREATE EVENT
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .create-layout { grid-template-columns: 1fr; }
+  .event-preview { position: static; }
+}
+
+@media (max-width: 768px) {
+  .dash-form .form-row { grid-template-columns: 1fr; gap: 0; }
+  .dash-form .form-section { padding: 20px; }
+  .form-actions .btn-eventora { width: 100%; min-width: 0; }
+}
+
+@media (max-width: 480px) {
+  .type-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   MY EVENTS
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* align-items:stretch on a column flexbox sizes children to the widest
+     sibling's CONTENT, so the non-wrapping pill row (442px of buttons)
+     stretched the search box and the whole toolbar past the viewport.
+     Pinning both children to 100% of the container breaks that link. */
+  .events-toolbar { flex-direction: column; align-items: stretch; }
+  .events-toolbar > * { width: 100%; max-width: 100%; }
+  /* flex-basis of 240px plus padding exceeded a 390px viewport and pushed the
+     whole toolbar wider than the screen. min-width:0 lets both children shrink,
+     and the pill row scrolls inside itself instead of stretching the page. */
+  .events-toolbar > * { min-width: 0; }
+  .events-search { max-width: none; flex: 0 1 auto; }
+  .events-filters { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .events-filters .faq-filter { flex: 0 0 auto; }
+}
+
+@media (max-width: 480px) {
+  .events-grid { grid-template-columns: 1fr; }
+  .event-card-meta { grid-template-columns: 1fr; }
+  .event-card { padding: 18px; }
+}
+
+/* --------------------------------------------------------------------------
+   MY BOOKINGS
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .chain-step { flex: 1 1 160px; }
+}
+
+@media (max-width: 768px) {
+  /* Same stretch trap as the my-events toolbar: a column flexbox sizes its
+     children to the widest sibling's content, so both are pinned to 100%. */
+  .bookings-toolbar { flex-direction: column; align-items: stretch; }
+  .bookings-toolbar > * { width: 100%; max-width: 100%; min-width: 0; }
+  .bookings-search { flex: 0 1 auto; }
+  .bookings-filters { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .bookings-filters .faq-filter { flex: 0 0 auto; }
+
+  .booking-chain { flex-direction: column; gap: 12px; }
+  .chain-step { padding-right: 0; }
+  .chain-step + .chain-step { padding-left: 0; border-left: none; }
+  .booking-card-foot { flex-direction: column; align-items: flex-start; }
+  .booking-actions { width: 100%; }
+  .booking-actions .btn-eventora { flex: 1 1 auto; }
+}
+
+@media (max-width: 480px) {
+  .booking-card { padding: 18px; }
+  .booking-card-top { flex-direction: column; gap: 10px; }
+  .booking-amount { text-align: left; }
+  .booking-actions { flex-direction: column; }
+  .booking-actions .btn-eventora { width: 100%; }
+}
+
+/* --------------------------------------------------------------------------
+   BOOKING DETAIL / SAVED VENDORS / NOTIFICATIONS
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .bd-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  /* Column flexbox stretches children to the widest sibling's content —
+     same trap fixed on my-events and bookings. */
+  .notif-toolbar { flex-direction: column; align-items: stretch; }
+  .notif-toolbar > * { width: 100%; max-width: 100%; min-width: 0; }
+  .notif-filters { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .notif-filters .faq-filter { flex: 0 0 auto; }
+
+  .bd-card { padding: 20px; }
+  .bd-chain-step { flex-wrap: wrap; }
+  .bd-chain-step .step-link { width: 100%; margin-top: 8px; }
+  .bd-head h1 { font-size: 1.3rem; }
+}
+
+@media (max-width: 480px) {
+  .saved-grid { grid-template-columns: 1fr; }
+  .bd-card { padding: 18px; }
+  .notification-item { padding: 14px; gap: 11px; }
+  .notification-item.is-unread { padding-left: 11px; }
+  .notification-item .notif-side { align-self: flex-start; }
+  .bd-money-row { font-size: 0.85rem; }
+}
+
+/* --------------------------------------------------------------------------
+   CLIENT REVIEWS / PROFILE / SETTINGS
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .profile-grid { grid-template-columns: 1fr; }
+  .settings-layout { grid-template-columns: 1fr; }
+  .settings-nav { position: static; }
+  .settings-nav ul { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+  .settings-nav a { white-space: nowrap; }
+}
+
+@media (max-width: 768px) {
+  .profile-hero { flex-direction: column; align-items: flex-start; }
+  .completion-box { text-align: left; margin-left: 0; }
+  .profile-field { flex-direction: column; gap: 4px; }
+  .profile-field .f-val { text-align: left; }
+  .profile-tags { justify-content: flex-start; }
+  .rv-foot { flex-direction: column; align-items: stretch; }
+  .rv-foot .btn-eventora { width: 100%; }
+  .toggle-row { gap: 12px; }
+}
+
+@media (max-width: 480px) {
+  .profile-hero,
+  .profile-panel,
+  .settings-panel { padding: 18px; }
+  .rv-eligible-card,
+  .rv-submitted-card { padding: 18px; }
+  .star-input label { font-size: 1.4rem; }
+  .danger-row .btn-eventora { width: 100%; }
+}
+
+/* --------------------------------------------------------------------------
+   VENDOR MODULE
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .vp-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  /* Column flexbox stretches children to the widest sibling's content —
+     the same trap fixed on my-events, bookings and notifications. */
+  .svc-toolbar { flex-direction: column; align-items: stretch; }
+  .svc-toolbar > * { width: 100%; max-width: 100%; min-width: 0; }
+  .svc-search { flex: 0 1 auto; }
+  .svc-filters { flex-direction: column; align-items: stretch; }
+  .vp-hero { flex-direction: column; align-items: flex-start; }
+  .vp-rating-box { text-align: left; min-width: 0; }
+  .biz-field { flex-direction: column; gap: 4px; }
+  .biz-field .b-val { text-align: left; }
+}
+
+@media (max-width: 480px) {
+  .svc-grid { grid-template-columns: 1fr; }
+  .vp-hero, .vp-panel { padding: 18px; }
+  .svc-actions { flex-direction: column; }
+  .svc-actions .btn-eventora { width: 100%; }
+}
+
+/* --------------------------------------------------------------------------
+   VENDOR BOOKING REQUESTS / SERVICE FORM
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .svc-form-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  /* Column flexbox stretches children to the widest sibling's content. */
+  .br-toolbar { flex-direction: column; align-items: stretch; }
+  .br-toolbar > * { width: 100%; max-width: 100%; min-width: 0; }
+  .br-filters { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .br-filters .faq-filter { flex: 0 0 auto; }
+
+  .br-chain { flex-direction: column; gap: 12px; }
+  .br-step { padding-right: 0; }
+  .br-step + .br-step { padding-left: 0; border-left: none; }
+  .br-card-foot { flex-direction: column; align-items: flex-start; }
+  .br-actions { width: 100%; }
+  .br-actions .btn-eventora { flex: 1 1 auto; }
+}
+
+@media (max-width: 480px) {
+  .br-card { padding: 18px; }
+  .br-card-top { flex-direction: column; gap: 10px; }
+  .br-amount { text-align: left; }
+  .br-actions { flex-direction: column; }
+  .br-actions .btn-eventora { width: 100%; }
+  .confirm-actions { flex-direction: column; }
+}
+
+/* --------------------------------------------------------------------------
+   VENDOR CALENDAR / PAYMENTS / REVIEWS
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .cal-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .vr-overview { grid-template-columns: 1fr; gap: 20px; }
+  .pay-summary { grid-template-columns: 1fr 1fr; }
+  .cal-head { flex-direction: column; align-items: stretch; }
+  .cal-head > * { width: 100%; max-width: 100%; min-width: 0; }
+  .cal-nav { justify-content: space-between; }
+}
+
+@media (max-width: 600px) {
+  /* A seven-column grid below ~600px squeezes each day to under 70px, which
+     truncates every entry to nothing. The agenda list is genuinely more
+     useful at that size than a broken grid. */
+  .cal-month { display: none; }
+  .cal-agenda { display: block; }
+}
+
+@media (max-width: 480px) {
+  .pay-summary { grid-template-columns: 1fr; }
+  .cal-panel, .vr-overview { padding: 18px; }
+  .vr-card { padding: 18px; }
+  .vr-card-head { flex-direction: column; gap: 8px; }
+}
+
+/* --------------------------------------------------------------------------
+   ADMIN MODULE
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Column flexbox stretches children to the widest sibling's content. */
+  .ad-toolbar { flex-direction: column; align-items: stretch; }
+  .ad-toolbar > * { width: 100%; max-width: 100%; min-width: 0; }
+  .ad-filters { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .ad-filters .faq-filter { flex: 0 0 auto; }
+
+  .ad-approval-foot { flex-direction: column; align-items: flex-start; }
+  .ad-approval-actions { width: 100%; }
+  .ad-approval-actions .btn-eventora { flex: 1 1 auto; }
+  .dist-row { grid-template-columns: 78px 1fr 36px; gap: 8px; }
+}
+
+@media (max-width: 480px) {
+  .ad-approval, .ad-metric { padding: 18px; }
+  .ad-approval-actions { flex-direction: column; }
+  .ad-approval-actions .btn-eventora { width: 100%; }
+}
+
+/* --------------------------------------------------------------------------
+   EVENTORA SELECT
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  /* 16px prevents iOS Safari zooming the page when a select is focused, which
+     is what causes the "layout jumped" effect on phones. */
+  .evt-select { font-size: 16px; padding-top: 0.7rem; padding-bottom: 0.7rem; }
+  .evt-select--compact { font-size: 16px; }
+  .evt-select--ghost { font-size: 16px; }
+}
+
+/* --------------------------------------------------------------------------
+   ADMIN — CATEGORIES / BOOKINGS / PAYMENTS
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .adt-filters { grid-template-columns: 1fr 1fr; padding: 14px; }
+  .adt-reset { grid-column: span 2; }
+  .cat-card-foot { flex-direction: column; }
+  .cat-card-foot .btn-eventora { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .cat-grid { grid-template-columns: 1fr; }
+  .adt-filters { grid-template-columns: 1fr; }
+  .adt-reset { grid-column: span 1; }
+  .cat-card { padding: 18px; }
+  .cat-stats { gap: 14px; }
+}
+
+/* --------------------------------------------------------------------------
+   ADMIN — VENDORS / REPORTS / COMMISSION
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .rpt-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .vm-actions { justify-content: flex-start; }
+  .bar-row { grid-template-columns: 92px 1fr 40px; gap: 9px; font-size: 0.72rem; }
+}
+
+@media (max-width: 480px) {
+  .rpt-panel { padding: 18px; }
+  .bar-row { grid-template-columns: 78px 1fr 36px; }
+  .rank-row .rank-val { font-size: 0.85rem; }
+}
+
+/* --------------------------------------------------------------------------
+   ADMIN — SETTINGS / CHATBOT LOGS
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .sys-info { grid-template-columns: 1fr; }
+  .log-msg { max-width: 220px; }
+  .settings-panel .panel-head-row { flex-direction: column; gap: 8px; }
+}
+
+@media (max-width: 600px) {
+  .log-toolbar { grid-template-columns: 1fr 1fr; }
+  .log-meta-grid { grid-template-columns: 1fr; }
+  .chat-bubble { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .log-toolbar { grid-template-columns: 1fr; padding: 14px; }
+  .log-msg { max-width: 160px; }
+}
+
+/* --------------------------------------------------------------------------
+   AI MODULE
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .chat-layout, .rs-layout { grid-template-columns: 1fr; }
+  .chat-shell { height: auto; min-height: 480px; }
+  .chat-window { max-height: 460px; }
+}
+
+@media (max-width: 768px) {
+  .rec-card-top { gap: 12px; }
+  .score-ring { width: 54px; height: 54px; }
+  .rec-actions { flex-direction: column; }
+  .rec-actions .btn-eventora { width: 100%; }
+  .evt-context-head { flex-direction: column; gap: 10px; }
+  .chat-msg { max-width: 88%; }
+}
+
+@media (max-width: 480px) {
+  .rec-grid { grid-template-columns: 1fr; }
+  .rec-card, .evt-context, .rs-panel { padding: 18px; }
+  .ai-banner { padding: 14px 16px; gap: 11px; }
+  .chat-window { padding: 14px; }
+  .chat-msg { max-width: 94%; }
+  /* 16px prevents iOS Safari zooming when the composer is focused. */
+  .chat-input-row textarea { font-size: 16px; }
+  .ec-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 360px) {
+  .ec-grid { grid-template-columns: 1fr; }
+  .rec-card-top { flex-direction: column; }
+  .score-ring { align-self: flex-start; }
+}
+
+/* --------------------------------------------------------------------------
+   PAYMENT MODULE
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .pm-layout { grid-template-columns: 1fr; }
+  .pm-summary { position: static; }
+}
+
+@media (max-width: 600px) {
+  .pm-methods { grid-template-columns: 1fr; }
+  .pay-result { padding: 24px 18px; }
+  .pay-result h1 { font-size: 1.45rem; }
+  .pm-booking-row { flex-direction: column; gap: 4px; }
+  .pm-booking-row .pb-val { text-align: left; }
+}
+
+@media (max-width: 480px) {
+  .pm-panel, .pm-summary { padding: 18px; }
+  .pr-actions { flex-direction: column; }
+  .pr-actions .btn-eventora { width: 100%; }
+  .result-icon { width: 64px; height: 64px; font-size: 1.75rem; }
+  .pr-row { flex-direction: column; gap: 3px; }
+  .pr-row .pr-val { text-align: left; }
+}
+
+/* --------------------------------------------------------------------------
+   BRAND MARK — narrow screens
+   -------------------------------------------------------------------------- */
+@media (max-width: 360px) {
+  /* Below 360px the navbar has to fit the wordmark, the toggle and two
+     buttons. Shrinking the icon slightly keeps the row on one line. */
+  .brand-mark { gap: 7px; }
+  .brand-mark::before { width: 1em; height: 1em; }
+}

@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Vendors | Eventora — AI-Powered Event Planning</title>
+  <meta name="description" content="Browse and filter event vendors across Hyderabad, Jamshoro and Sindh — venues, caterers, photographers, decorators, DJs, mehndi artists and event planners." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="inner-page">
+  <div class="auth-glow glow-primary" aria-hidden="true"></div>
+  <div class="auth-glow glow-gold" aria-hidden="true"></div>
+
+<header class="eventora-navbar">
+    <div class="container-xl">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="vendors.html" class="is-active">Find Vendors</a></li>
+          <li><a href="../index.html#categories">Categories</a></li>
+          <li><a href="../index.html#ai-planner">AI Planner</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-eventora btn-ghost btn-sm">Log In</a>
+        <a href="register.html" class="btn-eventora btn-primary btn-sm">Register</a>
+      </div>
+      <button type="button" class="navbar-toggler-custom" data-nav-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation">☰</button>
+    </div>
+    <nav id="mobile-menu" class="mobile-menu" data-mobile-menu aria-label="Mobile">
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="vendors.html">Find Vendors</a></li>
+        <li><a href="../index.html#categories">Categories</a></li>
+        <li><a href="../index.html#ai-planner">AI Planner</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Log In</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main data-vendor-list>
+    <!-- ====================================================================
+         HERO
+         ==================================================================== -->
+    <section class="page-hero">
+      <div class="container-xl">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Vendor Marketplace</span>
+          <h2>Find the right <em class="accent-em">vendor</em> for your event.</h2>
+          <p>Browse verified local vendors across Hyderabad, Jamshoro and the rest of Sindh.
+             Filter by category, city, budget and rating.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section flush-top">
+      <div class="container-xl">
+
+        <!-- This whole listing is sample data. Remove this notice once real
+             vendors have been onboarded and the PHP query is live. -->
+        <div class="demo-notice reveal">
+          <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+          <p><strong>Sample listings.</strong> Eventora has not launched, so the 20 vendors
+             below are invented demo records used to build and test the marketplace. Ratings, prices
+             and review counts are illustrative. No real business is represented here.
+             <!-- FUTURE: SELECT v.*, c.name, MIN(s.base_price) FROM vendor_profiles v
+                  JOIN services s ON s.vendor_id = v.vendor_id
+                  JOIN categories c ON c.id = s.category_id
+                  WHERE v.status = 'active' AND v.is_verified = 1 -->
+          </p>
+        </div>
+
+        <div class="vendor-layout">
+          <!-- ============================================================
+               FILTER RAIL
+               Every control maps to a column in Eventora Database v1.0 and
+               becomes part of the SQL WHERE clause in Phase 4.
+               ============================================================ -->
+          <aside class="filter-panel glass-card reveal" aria-label="Filter vendors">
+            <div class="filter-panel-head">
+              <h3>Filters</h3>
+              <div class="d-flex align-items-center gap-3">
+                <button type="button" class="filter-reset" data-filter-reset>Reset all</button>
+                <button type="button" class="filter-toggle" data-filter-toggle
+                        aria-expanded="false" aria-controls="filter-body">
+                  Show <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="filter-grid" id="filter-body">
+              <div class="filter-group">
+                <label for="filter-search">Search</label>
+                <input type="search" id="filter-search" data-filter-search
+                       placeholder="Vendor or category" autocomplete="off" />
+              </div>
+
+              <!-- categories.slug -->
+              <div class="filter-group">
+                <label for="filter-category">Category</label>
+                <select class="evt-select evt-select--compact" id="filter-category" data-filter-category>
+                  <option value="">All categories</option>
+                <option value="event-planner">Event Planner</option>
+                <option value="catering">Catering</option>
+                <option value="decoration">Decoration</option>
+                <option value="photography">Photography</option>
+                <option value="dj">DJ</option>
+                <option value="mehndi">Mehndi</option>
+                <option value="venue">Venue</option>
+                </select>
+              </div>
+
+              <!-- vendor_profiles.city -->
+              <div class="filter-group">
+                <label for="filter-city">City</label>
+                <select class="evt-select evt-select--compact" id="filter-city" data-filter-city>
+                  <option value="">All cities</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Jamshoro">Jamshoro</option>
+                <option value="Sukkur">Sukkur</option>
+                <option value="Larkana">Larkana</option>
+                <option value="Mirpurkhas">Mirpurkhas</option>
+                </select>
+              </div>
+
+              <!-- services.base_price -->
+              <div class="filter-group">
+                <label for="filter-budget">Budget</label>
+                <div class="filter-range">
+                  <input type="range" id="filter-budget" data-filter-budget
+                         min="10000" max="200000" step="5000" value="200000" />
+                  <span class="range-value" data-budget-output>Any budget</span>
+                </div>
+              </div>
+
+              <!-- vendor_profiles.avg_rating -->
+              <div class="filter-group">
+                <span class="filter-label">Minimum rating</span>
+                <div class="rating-options">
+                  <label class="rating-option">
+                    <input type="radio" name="min-rating" value="0" checked /> Any rating
+                  </label>
+                  <label class="rating-option">
+                    <input type="radio" name="min-rating" value="4.5" />
+                    <span class="stars">★★★★½</span> 4.5 &amp; up
+                  </label>
+                  <label class="rating-option">
+                    <input type="radio" name="min-rating" value="4" />
+                    <span class="stars">★★★★</span> 4.0 &amp; up
+                  </label>
+                  <label class="rating-option">
+                    <input type="radio" name="min-rating" value="3.5" />
+                    <span class="stars">★★★½</span> 3.5 &amp; up
+                  </label>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- ============================================================
+               RESULTS
+               ============================================================ -->
+          <div>
+            <div class="results-head">
+              <p class="results-count" data-results-count aria-live="polite"></p>
+              <div class="results-sort">
+                <label for="sort-by">Sort by</label>
+                <select class="evt-select evt-select--compact" id="sort-by" data-sort>
+                  <option value="recommended">Recommended</option>
+                  <option value="price-asc">Price: low to high</option>
+                  <option value="price-desc">Price: high to low</option>
+                  <option value="rating-desc">Highest rated</option>
+                  <option value="reviews-desc">Most reviewed</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="active-filters" data-active-filters></div>
+
+            <div class="vendor-grid">
+        <article class="vendor-card glass-card"
+                 data-vendor-id="1"
+                 data-name="Riverside Banquet Hall"
+                 data-category="venue"
+                 data-category-label="Venue"
+                 data-city="Hyderabad"
+                 data-price="180000"
+                 data-rating="4.8"
+                 data-reviews="42">
+          <div class="vendor-thumb">
+            <i class="bi bi-building thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Venue</p>
+            <h3>Riverside Banquet Hall</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.8</span> (42)</span>
+            <span><i class="bi bi-people" aria-hidden="true"></i> Up to 600</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 180,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=1" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Riverside Banquet Hall"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="2"
+                 data-name="Golden Spoon Catering"
+                 data-category="catering"
+                 data-category-label="Catering"
+                 data-city="Hyderabad"
+                 data-price="85000"
+                 data-rating="4.6"
+                 data-reviews="58">
+          <div class="vendor-thumb">
+            <i class="bi bi-egg-fried thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Catering</p>
+            <h3>Golden Spoon Catering</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.6</span> (58)</span>
+            <span><i class="bi bi-people" aria-hidden="true"></i> Up to 400</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 85,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=2" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Golden Spoon Catering"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="3"
+                 data-name="Lens & Light Studio"
+                 data-category="photography"
+                 data-category-label="Photography"
+                 data-city="Hyderabad"
+                 data-price="65000"
+                 data-rating="4.9"
+                 data-reviews="31">
+          <div class="vendor-thumb">
+            <i class="bi bi-camera thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Photography</p>
+            <h3>Lens & Light Studio</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.9</span> (31)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 65,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=3" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Lens & Light Studio"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="4"
+                 data-name="Bloom Decor House"
+                 data-category="decoration"
+                 data-category-label="Decoration"
+                 data-city="Hyderabad"
+                 data-price="45000"
+                 data-rating="4.4"
+                 data-reviews="27">
+          <div class="vendor-thumb">
+            <i class="bi bi-flower1 thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Decoration</p>
+            <h3>Bloom Decor House</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.4</span> (27)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 45,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=4" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Bloom Decor House"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="5"
+                 data-name="Sound Circle Entertainment"
+                 data-category="dj"
+                 data-category-label="DJ"
+                 data-city="Hyderabad"
+                 data-price="30000"
+                 data-rating="4.2"
+                 data-reviews="19">
+          <div class="vendor-thumb">
+            <i class="bi bi-music-note-beamed thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">DJ</p>
+            <h3>Sound Circle Entertainment</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.2</span> (19)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 30,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=5" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Sound Circle Entertainment"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="6"
+                 data-name="Henna Atelier"
+                 data-category="mehndi"
+                 data-category-label="Mehndi"
+                 data-city="Hyderabad"
+                 data-price="18000"
+                 data-rating="4.7"
+                 data-reviews="36">
+          <div class="vendor-thumb">
+            <i class="bi bi-brush thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Mehndi</p>
+            <h3>Henna Atelier</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.7</span> (36)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 18,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=6" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Henna Atelier"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="7"
+                 data-name="Milestone Event Planners"
+                 data-category="event-planner"
+                 data-category-label="Event Planner"
+                 data-city="Hyderabad"
+                 data-price="120000"
+                 data-rating="4.5"
+                 data-reviews="23">
+          <div class="vendor-thumb">
+            <i class="bi bi-clipboard2-check thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Event Planner</p>
+            <h3>Milestone Event Planners</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.5</span> (23)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 120,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=7" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Milestone Event Planners"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="8"
+                 data-name="Indus View Marquee"
+                 data-category="venue"
+                 data-category-label="Venue"
+                 data-city="Jamshoro"
+                 data-price="140000"
+                 data-rating="4.3"
+                 data-reviews="16">
+          <div class="vendor-thumb">
+            <i class="bi bi-building thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Venue</p>
+            <h3>Indus View Marquee</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Jamshoro</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.3</span> (16)</span>
+            <span><i class="bi bi-people" aria-hidden="true"></i> Up to 450</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 140,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=8" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Indus View Marquee"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="9"
+                 data-name="Campus Caterers"
+                 data-category="catering"
+                 data-category-label="Catering"
+                 data-city="Jamshoro"
+                 data-price="52000"
+                 data-rating="4.1"
+                 data-reviews="21">
+          <div class="vendor-thumb">
+            <i class="bi bi-egg-fried thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Catering</p>
+            <h3>Campus Caterers</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Jamshoro</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.1</span> (21)</span>
+            <span><i class="bi bi-people" aria-hidden="true"></i> Up to 250</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 52,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=9" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Campus Caterers"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="10"
+                 data-name="Frame Story Photography"
+                 data-category="photography"
+                 data-category-label="Photography"
+                 data-city="Jamshoro"
+                 data-price="40000"
+                 data-rating="4.6"
+                 data-reviews="14">
+          <div class="vendor-thumb">
+            <i class="bi bi-camera thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Photography</p>
+            <h3>Frame Story Photography</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Jamshoro</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.6</span> (14)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 40,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=10" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Frame Story Photography"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="11"
+                 data-name="Petal & Drape"
+                 data-category="decoration"
+                 data-category-label="Decoration"
+                 data-city="Jamshoro"
+                 data-price="36000"
+                 data-rating="3.9"
+                 data-reviews="11">
+          <div class="vendor-thumb">
+            <i class="bi bi-flower1 thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Decoration</p>
+            <h3>Petal & Drape</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Jamshoro</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">3.9</span> (11)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 36,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=11" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Petal & Drape"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="12"
+                 data-name="Northern Star Events"
+                 data-category="event-planner"
+                 data-category-label="Event Planner"
+                 data-city="Sukkur"
+                 data-price="95000"
+                 data-rating="4.4"
+                 data-reviews="18">
+          <div class="vendor-thumb">
+            <i class="bi bi-clipboard2-check thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Event Planner</p>
+            <h3>Northern Star Events</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Sukkur</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.4</span> (18)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 95,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=12" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Northern Star Events"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="13"
+                 data-name="Royal Court Banquet"
+                 data-category="venue"
+                 data-category-label="Venue"
+                 data-city="Sukkur"
+                 data-price="160000"
+                 data-rating="4.7"
+                 data-reviews="29">
+          <div class="vendor-thumb">
+            <i class="bi bi-building thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Venue</p>
+            <h3>Royal Court Banquet</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Sukkur</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.7</span> (29)</span>
+            <span><i class="bi bi-people" aria-hidden="true"></i> Up to 700</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 160,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=13" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Royal Court Banquet"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="14"
+                 data-name="Spice Route Catering"
+                 data-category="catering"
+                 data-category-label="Catering"
+                 data-city="Sukkur"
+                 data-price="70000"
+                 data-rating="4.2"
+                 data-reviews="24">
+          <div class="vendor-thumb">
+            <i class="bi bi-egg-fried thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Catering</p>
+            <h3>Spice Route Catering</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Sukkur</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.2</span> (24)</span>
+            <span><i class="bi bi-people" aria-hidden="true"></i> Up to 350</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 70,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=14" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Spice Route Catering"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="15"
+                 data-name="Rhythm & Beats DJ"
+                 data-category="dj"
+                 data-category-label="DJ"
+                 data-city="Larkana"
+                 data-price="26000"
+                 data-rating="4.0"
+                 data-reviews="9">
+          <div class="vendor-thumb">
+            <i class="bi bi-music-note-beamed thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">DJ</p>
+            <h3>Rhythm & Beats DJ</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Larkana</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.0</span> (9)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 26,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=15" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Rhythm & Beats DJ"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="16"
+                 data-name="Heritage Hall Larkana"
+                 data-category="venue"
+                 data-category-label="Venue"
+                 data-city="Larkana"
+                 data-price="110000"
+                 data-rating="4.1"
+                 data-reviews="13">
+          <div class="vendor-thumb">
+            <i class="bi bi-building thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Venue</p>
+            <h3>Heritage Hall Larkana</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Larkana</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.1</span> (13)</span>
+            <span><i class="bi bi-people" aria-hidden="true"></i> Up to 380</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 110,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=16" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Heritage Hall Larkana"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="17"
+                 data-name="Bridal Henna Collective"
+                 data-category="mehndi"
+                 data-category-label="Mehndi"
+                 data-city="Larkana"
+                 data-price="15000"
+                 data-rating="4.5"
+                 data-reviews="17">
+          <div class="vendor-thumb">
+            <i class="bi bi-brush thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Mehndi</p>
+            <h3>Bridal Henna Collective</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Larkana</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.5</span> (17)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 15,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=17" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Bridal Henna Collective"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="18"
+                 data-name="Desert Rose Decor"
+                 data-category="decoration"
+                 data-category-label="Decoration"
+                 data-city="Mirpurkhas"
+                 data-price="33000"
+                 data-rating="4.3"
+                 data-reviews="12">
+          <div class="vendor-thumb">
+            <i class="bi bi-flower1 thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Decoration</p>
+            <h3>Desert Rose Decor</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Mirpurkhas</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.3</span> (12)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 33,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=18" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Desert Rose Decor"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="19"
+                 data-name="Sunrise Photography Co."
+                 data-category="photography"
+                 data-category-label="Photography"
+                 data-city="Mirpurkhas"
+                 data-price="38000"
+                 data-rating="4.0"
+                 data-reviews="8">
+          <div class="vendor-thumb">
+            <i class="bi bi-camera thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Photography</p>
+            <h3>Sunrise Photography Co.</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Mirpurkhas</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.0</span> (8)</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 38,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=19" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Sunrise Photography Co."><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="vendor-card glass-card"
+                 data-vendor-id="20"
+                 data-name="Grand Union Caterers"
+                 data-category="catering"
+                 data-category-label="Catering"
+                 data-city="Mirpurkhas"
+                 data-price="60000"
+                 data-rating="4.4"
+                 data-reviews="20">
+          <div class="vendor-thumb">
+            <i class="bi bi-egg-fried thumb-icon" aria-hidden="true"></i>
+            <span class="demo-tag">Demo</span>
+          <span class="verified-badge"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+          </div>
+          <div class="vendor-card-body">
+            <p class="vendor-category">Catering</p>
+            <h3>Grand Union Caterers</h3>
+            <div class="vendor-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Mirpurkhas</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.4</span> (20)</span>
+            <span><i class="bi bi-people" aria-hidden="true"></i> Up to 300</span>
+            </div>
+            <p class="vendor-price">Starting from <strong>Rs. 60,000</strong></p>
+          </div>
+          <div class="vendor-card-actions">
+            <!-- FUTURE: vendor-detail.html?vendor_id=<?= $row['vendor_id'] ?> -->
+            <a href="vendor-detail.html?vendor_id=20" class="btn-eventora btn-primary">View Details</a>
+            <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                    aria-label="Save Grand Union Caterers"><i class="bi bi-heart" aria-hidden="true"></i></button>
+          </div>
+        </article>
+            </div>
+
+            <div class="vendor-empty" data-vendor-empty>
+              <i class="bi bi-search" aria-hidden="true"></i>
+              <h4>No vendors match your filters</h4>
+              <p>Try widening your budget, choosing another city, or clearing the filters.</p>
+              <button type="button" class="btn-eventora btn-outline-gold" data-filter-reset>Clear filters</button>
+            </div>
+
+            <nav class="pagination-row" data-pagination aria-label="Vendor results pages"></nav>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         BECOME A VENDOR — index.html links here via #become-a-vendor
+         ==================================================================== -->
+    <section class="section" id="become-a-vendor">
+      <div class="container-xl">
+        <div class="become-vendor glass-card reveal">
+          <div class="become-vendor-inner">
+            <div>
+              <span class="eyebrow">For Vendors</span>
+              <h2>List your business on Eventora.</h2>
+              <p>Register your services, set your own pricing and receive booking requests from clients
+                 planning events in your city. No listing fee — Eventora earns a commission only when a
+                 booking completes.</p>
+            </div>
+            <div class="cta-actions">
+              <a href="register.html" class="btn-eventora btn-primary">Register as a Vendor</a>
+              <a href="faq.html" class="btn-eventora btn-outline-gold">Vendor FAQs</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<footer class="eventora-footer">
+    <div class="container-xl">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="brand-mark">Eventora</span>
+          <p>AI-powered event management connecting clients and vendors across Hyderabad, Jamshoro, and beyond.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Platform</h5>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="vendors.html">Find Vendors</a></li>
+            <li><a href="../index.html#categories">Categories</a></li>
+            <li><a href="../index.html#ai-planner">AI Planner</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="vendors.html#become-a-vendor">Become a Vendor</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Account</h5>
+          <ul>
+            <li><a href="login.html">Log In</a></li>
+            <li><a href="register.html">Register</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Eventora. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Eventora on Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" aria-label="Eventora on Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" aria-label="Eventora on WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

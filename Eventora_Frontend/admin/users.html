@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Users | Eventora Admin</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Admin navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Admin</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Overview</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="reports.html"><i class="bi bi-graph-up" aria-hidden="true"></i> Reports</a></li>
+      </ul>
+
+      <p class="dash-nav-label">People</p>
+      <ul>
+        <li><a href="users.html"><i class="bi bi-people" aria-hidden="true"></i> Users</a></li>
+        <li><a href="vendors.html"><i class="bi bi-shop" aria-hidden="true"></i> Vendors</a></li>
+        <li><a href="vendor-approval.html"><i class="bi bi-patch-check" aria-hidden="true"></i> Vendor Approval
+          <span class="nav-count">6</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Platform</p>
+      <ul>
+        <li><a href="categories.html"><i class="bi bi-tags" aria-hidden="true"></i> Categories</a></li>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> Bookings</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+        <li><a href="commission.html"><i class="bi bi-percent" aria-hidden="true"></i> Commission</a></li>
+        <li><a href="chatbot-logs.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chatbot Logs</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Users</h1>
+          <p class="topbar-sub">Accounts — client, vendor and admin</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="vendor-approval.html" class="icon-btn" aria-label="Vendor approvals">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="settings.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">EA</span>
+          <span>
+            <span class="who d-block">Eventora Admin</span>
+            <span class="role">Administrator</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-admin-users>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo user list.</strong> 58 sample accounts assembled from the client and
+           vendor demo data. Blocking changes this page only — nothing is saved.</p>
+      </div>
+
+      <div class="pay-formula">
+        <strong>Blocking is never deletion.</strong>
+        Blocking sets <code>users.status = 'blocked'</code>. The row is never removed, because
+        bookings, payments, commissions and reviews hold foreign keys to it with
+        <code>ON DELETE RESTRICT</code> — a delete would fail even if it were attempted, and the
+        platform needs that history for accounting. Blocking a vendor also does not change
+        <code>is_verified</code>; verification is decided on
+        <a href="vendor-approval.html">Vendor Approval</a>.
+      </div>
+
+      <div class="ad-toolbar">
+        <div class="ad-filters" role="group" aria-label="Filter users by role">
+            <button type="button" class="faq-filter is-active" data-user-filter="all" aria-pressed="true">All (58)</button>
+            <button type="button" class="faq-filter" data-user-filter="client" aria-pressed="false">Clients (37)</button>
+            <button type="button" class="faq-filter" data-user-filter="vendor" aria-pressed="false">Vendors (20)</button>
+            <button type="button" class="faq-filter" data-user-filter="admin" aria-pressed="false">Admin (1)</button>
+            <button type="button" class="faq-filter" data-user-filter="blocked" aria-pressed="false">Blocked</button>
+        </div>
+        <div class="bookings-search">
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <label for="user-search" class="visually-hidden">Search users</label>
+          <input type="search" id="user-search" data-user-search
+                 placeholder="Search by name, role or city" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="dash-section-head">
+        <h2 data-user-count aria-live="polite"></h2>
+        <span class="rv-meta">users.role is client, vendor or admin — nothing else</span>
+      </div>
+
+      <!-- FUTURE PHP:
+           SELECT u.id, u.name, u.email, u.role, u.status, u.created_at,
+                  cp.city AS client_city, vp.city AS vendor_city, vp.is_verified
+           FROM users u
+           LEFT JOIN client_profiles cp ON cp.user_id = u.id
+           LEFT JOIN vendor_profiles vp ON vp.user_id = u.id
+           ORDER BY u.created_at DESC;
+
+           Blocking: UPDATE users SET status = 'blocked'
+                     WHERE id = :user_id AND role <> 'admin'
+           The role guard is enforced in SQL as well as in the UI, so the only
+           admin account cannot be locked out — there is no public admin signup. -->
+      <section class="dash-panel glass-card" data-user-table>
+        <div class="dash-table-wrap">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Account</th><th>Role</th><th>City</th><th>Status</th>
+                <th class="cell-actions">&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr data-user-row data-role="admin" data-status="active"
+                    data-name="Eventora Admin" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar admin" aria-hidden="true">EA</span>
+                      <span>
+                        <span class="cell-strong">Eventora Admin</span>
+                        <span class="cell-sub">Seeded account — no public signup path</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge admin">admin</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><span class="ap-outcome">Protected</span></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Riverside Banquet Hall" data-city="Hyderabad">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">RB</span>
+                      <span>
+                        <span class="cell-strong">Riverside Banquet Hall</span>
+                        <span class="cell-sub">Verified · Venue</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Hyderabad</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Golden Spoon Catering" data-city="Hyderabad">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">GS</span>
+                      <span>
+                        <span class="cell-strong">Golden Spoon Catering</span>
+                        <span class="cell-sub">Verified · Catering</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Hyderabad</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Lens &amp; Light Studio" data-city="Hyderabad">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">LL</span>
+                      <span>
+                        <span class="cell-strong">Lens &amp; Light Studio</span>
+                        <span class="cell-sub">Verified · Photography</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Hyderabad</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Bloom Decor House" data-city="Hyderabad">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">BD</span>
+                      <span>
+                        <span class="cell-strong">Bloom Decor House</span>
+                        <span class="cell-sub">Verified · Decoration</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Hyderabad</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Sound Circle Entertainment" data-city="Hyderabad">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sound Circle Entertainment</span>
+                        <span class="cell-sub">Awaiting verification · DJ</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Hyderabad</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Henna Atelier" data-city="Hyderabad">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">HA</span>
+                      <span>
+                        <span class="cell-strong">Henna Atelier</span>
+                        <span class="cell-sub">Verified · Mehndi</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Hyderabad</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Milestone Event Planners" data-city="Hyderabad">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">ME</span>
+                      <span>
+                        <span class="cell-strong">Milestone Event Planners</span>
+                        <span class="cell-sub">Verified · Event Planner</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Hyderabad</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Indus View Marquee" data-city="Jamshoro">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">IV</span>
+                      <span>
+                        <span class="cell-strong">Indus View Marquee</span>
+                        <span class="cell-sub">Verified · Venue</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Jamshoro</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Campus Caterers" data-city="Jamshoro">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">CC</span>
+                      <span>
+                        <span class="cell-strong">Campus Caterers</span>
+                        <span class="cell-sub">Awaiting verification · Catering</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Jamshoro</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Frame Story Photography" data-city="Jamshoro">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">FS</span>
+                      <span>
+                        <span class="cell-strong">Frame Story Photography</span>
+                        <span class="cell-sub">Verified · Photography</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Jamshoro</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Petal &amp; Drape" data-city="Jamshoro">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">PD</span>
+                      <span>
+                        <span class="cell-strong">Petal &amp; Drape</span>
+                        <span class="cell-sub">Awaiting verification · Decoration</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Jamshoro</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Northern Star Events" data-city="Sukkur">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">NS</span>
+                      <span>
+                        <span class="cell-strong">Northern Star Events</span>
+                        <span class="cell-sub">Verified · Event Planner</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Sukkur</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Royal Court Banquet" data-city="Sukkur">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">RC</span>
+                      <span>
+                        <span class="cell-strong">Royal Court Banquet</span>
+                        <span class="cell-sub">Verified · Venue</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Sukkur</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Spice Route Catering" data-city="Sukkur">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">SR</span>
+                      <span>
+                        <span class="cell-strong">Spice Route Catering</span>
+                        <span class="cell-sub">Verified · Catering</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Sukkur</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Rhythm &amp; Beats DJ" data-city="Larkana">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">RB</span>
+                      <span>
+                        <span class="cell-strong">Rhythm &amp; Beats DJ</span>
+                        <span class="cell-sub">Awaiting verification · DJ</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Larkana</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Heritage Hall Larkana" data-city="Larkana">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">HH</span>
+                      <span>
+                        <span class="cell-strong">Heritage Hall Larkana</span>
+                        <span class="cell-sub">Verified · Venue</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Larkana</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Bridal Henna Collective" data-city="Larkana">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">BH</span>
+                      <span>
+                        <span class="cell-strong">Bridal Henna Collective</span>
+                        <span class="cell-sub">Verified · Mehndi</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Larkana</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Desert Rose Decor" data-city="Mirpurkhas">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">DR</span>
+                      <span>
+                        <span class="cell-strong">Desert Rose Decor</span>
+                        <span class="cell-sub">Awaiting verification · Decoration</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Mirpurkhas</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Sunrise Photography Co." data-city="Mirpurkhas">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">SP</span>
+                      <span>
+                        <span class="cell-strong">Sunrise Photography Co.</span>
+                        <span class="cell-sub">Awaiting verification · Photography</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Mirpurkhas</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="vendor" data-status="active"
+                    data-name="Grand Union Caterers" data-city="Mirpurkhas">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar vendor" aria-hidden="true">GU</span>
+                      <span>
+                        <span class="cell-strong">Grand Union Caterers</span>
+                        <span class="cell-sub">Verified · Catering</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge vendor">vendor</span></td>
+                  <td>Mirpurkhas</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Demo Client" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">DC</span>
+                      <span>
+                        <span class="cell-strong">Demo Client</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client B" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client B</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client C" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client C</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client D" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client D</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client E" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client E</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client F" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client F</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client G" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client G</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client A1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client A1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client B1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client B1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client C1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client C1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client D1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client D1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client E1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client E1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client F1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client F1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client G1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client G1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client H1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client H1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client I1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client I1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client J1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client J1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client K1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client K1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client L1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client L1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client M1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client M1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client N1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client N1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client O1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client O1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client P1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client P1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client Q1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client Q1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client R1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client R1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client S1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client S1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client T1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client T1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client U1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client U1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client V1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client V1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client W1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client W1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client X1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client X1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client Y1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client Y1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client Z1" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client Z1</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client A2" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client A2</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client B2" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client B2</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client C2" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client C2</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+                <tr data-user-row data-role="client" data-status="active"
+                    data-name="Sample Client D2" data-city="—">
+                  <td>
+                    <span class="user-name">
+                      <span class="u-avatar client" aria-hidden="true">SC</span>
+                      <span>
+                        <span class="cell-strong">Sample Client D2</span>
+                        <span class="cell-sub">Client account</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="role-badge client">client</span></td>
+                  <td>—</td>
+                  <td><span class="account-status active" data-user-status>active</span></td>
+                  <td class="cell-actions"><a href="#" class="link-action" data-user-toggle>Block</a></td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="dash-empty glass-card" data-user-empty hidden>
+        <i class="bi bi-people" aria-hidden="true"></i>
+        <h4>No accounts match</h4>
+        <p>Try a different role filter, or clear your search.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

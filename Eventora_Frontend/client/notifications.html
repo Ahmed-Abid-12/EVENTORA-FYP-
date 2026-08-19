@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications | Eventora Client</title>
+  <meta name="description" content="Booking updates, payment confirmations, event reminders and system messages for your Eventora account." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="../payment/history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="../ai/recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="../ai/chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="../ai/review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Notifications</h1>
+          <p class="topbar-sub">Booking, payment and event updates</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-notifications>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo notifications.</strong> Sample records used to build the client module.
+           Marking one as read changes it on this page only — the change is not saved anywhere and
+           will reset when you reload.</p>
+      </div>
+
+      <div class="notif-toolbar">
+        <div class="notif-filters" role="group" aria-label="Filter notifications">
+          <button type="button" class="faq-filter is-active" data-notif-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="faq-filter" data-notif-filter="unread" aria-pressed="false">Unread</button>
+          <button type="button" class="faq-filter" data-notif-filter="booking" aria-pressed="false">Bookings</button>
+          <button type="button" class="faq-filter" data-notif-filter="payment" aria-pressed="false">Payments</button>
+          <button type="button" class="faq-filter" data-notif-filter="event" aria-pressed="false">Events</button>
+          <button type="button" class="faq-filter" data-notif-filter="review" aria-pressed="false">Reviews</button>
+          <button type="button" class="faq-filter" data-notif-filter="system" aria-pressed="false">System</button>
+        </div>
+        <button type="button" class="btn-eventora btn-outline-gold" data-mark-all>
+          Mark all as read
+        </button>
+      </div>
+
+      <div class="dash-section-head">
+        <h2 data-notif-count aria-live="polite"></h2>
+        <span class="nav-count" data-unread-badge hidden>0</span>
+      </div>
+
+      <!-- FUTURE PHP: load notifications for current user
+           SELECT notification_id, title, message, type, related_id, is_read, created_at
+           FROM notifications
+           WHERE user_id = :user_id
+           ORDER BY created_at DESC
+           LIMIT 50;
+           Attached to users.id, because all three roles receive notifications. -->
+        <section class="notif-group">
+          <p class="notif-group-label">Today</p>
+          <div class="notif-list">
+            <article class="notification-item is-unread" data-type="booking">
+              <span class="notif-icon accepted"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+              <div class="notif-body">
+                <p class="notif-title">Booking accepted</p>
+                <p class="notif-text">Riverside Banquet Hall accepted your request for Main Hall Booking on Sample Wedding.</p>
+                <p class="notif-when">2 hours ago</p>
+              </div>
+              <div class="notif-side">
+                <span class="notif-dot" aria-hidden="true"></span>
+                <button type="button" class="btn-mark" data-mark-read
+                        aria-label="Mark &quot;Booking accepted&quot; as read">
+                  <i class="bi bi-check2" aria-hidden="true"></i>
+                </button>
+              </div>
+            </article>
+
+            <article class="notification-item is-unread" data-type="booking">
+              <span class="notif-icon "><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
+              <div class="notif-body">
+                <p class="notif-title">Booking request sent</p>
+                <p class="notif-text">Your request for Full-Day Coverage from Lens &amp; Light Studio is waiting for a reply.</p>
+                <p class="notif-when">5 hours ago</p>
+              </div>
+              <div class="notif-side">
+                <span class="notif-dot" aria-hidden="true"></span>
+                <button type="button" class="btn-mark" data-mark-read
+                        aria-label="Mark &quot;Booking request sent&quot; as read">
+                  <i class="bi bi-check2" aria-hidden="true"></i>
+                </button>
+              </div>
+            </article>
+
+            <article class="notification-item is-unread" data-type="payment">
+              <span class="notif-icon payment"><i class="bi bi-cash-coin" aria-hidden="true"></i></span>
+              <div class="notif-body">
+                <p class="notif-title">Payment reminder</p>
+                <p class="notif-text">Two accepted bookings on Sample Wedding are ready for payment.</p>
+                <p class="notif-when">9 hours ago</p>
+              </div>
+              <div class="notif-side">
+                <span class="notif-dot" aria-hidden="true"></span>
+                <button type="button" class="btn-mark" data-mark-read
+                        aria-label="Mark &quot;Payment reminder&quot; as read">
+                  <i class="bi bi-check2" aria-hidden="true"></i>
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+        <section class="notif-group">
+          <p class="notif-group-label">Earlier this week</p>
+          <div class="notif-list">
+            <article class="notification-item is-read" data-type="booking">
+              <span class="notif-icon rejected"><i class="bi bi-x-circle" aria-hidden="true"></i></span>
+              <div class="notif-body">
+                <p class="notif-title">Booking rejected</p>
+                <p class="notif-text">Bloom Decor House could not take your request for Stage &amp; Backdrop on 15 December.</p>
+                <p class="notif-when">Yesterday, 4:20 PM</p>
+              </div>
+              <div class="notif-side">
+                <span class="notif-dot" aria-hidden="true"></span>
+                <button type="button" class="btn-mark" data-mark-read
+                        aria-label="Mark &quot;Booking rejected&quot; as read">
+                  <i class="bi bi-check2" aria-hidden="true"></i>
+                </button>
+              </div>
+            </article>
+
+            <article class="notification-item is-read" data-type="event">
+              <span class="notif-icon "><i class="bi bi-calendar-event" aria-hidden="true"></i></span>
+              <div class="notif-body">
+                <p class="notif-title">Event reminder</p>
+                <p class="notif-text">Sample Engagement is 30 days away. Three bookings are confirmed.</p>
+                <p class="notif-when">Yesterday, 9:05 AM</p>
+              </div>
+              <div class="notif-side">
+                <span class="notif-dot" aria-hidden="true"></span>
+                <button type="button" class="btn-mark" data-mark-read
+                        aria-label="Mark &quot;Event reminder&quot; as read">
+                  <i class="bi bi-check2" aria-hidden="true"></i>
+                </button>
+              </div>
+            </article>
+
+            <article class="notification-item is-read" data-type="payment">
+              <span class="notif-icon payment"><i class="bi bi-receipt" aria-hidden="true"></i></span>
+              <div class="notif-body">
+                <p class="notif-title">Payment confirmed</p>
+                <p class="notif-text">Your payment of Rs. 18,000 to Henna Atelier was recorded against Sample Birthday.</p>
+                <p class="notif-when">3 days ago</p>
+              </div>
+              <div class="notif-side">
+                <span class="notif-dot" aria-hidden="true"></span>
+                <button type="button" class="btn-mark" data-mark-read
+                        aria-label="Mark &quot;Payment confirmed&quot; as read">
+                  <i class="bi bi-check2" aria-hidden="true"></i>
+                </button>
+              </div>
+            </article>
+
+            <article class="notification-item is-read" data-type="review">
+              <span class="notif-icon "><i class="bi bi-star" aria-hidden="true"></i></span>
+              <div class="notif-body">
+                <p class="notif-title">Review reminder</p>
+                <p class="notif-text">Sample Birthday is complete. Leave a review for Henna Atelier and Bloom Decor House.</p>
+                <p class="notif-when">5 days ago</p>
+              </div>
+              <div class="notif-side">
+                <span class="notif-dot" aria-hidden="true"></span>
+                <button type="button" class="btn-mark" data-mark-read
+                        aria-label="Mark &quot;Review reminder&quot; as read">
+                  <i class="bi bi-check2" aria-hidden="true"></i>
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+        <section class="notif-group">
+          <p class="notif-group-label">Older</p>
+          <div class="notif-list">
+            <article class="notification-item is-read" data-type="system">
+              <span class="notif-icon system"><i class="bi bi-info-circle" aria-hidden="true"></i></span>
+              <div class="notif-body">
+                <p class="notif-title">Welcome to Eventora</p>
+                <p class="notif-text">Your client account is ready. Create an event to start booking vendors.</p>
+                <p class="notif-when">2 weeks ago</p>
+              </div>
+              <div class="notif-side">
+                <span class="notif-dot" aria-hidden="true"></span>
+                <button type="button" class="btn-mark" data-mark-read
+                        aria-label="Mark &quot;Welcome to Eventora&quot; as read">
+                  <i class="bi bi-check2" aria-hidden="true"></i>
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+      <div class="dash-empty glass-card" data-notif-empty hidden>
+        <i class="bi bi-bell-slash" aria-hidden="true"></i>
+        <h4>Nothing here</h4>
+        <p>No notifications match this filter.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

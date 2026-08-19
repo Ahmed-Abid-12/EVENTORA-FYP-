@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review Summary | Eventora</title>
+  <meta name="description" content="NLP summary of vendor reviews — sentiment, themes and the raw review records." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="../client/dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="../client/create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="../client/my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="../client/budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="../client/bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="../client/saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="../client/reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="../payment/history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="../client/notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="../client/profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="../client/settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Review Summary</h1>
+          <p class="topbar-sub">NLP analysis of vendor reviews</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="../client/notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="../client/profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content">
+
+      <!-- The AI backend does not exist. This must be unmissable. -->
+      <div class="ai-banner">
+        <span class="ai-icon"><i class="bi bi-cpu" aria-hidden="true"></i></span>
+        <div class="ai-body">
+          <p class="ai-title">NLP Review Summary Preview <span class="ai-preview-tag">
+            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> Preview</span></p>
+          <p>The Python NLP service has <strong>not been built</strong>. The summary, themes and sentiment below were <strong>not generated by a model</strong> — the theme counts are word occurrences counted across the real demo review texts, and the sentiment figure is the mean of the demo <code>sentiment_score</code> values. The raw reviews underneath are the actual records.</p>
+        </div>
+      </div>
+
+      <!-- ==================================================================
+           VENDOR CONTEXT
+           ================================================================== -->
+      <section class="evt-context glass-card">
+        <div class="evt-context-head">
+          <div>
+            <h2>Lens &amp; Light Studio</h2>
+            <p class="ec-sub">vendor_id 3 · Photography · Hyderabad</p>
+          </div>
+          <a href="../pages/vendor-detail.html?vendor_id=3"
+             class="btn-eventora btn-ghost">View vendor page</a>
+        </div>
+      </section>
+
+      <div class="rs-layout">
+        <div>
+          <!-- ============================================================
+               AI SUMMARY — visually distinct from the raw reviews below
+               ============================================================ -->
+          <section class="rs-panel glass-card">
+            <h2>AI summary <span class="ai-preview-tag">
+              <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> Preview</span></h2>
+            <p class="panel-sub">Would be stored in <code>review_summaries.summary_text</code></p>
+
+            <p class="rs-summary-text">Across 31 reviews, clients most often praise punctuality and clear communication before the event, and the quality of the edited gallery afterwards. The few less positive reviews mention a small number of missed shots rather than any problem with reliability.</p>
+
+            <h2 class="mt-4">Positive themes</h2>
+            <p class="panel-sub">Counted from words appearing in the review texts</p>
+            <div class="theme-list">
+            <span class="theme-chip positive">Punctuality
+              <span class="tc-count">6</span></span>
+            <span class="theme-chip positive">Communication
+              <span class="tc-count">15</span></span>
+            <span class="theme-chip positive">Edit quality
+              <span class="tc-count">16</span></span>
+            <span class="theme-chip positive">Professionalism
+              <span class="tc-count">5</span></span>
+            </div>
+
+            <h2 class="mt-4">Areas for improvement</h2>
+            <p class="panel-sub">Counted the same way</p>
+            <div class="theme-list">
+            <span class="theme-chip negative">Missed shots
+              <span class="tc-count">5</span></span>
+            <span class="theme-chip negative">Coverage gaps
+              <span class="tc-count">5</span></span>
+            </div>
+
+            <!-- FUTURE AI: POST /api/review-summary.php { vendor_id }
+                 PHP calls the Python NLP service with the vendor's review_text
+                 rows, then writes the result to review_summaries
+                 (vendor_id, summary_text, positive_points, negative_points,
+                  avg_sentiment, review_count, generated_at).
+                 It also updates reviews.sentiment_score per review.
+                 PHP READS sentiment_score; only the NLP module writes it.
+                 The browser never calls Python directly. -->
+            <p class="panel-note mt-4">The numbers on each theme are literal occurrence counts across
+               the 31 review texts, so they can be checked by reading the reviews. A real
+               NLP model would cluster meaning rather than count words — that is the work still to do.</p>
+          </section>
+
+          <!-- ============================================================
+               RAW REVIEWS — the source input, clearly separated
+               ============================================================ -->
+          <section class="rs-panel glass-card">
+            <h2>Raw reviews</h2>
+            <p class="panel-sub">The source input — <code>reviews.review_text</code>, showing 8 of
+               31</p>
+            <div class="raw-review">
+              <div class="rr-head">
+                <span class="rr-who">Sample Client E</span>
+                <span class="rr-stars" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+              </div>
+              <p class="rr-text">Arrived early, worked around our schedule and delivered the gallery ahead of the promised date.</p>
+              <p class="rr-meta">EVB-0024 · Full-Day Coverage · sentiment_score 0.92</p>
+            </div>
+            <div class="raw-review">
+              <div class="rr-head">
+                <span class="rr-who">Sample Client A1</span>
+                <span class="rr-stars" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+              </div>
+              <p class="rr-text">Very easy to coordinate with. The edits came back exactly in the style we discussed beforehand.</p>
+              <p class="rr-meta">EVB-1001 · Half-Day Coverage · sentiment_score 0.92</p>
+            </div>
+            <div class="raw-review">
+              <div class="rr-head">
+                <span class="rr-who">Sample Client B1</span>
+                <span class="rr-stars" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+              </div>
+              <p class="rr-text">Professional throughout. Guests barely noticed the team working, which is exactly what we wanted.</p>
+              <p class="rr-meta">EVB-1002 · Full-Day Coverage · sentiment_score 0.92</p>
+            </div>
+            <div class="raw-review">
+              <div class="rr-head">
+                <span class="rr-who">Sample Client C1</span>
+                <span class="rr-stars" aria-label="4 out of 5">★★★★<span class="off">★</span></span>
+              </div>
+              <p class="rr-text">Good coverage of every part of the day. A few shots we asked for were missed but the rest was strong.</p>
+              <p class="rr-meta">EVB-1003 · Cinematic Film Package · sentiment_score 0.68</p>
+            </div>
+            <div class="raw-review">
+              <div class="rr-head">
+                <span class="rr-who">Sample Client D1</span>
+                <span class="rr-stars" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+              </div>
+              <p class="rr-text">Clear communication from booking to delivery, and the final album quality was excellent.</p>
+              <p class="rr-meta">EVB-1004 · Half-Day Coverage · sentiment_score 0.92</p>
+            </div>
+            <div class="raw-review">
+              <div class="rr-head">
+                <span class="rr-who">Sample Client E1</span>
+                <span class="rr-stars" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+              </div>
+              <p class="rr-text">Responsive to questions and flexible when our timings shifted on the day.</p>
+              <p class="rr-meta">EVB-1005 · Full-Day Coverage · sentiment_score 0.92</p>
+            </div>
+            <div class="raw-review">
+              <div class="rr-head">
+                <span class="rr-who">Sample Client F1</span>
+                <span class="rr-stars" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+              </div>
+              <p class="rr-text">Arrived early, worked around our schedule and delivered the gallery ahead of the promised date.</p>
+              <p class="rr-meta">EVB-1006 · Cinematic Film Package · sentiment_score 0.92</p>
+            </div>
+            <div class="raw-review">
+              <div class="rr-head">
+                <span class="rr-who">Sample Client G1</span>
+                <span class="rr-stars" aria-label="5 out of 5">★★★★★<span class="off"></span></span>
+              </div>
+              <p class="rr-text">Very easy to coordinate with. The edits came back exactly in the style we discussed beforehand.</p>
+              <p class="rr-meta">EVB-1007 · Half-Day Coverage · sentiment_score 0.92</p>
+            </div>
+            <div class="rec-actions mt-3">
+              <a href="../vendor/reviews.html" class="btn-eventora btn-ghost">All 31 reviews</a>
+            </div>
+          </section>
+        </div>
+
+        <!-- ================================================================
+             SIDEBAR
+             ================================================================ -->
+        <aside>
+          <section class="sentiment-box glass-card mb-3">
+            <p class="sb-label">Overall sentiment</p>
+            <p class="sb-value">Positive</p>
+            <p class="sb-score">Mean <code>sentiment_score</code> 0.897
+               across 31 reviews</p>
+          </section>
+
+          <section class="rs-panel glass-card mb-3">
+            <h2>Rating distribution</h2>
+            <p class="panel-sub">4.9 average from 31 reviews</p>
+            <div class="rating-bars">
+            <div class="rating-bar-row">
+              <span>5★</span>
+              <div class="rating-bar"><span data-pct="90"></span></div>
+              <span>28</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>4★</span>
+              <div class="rating-bar"><span data-pct="10"></span></div>
+              <span>3</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>3★</span>
+              <div class="rating-bar"><span data-pct="0"></span></div>
+              <span>0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>2★</span>
+              <div class="rating-bar"><span data-pct="0"></span></div>
+              <span>0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span>1★</span>
+              <div class="rating-bar"><span data-pct="0"></span></div>
+              <span>0</span>
+            </div>
+            </div>
+            <p class="panel-note mt-3">Matches the vendor's public listing and
+               <em>vendor/reviews.html</em> exactly — same records, same counts.</p>
+          </section>
+
+          <section class="rs-panel glass-card">
+            <h2>What is stored</h2>
+            <p class="panel-sub">Frozen Database v1.0</p>
+            <div class="sys-row"><span class="s-key">Source</span>
+              <span class="s-val"><code>reviews.review_text</code></span></div>
+            <div class="sys-row"><span class="s-key">Per review</span>
+              <span class="s-val"><code>reviews.sentiment_score</code></span></div>
+            <div class="sys-row"><span class="s-key">Cached summary</span>
+              <span class="s-val"><code>review_summaries</code></span></div>
+            <div class="sys-row"><span class="s-key">Written by</span>
+              <span class="s-val">Python NLP module only</span></div>
+            <p class="panel-note mt-3">One cached summary per vendor —
+               <code>review_summaries.vendor_id</code> is UNIQUE. Regenerating overwrites it rather
+               than adding a row.</p>
+          </section>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

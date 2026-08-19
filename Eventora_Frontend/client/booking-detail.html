@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Booking Detail | Eventora Client</title>
+  <meta name="description" content="Full detail for one Eventora booking — event, service, vendor, amount, commission breakdown and status progression." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="../payment/history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="../ai/recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="../ai/chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="../ai/review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Booking Detail</h1>
+          <p class="topbar-sub">Event &rarr; Service &rarr; Vendor &rarr; Booking</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-booking-detail>
+
+      <nav class="breadcrumb-row" aria-label="Breadcrumb">
+        <a href="dashboard.html">Dashboard</a><span class="sep">/</span>
+        <a href="bookings.html">My Bookings</a><span class="sep">/</span>
+        <span data-bd-ref>Booking</span>
+      </nav>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo booking.</strong> Sample record used to build the client module. No payment
+           has been made and no vendor agreement exists.</p>
+      </div>
+
+      <div class="demo-notice" data-bd-notfound hidden>
+        <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+        <p><strong>Booking not found.</strong> No demo booking matches that ID, so the first one is
+           shown instead.
+           <!-- FUTURE PHP: return 404, and confirm the booking belongs to this client. --></p>
+      </div>
+
+      <div class="bd-layout">
+        <div>
+          <!-- ============================================================
+               HEADER
+               ============================================================ -->
+          <section class="bd-card glass-card">
+            <div class="bd-head">
+              <div>
+                <p class="bd-ref" data-bd-ref>EVB-0000</p>
+                <h1 data-bd-service>Service</h1>
+                <div class="bd-badges">
+                  <span class="booking-status pending" data-bd-status>pending</span>
+                  <span class="demo-tag muted">Demo</span>
+                </div>
+              </div>
+              <p class="booking-amount">
+                <span class="amount-label">Booking amount</span>
+                <span data-bd-amount>Rs. 0</span>
+              </p>
+            </div>
+
+            <!-- FUTURE PHP: load booking from MySQL
+                 SELECT b.*, e.event_name, e.event_date, s.title, c.name AS category,
+                        v.business_name, v.city, v.vendor_id
+                 FROM bookings b
+                 JOIN events e          ON e.event_id   = b.event_id
+                 JOIN services s        ON s.service_id = b.service_id
+                 JOIN categories c      ON c.id         = s.category_id
+                 JOIN vendor_profiles v ON v.vendor_id  = b.vendor_id
+                 WHERE b.booking_id = :booking_id AND b.client_id = :client_id; -->
+            <div class="bd-chain">
+              <div class="bd-chain-step">
+                <span class="step-icon"><i class="bi bi-calendar-event" aria-hidden="true"></i></span>
+                <div class="step-body">
+                  <p class="step-k">Event</p>
+                  <p class="step-v" data-bd-event>Event</p>
+                  <p class="step-sub" data-bd-event-date>Date</p>
+                </div>
+                <a href="my-events.html" class="btn-eventora btn-ghost step-link">View Event</a>
+              </div>
+
+              <div class="bd-chain-step">
+                <span class="step-icon"><i class="bi bi-box-seam" aria-hidden="true"></i></span>
+                <div class="step-body">
+                  <p class="step-k">Service</p>
+                  <p class="step-v" data-bd-service>Service</p>
+                  <p class="step-sub" data-bd-category>Category</p>
+                </div>
+              </div>
+
+              <div class="bd-chain-step">
+                <span class="step-icon"><i class="bi bi-shop" aria-hidden="true"></i></span>
+                <div class="step-body">
+                  <p class="step-k">Vendor</p>
+                  <p class="step-v" data-bd-vendor>Vendor</p>
+                  <p class="step-sub" data-bd-vendor-city>City</p>
+                </div>
+                <a href="../pages/vendor-detail.html" class="btn-eventora btn-ghost step-link"
+                   data-bd-vendor-link>View Vendor</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============================================================
+               TIMELINE
+               ============================================================ -->
+          <section class="bd-card glass-card">
+            <h2>Booking progress</h2>
+            <ul class="bd-timeline" data-bd-timeline></ul>
+          </section>
+
+          <!-- ============================================================
+               AMOUNT BREAKDOWN
+               ============================================================ -->
+          <section class="bd-card glass-card">
+            <h2>Amount breakdown</h2>
+
+            <div class="bd-money-row">
+              <span class="m-key">Service price</span>
+              <span class="m-val" data-bd-amount>Rs. 0</span>
+            </div>
+            <div class="bd-money-row">
+              <span class="m-key">Platform commission (<span data-bd-commission-pct>10%</span>, paid by the vendor)</span>
+              <span class="m-val" data-bd-commission>Rs. 0</span>
+            </div>
+            <div class="bd-money-row">
+              <span class="m-key">Vendor receives</span>
+              <span class="m-val" data-bd-vendor-net>Rs. 0</span>
+            </div>
+            <div class="bd-money-row is-total">
+              <span class="m-key">You pay</span>
+              <span class="m-val" data-bd-total>Rs. 0</span>
+            </div>
+
+            <!-- commissions table is authoritative (D4); the percentage is
+                 snapshotted at booking time so history stays auditable (D5). -->
+            <p class="bd-money-note">The commission is deducted from the vendor's payout — it is not
+               added to your bill. The rate applied to this booking is recorded at the time it was
+               placed, so it will not change if the platform rate changes later.</p>
+          </section>
+        </div>
+
+        <!-- ================================================================
+             SIDEBAR
+             ================================================================ -->
+        <aside>
+          <div class="bd-payment is-locked" data-bd-payment>
+            <div class="pay-head">
+              <i class="bi bi-lock" data-pay-icon aria-hidden="true"></i>
+              <h3 data-pay-title>Payment</h3>
+            </div>
+            <p data-pay-text>Payment status</p>
+            <!-- Only rendered when status === 'accepted'. -->
+            <button type="button" class="btn-eventora btn-primary" data-pay-action hidden>
+              Pay Now
+            </button>
+          </div>
+
+          <div class="bd-side-actions">
+            <!-- Only rendered when status === 'completed'. -->
+            <a href="reviews.html" class="btn-eventora btn-primary" data-bd-review hidden>
+              Leave a Review
+            </a>
+            <!-- Only rendered when status === 'pending'. -->
+            <button type="button" class="btn-eventora btn-outline-gold" data-bd-cancel hidden>
+              Cancel Request
+            </button>
+            <a href="bookings.html" class="btn-eventora btn-ghost">Back to Bookings</a>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+  <!-- FUTURE PHP: this data block is replaced by the query above. Data, not code. -->
+  <script type="application/json" id="demo-booking-data">
+{
+ "bookings": [
+  {
+   "booking_id": 1,
+   "ref": "EVB-0001",
+   "vendor_id": 1,
+   "event_name": "Sample Wedding",
+   "event_date_pretty": "15 Dec 2026",
+   "vendor": "Riverside Banquet Hall",
+   "vendor_city": "Hyderabad",
+   "service": "Main Hall Booking",
+   "category": "Venue",
+   "amount": 180000,
+   "commission_percentage": 10.0,
+   "commission_amount": 18000,
+   "placed_pretty": "2 Jun 2026",
+   "decided_pretty": "5 Jun 2026",
+   "paid_pretty": "\u2014",
+   "status": "accepted"
+  },
+  {
+   "booking_id": 2,
+   "ref": "EVB-0002",
+   "vendor_id": 2,
+   "event_name": "Sample Wedding",
+   "event_date_pretty": "15 Dec 2026",
+   "vendor": "Golden Spoon Catering",
+   "vendor_city": "Hyderabad",
+   "service": "Premium Buffet",
+   "category": "Catering",
+   "amount": 128000,
+   "commission_percentage": 10.0,
+   "commission_amount": 12800,
+   "placed_pretty": "4 Jun 2026",
+   "decided_pretty": "6 Jun 2026",
+   "paid_pretty": "\u2014",
+   "status": "accepted"
+  },
+  {
+   "booking_id": 3,
+   "ref": "EVB-0003",
+   "vendor_id": 3,
+   "event_name": "Sample Wedding",
+   "event_date_pretty": "15 Dec 2026",
+   "vendor": "Lens & Light Studio",
+   "vendor_city": "Hyderabad",
+   "service": "Full-Day Coverage",
+   "category": "Photography",
+   "amount": 110000,
+   "commission_percentage": 10.0,
+   "commission_amount": 11000,
+   "placed_pretty": "9 Jun 2026",
+   "decided_pretty": "\u2014",
+   "paid_pretty": "\u2014",
+   "status": "pending"
+  },
+  {
+   "booking_id": 4,
+   "ref": "EVB-0004",
+   "vendor_id": 4,
+   "event_name": "Sample Wedding",
+   "event_date_pretty": "15 Dec 2026",
+   "vendor": "Bloom Decor House",
+   "vendor_city": "Hyderabad",
+   "service": "Stage & Backdrop",
+   "category": "Decoration",
+   "amount": 45000,
+   "commission_percentage": 10.0,
+   "commission_amount": 4500,
+   "placed_pretty": "9 Jun 2026",
+   "decided_pretty": "10 Jun 2026",
+   "paid_pretty": "\u2014",
+   "status": "rejected"
+  },
+  {
+   "booking_id": 5,
+   "ref": "EVB-0005",
+   "vendor_id": 5,
+   "event_name": "Sample Corporate Dinner",
+   "event_date_pretty": "5 Feb 2027",
+   "vendor": "Sound Circle Entertainment",
+   "vendor_city": "Hyderabad",
+   "service": "DJ with Lighting & MC",
+   "category": "DJ",
+   "amount": 54000,
+   "commission_percentage": 10.0,
+   "commission_amount": 5400,
+   "placed_pretty": "11 Jun 2026",
+   "decided_pretty": "13 Jun 2026",
+   "paid_pretty": "\u2014",
+   "status": "cancelled"
+  },
+  {
+   "booking_id": 6,
+   "ref": "EVB-0006",
+   "vendor_id": 8,
+   "event_name": "Sample Engagement",
+   "event_date_pretty": "20 Sep 2026",
+   "vendor": "Indus View Marquee",
+   "vendor_city": "Jamshoro",
+   "service": "Main Hall Booking",
+   "category": "Venue",
+   "amount": 140000,
+   "commission_percentage": 10.0,
+   "commission_amount": 14000,
+   "placed_pretty": "18 May 2026",
+   "decided_pretty": "20 May 2026",
+   "paid_pretty": "\u2014",
+   "status": "accepted"
+  },
+  {
+   "booking_id": 7,
+   "ref": "EVB-0007",
+   "vendor_id": 9,
+   "event_name": "Sample Engagement",
+   "event_date_pretty": "20 Sep 2026",
+   "vendor": "Campus Caterers",
+   "vendor_city": "Jamshoro",
+   "service": "Standard Menu",
+   "category": "Catering",
+   "amount": 52000,
+   "commission_percentage": 10.0,
+   "commission_amount": 5200,
+   "placed_pretty": "20 May 2026",
+   "decided_pretty": "22 May 2026",
+   "paid_pretty": "\u2014",
+   "status": "accepted"
+  },
+  {
+   "booking_id": 8,
+   "ref": "EVB-0008",
+   "vendor_id": 10,
+   "event_name": "Sample Engagement",
+   "event_date_pretty": "20 Sep 2026",
+   "vendor": "Frame Story Photography",
+   "vendor_city": "Jamshoro",
+   "service": "Half-Day Coverage",
+   "category": "Photography",
+   "amount": 40000,
+   "commission_percentage": 10.0,
+   "commission_amount": 4000,
+   "placed_pretty": "22 May 2026",
+   "decided_pretty": "24 May 2026",
+   "paid_pretty": "\u2014",
+   "status": "accepted"
+  },
+  {
+   "booking_id": 9,
+   "ref": "EVB-0009",
+   "vendor_id": 6,
+   "event_name": "Sample Birthday",
+   "event_date_pretty": "10 May 2026",
+   "vendor": "Henna Atelier",
+   "vendor_city": "Hyderabad",
+   "service": "Bridal Mehndi",
+   "category": "Mehndi",
+   "amount": 18000,
+   "commission_percentage": 10.0,
+   "commission_amount": 1800,
+   "placed_pretty": "30 Mar 2026",
+   "decided_pretty": "1 Apr 2026",
+   "paid_pretty": "3 Apr 2026",
+   "status": "completed"
+  },
+  {
+   "booking_id": 10,
+   "ref": "EVB-0010",
+   "vendor_id": 4,
+   "event_name": "Sample Birthday",
+   "event_date_pretty": "10 May 2026",
+   "vendor": "Bloom Decor House",
+   "vendor_city": "Hyderabad",
+   "service": "Floral Package",
+   "category": "Decoration",
+   "amount": 58000,
+   "commission_percentage": 10.0,
+   "commission_amount": 5800,
+   "placed_pretty": "2 Apr 2026",
+   "decided_pretty": "4 Apr 2026",
+   "paid_pretty": "6 Apr 2026",
+   "status": "completed"
+  }
+ ]
+}
+  </script>
+
+</body>
+</html>

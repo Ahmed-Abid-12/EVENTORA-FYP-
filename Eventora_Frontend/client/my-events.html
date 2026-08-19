@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Events | Eventora Client</title>
+  <meta name="description" content="All the events you are planning on Eventora — status, budget, guest count and the bookings attached to each one." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="../payment/history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="../ai/recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="../ai/chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="../ai/review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>My Events</h1>
+          <p class="topbar-sub">Every booking belongs to one of these</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-my-events>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo events.</strong> You are not signed in, so the 5 events below are
+           sample records used to build the client module. Nothing here is stored in a database.</p>
+      </div>
+
+      <div class="events-toolbar">
+        <div class="events-filters" role="group" aria-label="Filter events by status">
+            <button type="button" class="faq-filter is-active" data-event-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="faq-filter" data-event-filter="planning" aria-pressed="false">Planning</button>
+            <button type="button" class="faq-filter" data-event-filter="ongoing" aria-pressed="false">Ongoing</button>
+            <button type="button" class="faq-filter" data-event-filter="completed" aria-pressed="false">Completed</button>
+            <button type="button" class="faq-filter" data-event-filter="cancelled" aria-pressed="false">Cancelled</button>
+        </div>
+
+        <div class="events-search">
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <label for="events-search-input" class="visually-hidden">Search your events</label>
+          <input type="search" id="events-search-input" data-events-search
+                 placeholder="Search by name, type, city or venue" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="dash-section-head">
+        <h2 data-events-count aria-live="polite"></h2>
+        <a href="create-event.html">+ Create a new event</a>
+      </div>
+
+      <!-- FUTURE BACKEND INTEGRATION
+           SELECT e.event_id, e.event_name, e.event_type, e.event_date, e.city,
+                  e.venue, e.guest_count, e.total_budget, e.status,
+                  COALESCE(SUM(b.total_amount), 0) AS committed
+           FROM events e
+           LEFT JOIN bookings b
+                  ON b.event_id = e.event_id
+                 AND b.status IN ('pending', 'accepted', 'completed')
+           WHERE e.client_id = :client_id
+           GROUP BY e.event_id
+           ORDER BY e.event_date ASC;
+
+           Booking counts per status come from a second grouped query, or from
+           the same result set grouped by b.status.
+           client_id comes from the session via client_profiles — never users.id. -->
+      <div class="events-grid">
+          <article class="event-card glass-card"
+                   data-event-id="1"
+                   data-status="planning"
+                   data-name="Sample Wedding"
+                   data-type="Wedding"
+                   data-city="Hyderabad"
+                   data-venue="Riverside Banquet Hall">
+            <div class="event-card-head">
+              <div class="date-chip">
+                <span class="day">15</span>
+                <span class="mon">Dec</span>
+                <span class="yr">2026</span>
+              </div>
+              <div class="event-card-title">
+                <p class="ev-type">Wedding</p>
+                <h3>Sample Wedding</h3>
+                <span class="event-status planning">planning</span>
+              </div>
+              <span class="demo-tag muted">Demo</span>
+            </div>
+
+            <div class="event-card-meta">
+              <div><span class="k">City</span><span class="v">Hyderabad</span></div>
+              <div><span class="k">Venue</span><span class="v">Riverside Banquet Hall</span></div>
+              <div><span class="k">Guests</span><span class="v">250</span></div>
+              <div><span class="k">Budget</span><span class="v">Rs. 500,000</span></div>
+            </div>
+
+            <div class="booking-pips"><span class="booking-pip"><span class="n">2</span> accepted</span><span class="booking-pip"><span class="n">1</span> pending</span><span class="booking-pip"><span class="n">1</span> rejected</span></div>
+
+            <div class="event-card-budget">
+              <div class="budget-top">
+                <span>Committed</span>
+                <strong>Rs. 418,000 of Rs. 500,000</strong>
+              </div>
+              <div class="budget-track">
+                <span data-pct="84"></span>
+              </div>
+            </div>
+
+            <div class="event-card-foot">
+              <a href="../pages/vendors.html?event_id=1" class="btn-eventora btn-primary">Find Vendors</a>
+              <a href="booking-detail.html?event_id=1" class="btn-eventora btn-ghost">Bookings</a>
+              <button type="button" class="btn-save" data-cancel-event="Sample Wedding" aria-label="Cancel Sample Wedding"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+            </div>
+          </article>
+
+          <article class="event-card glass-card"
+                   data-event-id="2"
+                   data-status="planning"
+                   data-name="Sample Corporate Dinner"
+                   data-type="Corporate"
+                   data-city="Hyderabad"
+                   data-venue="Not set">
+            <div class="event-card-head">
+              <div class="date-chip">
+                <span class="day">05</span>
+                <span class="mon">Feb</span>
+                <span class="yr">2027</span>
+              </div>
+              <div class="event-card-title">
+                <p class="ev-type">Corporate</p>
+                <h3>Sample Corporate Dinner</h3>
+                <span class="event-status planning">planning</span>
+              </div>
+              <span class="demo-tag muted">Demo</span>
+            </div>
+
+            <div class="event-card-meta">
+              <div><span class="k">City</span><span class="v">Hyderabad</span></div>
+              <div><span class="k">Venue</span><span class="v">Not set</span></div>
+              <div><span class="k">Guests</span><span class="v">80</span></div>
+              <div><span class="k">Budget</span><span class="v">Rs. 180,000</span></div>
+            </div>
+
+            <div class="booking-pips"><span class="booking-pip"><span class="n">1</span> cancelled</span></div>
+
+            <div class="event-card-budget">
+              <div class="budget-top">
+                <span>Committed</span>
+                <strong>Rs. 0 of Rs. 180,000</strong>
+              </div>
+              <div class="budget-track">
+                <span data-pct="0"></span>
+              </div>
+            </div>
+
+            <div class="event-card-foot">
+              <a href="../pages/vendors.html?event_id=2" class="btn-eventora btn-primary">Find Vendors</a>
+              <a href="booking-detail.html?event_id=2" class="btn-eventora btn-ghost">Bookings</a>
+              <button type="button" class="btn-save" data-cancel-event="Sample Corporate Dinner" aria-label="Cancel Sample Corporate Dinner"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+            </div>
+          </article>
+
+          <article class="event-card glass-card"
+                   data-event-id="3"
+                   data-status="ongoing"
+                   data-name="Sample Engagement"
+                   data-type="Engagement"
+                   data-city="Jamshoro"
+                   data-venue="Indus View Marquee">
+            <div class="event-card-head">
+              <div class="date-chip">
+                <span class="day">20</span>
+                <span class="mon">Sep</span>
+                <span class="yr">2026</span>
+              </div>
+              <div class="event-card-title">
+                <p class="ev-type">Engagement</p>
+                <h3>Sample Engagement</h3>
+                <span class="event-status ongoing">ongoing</span>
+              </div>
+              <span class="demo-tag muted">Demo</span>
+            </div>
+
+            <div class="event-card-meta">
+              <div><span class="k">City</span><span class="v">Jamshoro</span></div>
+              <div><span class="k">Venue</span><span class="v">Indus View Marquee</span></div>
+              <div><span class="k">Guests</span><span class="v">120</span></div>
+              <div><span class="k">Budget</span><span class="v">Rs. 250,000</span></div>
+            </div>
+
+            <div class="booking-pips"><span class="booking-pip"><span class="n">3</span> accepted</span></div>
+
+            <div class="event-card-budget">
+              <div class="budget-top">
+                <span>Committed</span>
+                <strong>Rs. 232,000 of Rs. 250,000</strong>
+              </div>
+              <div class="budget-track">
+                <span data-pct="93"></span>
+              </div>
+            </div>
+
+            <div class="event-card-foot">
+              <a href="../pages/vendors.html?event_id=3" class="btn-eventora btn-primary">Find Vendors</a>
+              <a href="booking-detail.html?event_id=3" class="btn-eventora btn-ghost">Bookings</a>
+              <button type="button" class="btn-save" data-cancel-event="Sample Engagement" aria-label="Cancel Sample Engagement"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+            </div>
+          </article>
+
+          <article class="event-card glass-card"
+                   data-event-id="4"
+                   data-status="completed"
+                   data-name="Sample Birthday"
+                   data-type="Birthday"
+                   data-city="Hyderabad"
+                   data-venue="Home">
+            <div class="event-card-head">
+              <div class="date-chip">
+                <span class="day">10</span>
+                <span class="mon">May</span>
+                <span class="yr">2026</span>
+              </div>
+              <div class="event-card-title">
+                <p class="ev-type">Birthday</p>
+                <h3>Sample Birthday</h3>
+                <span class="event-status completed">completed</span>
+              </div>
+              <span class="demo-tag muted">Demo</span>
+            </div>
+
+            <div class="event-card-meta">
+              <div><span class="k">City</span><span class="v">Hyderabad</span></div>
+              <div><span class="k">Venue</span><span class="v">Home</span></div>
+              <div><span class="k">Guests</span><span class="v">40</span></div>
+              <div><span class="k">Budget</span><span class="v">Rs. 100,000</span></div>
+            </div>
+
+            <div class="booking-pips"><span class="booking-pip"><span class="n">2</span> completed</span></div>
+
+            <div class="event-card-budget">
+              <div class="budget-top">
+                <span>Committed</span>
+                <strong>Rs. 76,000 of Rs. 100,000</strong>
+              </div>
+              <div class="budget-track">
+                <span data-pct="76"></span>
+              </div>
+            </div>
+
+            <div class="event-card-foot">
+              <a href="booking-detail.html?event_id=4" class="btn-eventora btn-ghost">Event completed</a>
+              <a href="booking-detail.html?event_id=4" class="btn-eventora btn-ghost">Bookings</a>
+              
+            </div>
+          </article>
+
+          <article class="event-card glass-card"
+                   data-event-id="5"
+                   data-status="cancelled"
+                   data-name="Sample Seminar"
+                   data-type="Seminar"
+                   data-city="Sukkur"
+                   data-venue="Not set">
+            <div class="event-card-head">
+              <div class="date-chip">
+                <span class="day">02</span>
+                <span class="mon">Jul</span>
+                <span class="yr">2026</span>
+              </div>
+              <div class="event-card-title">
+                <p class="ev-type">Seminar</p>
+                <h3>Sample Seminar</h3>
+                <span class="event-status cancelled">cancelled</span>
+              </div>
+              <span class="demo-tag muted">Demo</span>
+            </div>
+
+            <div class="event-card-meta">
+              <div><span class="k">City</span><span class="v">Sukkur</span></div>
+              <div><span class="k">Venue</span><span class="v">Not set</span></div>
+              <div><span class="k">Guests</span><span class="v">150</span></div>
+              <div><span class="k">Budget</span><span class="v">Rs. 120,000</span></div>
+            </div>
+
+            <div class="booking-pips"><span class="booking-pip">No bookings yet</span></div>
+
+            <div class="event-card-budget">
+              <div class="budget-top">
+                <span>Committed</span>
+                <strong>Rs. 0 of Rs. 120,000</strong>
+              </div>
+              <div class="budget-track">
+                <span data-pct="0"></span>
+              </div>
+            </div>
+
+            <div class="event-card-foot">
+              <a href="booking-detail.html?event_id=5" class="btn-eventora btn-ghost">Event cancelled</a>
+              <a href="booking-detail.html?event_id=5" class="btn-eventora btn-ghost">Bookings</a>
+              
+            </div>
+          </article>
+      </div>
+
+      <!-- Shown when filters match nothing. A client with no events at all
+           would get this same block from PHP with different copy. -->
+      <div class="dash-empty glass-card" data-events-empty hidden>
+        <i class="bi bi-calendar-x" aria-hidden="true"></i>
+        <h4>No events match</h4>
+        <p>Try a different status filter, or clear your search.</p>
+        <a href="create-event.html" class="btn-eventora btn-primary">Create an Event</a>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

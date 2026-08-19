@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Bookings | Eventora Client</title>
+  <meta name="description" content="Every booking you have made on Eventora — status, vendor, service, amount and the event it belongs to." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="../payment/history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="../ai/recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="../ai/chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="../ai/review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>My Bookings</h1>
+          <p class="topbar-sub">Event &rarr; Service &rarr; Vendor</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-bookings>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo bookings.</strong> You are not signed in, so the 10 bookings below
+           are sample records used to build the client module. No booking, payment or transaction
+           exists — nothing here reflects a real vendor agreement.</p>
+      </div>
+
+      <div class="bookings-toolbar">
+        <div class="bookings-filters" role="group" aria-label="Filter bookings by status">
+            <button type="button" class="faq-filter is-active" data-booking-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="faq-filter" data-booking-filter="pending" aria-pressed="false">Pending</button>
+            <button type="button" class="faq-filter" data-booking-filter="accepted" aria-pressed="false">Accepted</button>
+            <button type="button" class="faq-filter" data-booking-filter="rejected" aria-pressed="false">Rejected</button>
+            <button type="button" class="faq-filter" data-booking-filter="completed" aria-pressed="false">Completed</button>
+            <button type="button" class="faq-filter" data-booking-filter="cancelled" aria-pressed="false">Cancelled</button>
+        </div>
+
+        <div class="bookings-search">
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <label for="bookings-search-input" class="visually-hidden">Search your bookings</label>
+          <input type="search" id="bookings-search-input" data-bookings-search
+                 placeholder="Search by booking ID, event, vendor or service" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="dash-section-head">
+        <h2 data-bookings-count aria-live="polite"></h2>
+        <a href="../pages/vendors.html">+ Book another vendor</a>
+      </div>
+
+      <!-- FUTURE BACKEND INTEGRATION
+           SELECT b.booking_id, b.booking_date, b.total_amount, b.status, b.created_at,
+                  e.event_id, e.event_name, e.event_date,
+                  s.service_id, s.title AS service_title,
+                  c.name AS category_name,
+                  v.vendor_id, v.business_name
+           FROM bookings b
+           JOIN events          e ON e.event_id   = b.event_id
+           JOIN services        s ON s.service_id = b.service_id
+           JOIN categories      c ON c.id         = s.category_id
+           JOIN vendor_profiles v ON v.vendor_id  = b.vendor_id
+           WHERE b.client_id = :client_id
+           ORDER BY b.created_at DESC;
+
+           client_id comes from the session via client_profiles — never users.id.
+           The status filter becomes:  AND b.status = :status
+           Actions are decided server-side from b.status; a terminal booking
+           must never be rendered with a state-changing button. -->
+      <div class="bookings-list">
+          <article class="booking-card glass-card"
+                   data-booking-id="1"
+                   data-status="accepted"
+                   data-ref="EVB-0001"
+                   data-event="Sample Wedding"
+                   data-vendor="Riverside Banquet Hall"
+                   data-service="Main Hall Booking"
+                   data-category="Venue">
+            <div class="booking-card-top">
+              <div class="booking-ref">
+                <span class="ref-id">EVB-0001</span>
+                <span class="booking-status accepted">accepted</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="booking-amount">
+                <span class="amount-label">Booking amount</span>
+                Rs. 180,000
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor: the shape of a bookings row.
+                 bookings.event_id / service_id / vendor_id -->
+            <div class="booking-chain">
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Wedding</span>
+                <span class="sub">15 Dec 2026</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Main Hall Booking</span>
+                <span class="sub">Venue</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-shop" aria-hidden="true"></i> Vendor</span>
+                <span class="v">Riverside Banquet Hall</span>
+                <span class="sub">Requested 2 Jun 2026</span>
+              </div>
+            </div>
+
+            <div class="booking-card-foot">
+              <span class="booking-placed">Booking placed 2 Jun 2026</span>
+              <div class="booking-actions">
+                <a href="booking-detail.html?booking_id=1" class="btn-eventora btn-ghost">View Details</a>
+                <a href="my-events.html" class="btn-eventora btn-outline-gold">View Event</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="booking-card glass-card"
+                   data-booking-id="2"
+                   data-status="accepted"
+                   data-ref="EVB-0002"
+                   data-event="Sample Wedding"
+                   data-vendor="Golden Spoon Catering"
+                   data-service="Premium Buffet"
+                   data-category="Catering">
+            <div class="booking-card-top">
+              <div class="booking-ref">
+                <span class="ref-id">EVB-0002</span>
+                <span class="booking-status accepted">accepted</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="booking-amount">
+                <span class="amount-label">Booking amount</span>
+                Rs. 128,000
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor: the shape of a bookings row.
+                 bookings.event_id / service_id / vendor_id -->
+            <div class="booking-chain">
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Wedding</span>
+                <span class="sub">15 Dec 2026</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Premium Buffet</span>
+                <span class="sub">Catering</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-shop" aria-hidden="true"></i> Vendor</span>
+                <span class="v">Golden Spoon Catering</span>
+                <span class="sub">Requested 4 Jun 2026</span>
+              </div>
+            </div>
+
+            <div class="booking-card-foot">
+              <span class="booking-placed">Booking placed 4 Jun 2026</span>
+              <div class="booking-actions">
+                <a href="booking-detail.html?booking_id=2" class="btn-eventora btn-ghost">View Details</a>
+                <a href="my-events.html" class="btn-eventora btn-outline-gold">View Event</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="booking-card glass-card"
+                   data-booking-id="3"
+                   data-status="pending"
+                   data-ref="EVB-0003"
+                   data-event="Sample Wedding"
+                   data-vendor="Lens &amp; Light Studio"
+                   data-service="Full-Day Coverage"
+                   data-category="Photography">
+            <div class="booking-card-top">
+              <div class="booking-ref">
+                <span class="ref-id">EVB-0003</span>
+                <span class="booking-status pending">pending</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="booking-amount">
+                <span class="amount-label">Booking amount</span>
+                Rs. 110,000
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor: the shape of a bookings row.
+                 bookings.event_id / service_id / vendor_id -->
+            <div class="booking-chain">
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Wedding</span>
+                <span class="sub">15 Dec 2026</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Full-Day Coverage</span>
+                <span class="sub">Photography</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-shop" aria-hidden="true"></i> Vendor</span>
+                <span class="v">Lens &amp; Light Studio</span>
+                <span class="sub">Requested 9 Jun 2026</span>
+              </div>
+            </div>
+
+            <div class="booking-card-foot">
+              <span class="booking-placed">Booking placed 9 Jun 2026</span>
+              <div class="booking-actions">
+                <a href="booking-detail.html?booking_id=3" class="btn-eventora btn-ghost">View Details</a>
+                <button type="button" class="btn-eventora btn-outline-gold" data-cancel-booking="EVB-0003">Cancel Request</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="booking-card glass-card"
+                   data-booking-id="4"
+                   data-status="rejected"
+                   data-ref="EVB-0004"
+                   data-event="Sample Wedding"
+                   data-vendor="Bloom Decor House"
+                   data-service="Stage &amp; Backdrop"
+                   data-category="Decoration">
+            <div class="booking-card-top">
+              <div class="booking-ref">
+                <span class="ref-id">EVB-0004</span>
+                <span class="booking-status rejected">rejected</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="booking-amount">
+                <span class="amount-label">Booking amount</span>
+                Rs. 45,000
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor: the shape of a bookings row.
+                 bookings.event_id / service_id / vendor_id -->
+            <div class="booking-chain">
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Wedding</span>
+                <span class="sub">15 Dec 2026</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Stage &amp; Backdrop</span>
+                <span class="sub">Decoration</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-shop" aria-hidden="true"></i> Vendor</span>
+                <span class="v">Bloom Decor House</span>
+                <span class="sub">Requested 9 Jun 2026</span>
+              </div>
+            </div>
+
+            <div class="booking-card-foot">
+              <span class="booking-placed">Booking placed 9 Jun 2026</span>
+              <div class="booking-actions">
+                <a href="booking-detail.html?booking_id=4" class="btn-eventora btn-ghost">View Details</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="booking-card glass-card"
+                   data-booking-id="5"
+                   data-status="cancelled"
+                   data-ref="EVB-0005"
+                   data-event="Sample Corporate Dinner"
+                   data-vendor="Sound Circle Entertainment"
+                   data-service="DJ with Lighting &amp; MC"
+                   data-category="DJ">
+            <div class="booking-card-top">
+              <div class="booking-ref">
+                <span class="ref-id">EVB-0005</span>
+                <span class="booking-status cancelled">cancelled</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="booking-amount">
+                <span class="amount-label">Booking amount</span>
+                Rs. 54,000
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor: the shape of a bookings row.
+                 bookings.event_id / service_id / vendor_id -->
+            <div class="booking-chain">
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Corporate Dinner</span>
+                <span class="sub">5 Feb 2027</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">DJ with Lighting &amp; MC</span>
+                <span class="sub">DJ</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-shop" aria-hidden="true"></i> Vendor</span>
+                <span class="v">Sound Circle Entertainment</span>
+                <span class="sub">Requested 11 Jun 2026</span>
+              </div>
+            </div>
+
+            <div class="booking-card-foot">
+              <span class="booking-placed">Booking placed 11 Jun 2026</span>
+              <div class="booking-actions">
+                <a href="booking-detail.html?booking_id=5" class="btn-eventora btn-ghost">View Details</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="booking-card glass-card"
+                   data-booking-id="6"
+                   data-status="accepted"
+                   data-ref="EVB-0006"
+                   data-event="Sample Engagement"
+                   data-vendor="Indus View Marquee"
+                   data-service="Main Hall Booking"
+                   data-category="Venue">
+            <div class="booking-card-top">
+              <div class="booking-ref">
+                <span class="ref-id">EVB-0006</span>
+                <span class="booking-status accepted">accepted</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="booking-amount">
+                <span class="amount-label">Booking amount</span>
+                Rs. 140,000
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor: the shape of a bookings row.
+                 bookings.event_id / service_id / vendor_id -->
+            <div class="booking-chain">
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Engagement</span>
+                <span class="sub">20 Sep 2026</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Main Hall Booking</span>
+                <span class="sub">Venue</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-shop" aria-hidden="true"></i> Vendor</span>
+                <span class="v">Indus View Marquee</span>
+                <span class="sub">Requested 18 May 2026</span>
+              </div>
+            </div>
+
+            <div class="booking-card-foot">
+              <span class="booking-placed">Booking placed 18 May 2026</span>
+              <div class="booking-actions">
+                <a href="booking-detail.html?booking_id=6" class="btn-eventora btn-ghost">View Details</a>
+                <a href="my-events.html" class="btn-eventora btn-outline-gold">View Event</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="booking-card glass-card"
+                   data-booking-id="7"
+                   data-status="accepted"
+                   data-ref="EVB-0007"
+                   data-event="Sample Engagement"
+                   data-vendor="Campus Caterers"
+                   data-service="Standard Menu"
+                   data-category="Catering">
+            <div class="booking-card-top">
+              <div class="booking-ref">
+                <span class="ref-id">EVB-0007</span>
+                <span class="booking-status accepted">accepted</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="booking-amount">
+                <span class="amount-label">Booking amount</span>
+                Rs. 52,000
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor: the shape of a bookings row.
+                 bookings.event_id / service_id / vendor_id -->
+            <div class="booking-chain">
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Engagement</span>
+                <span class="sub">20 Sep 2026</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Standard Menu</span>
+                <span class="sub">Catering</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-shop" aria-hidden="true"></i> Vendor</span>
+                <span class="v">Campus Caterers</span>
+                <span class="sub">Requested 20 May 2026</span>
+              </div>
+            </div>
+
+            <div class="booking-card-foot">
+              <span class="booking-placed">Booking placed 20 May 2026</span>
+              <div class="booking-actions">
+                <a href="booking-detail.html?booking_id=7" class="btn-eventora btn-ghost">View Details</a>
+                <a href="my-events.html" class="btn-eventora btn-outline-gold">View Event</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="booking-card glass-card"
+                   data-booking-id="8"
+                   data-status="accepted"
+                   data-ref="EVB-0008"
+                   data-event="Sample Engagement"
+                   data-vendor="Frame Story Photography"
+                   data-service="Half-Day Coverage"
+                   data-category="Photography">
+            <div class="booking-card-top">
+              <div class="booking-ref">
+                <span class="ref-id">EVB-0008</span>
+                <span class="booking-status accepted">accepted</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="booking-amount">
+                <span class="amount-label">Booking amount</span>
+                Rs. 40,000
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor: the shape of a bookings row.
+                 bookings.event_id / service_id / vendor_id -->
+            <div class="booking-chain">
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Engagement</span>
+                <span class="sub">20 Sep 2026</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Half-Day Coverage</span>
+                <span class="sub">Photography</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-shop" aria-hidden="true"></i> Vendor</span>
+                <span class="v">Frame Story Photography</span>
+                <span class="sub">Requested 22 May 2026</span>
+              </div>
+            </div>
+
+            <div class="booking-card-foot">
+              <span class="booking-placed">Booking placed 22 May 2026</span>
+              <div class="booking-actions">
+                <a href="booking-detail.html?booking_id=8" class="btn-eventora btn-ghost">View Details</a>
+                <a href="my-events.html" class="btn-eventora btn-outline-gold">View Event</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="booking-card glass-card"
+                   data-booking-id="9"
+                   data-status="completed"
+                   data-ref="EVB-0009"
+                   data-event="Sample Birthday"
+                   data-vendor="Henna Atelier"
+                   data-service="Bridal Mehndi"
+                   data-category="Mehndi">
+            <div class="booking-card-top">
+              <div class="booking-ref">
+                <span class="ref-id">EVB-0009</span>
+                <span class="booking-status completed">completed</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="booking-amount">
+                <span class="amount-label">Booking amount</span>
+                Rs. 18,000
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor: the shape of a bookings row.
+                 bookings.event_id / service_id / vendor_id -->
+            <div class="booking-chain">
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Birthday</span>
+                <span class="sub">10 May 2026</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Bridal Mehndi</span>
+                <span class="sub">Mehndi</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-shop" aria-hidden="true"></i> Vendor</span>
+                <span class="v">Henna Atelier</span>
+                <span class="sub">Requested 30 Mar 2026</span>
+              </div>
+            </div>
+
+            <div class="booking-card-foot">
+              <span class="booking-placed">Booking placed 30 Mar 2026</span>
+              <div class="booking-actions">
+                <a href="booking-detail.html?booking_id=9" class="btn-eventora btn-ghost">View Details</a>
+                <a href="reviews.html?booking_id=9" class="btn-eventora btn-primary">Leave Review</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="booking-card glass-card"
+                   data-booking-id="10"
+                   data-status="completed"
+                   data-ref="EVB-0010"
+                   data-event="Sample Birthday"
+                   data-vendor="Bloom Decor House"
+                   data-service="Floral Package"
+                   data-category="Decoration">
+            <div class="booking-card-top">
+              <div class="booking-ref">
+                <span class="ref-id">EVB-0010</span>
+                <span class="booking-status completed">completed</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="booking-amount">
+                <span class="amount-label">Booking amount</span>
+                Rs. 58,000
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor: the shape of a bookings row.
+                 bookings.event_id / service_id / vendor_id -->
+            <div class="booking-chain">
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Birthday</span>
+                <span class="sub">10 May 2026</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Floral Package</span>
+                <span class="sub">Decoration</span>
+              </div>
+              <div class="chain-step">
+                <span class="k"><i class="bi bi-shop" aria-hidden="true"></i> Vendor</span>
+                <span class="v">Bloom Decor House</span>
+                <span class="sub">Requested 2 Apr 2026</span>
+              </div>
+            </div>
+
+            <div class="booking-card-foot">
+              <span class="booking-placed">Booking placed 2 Apr 2026</span>
+              <div class="booking-actions">
+                <a href="booking-detail.html?booking_id=10" class="btn-eventora btn-ghost">View Details</a>
+                <a href="reviews.html?booking_id=10" class="btn-eventora btn-primary">Leave Review</a>
+              </div>
+            </div>
+          </article>
+      </div>
+
+      <div class="dash-empty glass-card" data-bookings-empty hidden>
+        <i class="bi bi-journal-x" aria-hidden="true"></i>
+        <h4>No bookings match</h4>
+        <p>Try a different status filter, or clear your search.</p>
+        <a href="../pages/vendors.html" class="btn-eventora btn-primary">Find Vendors</a>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

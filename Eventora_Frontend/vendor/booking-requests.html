@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Booking Requests | Eventora Vendor</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Vendor navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Vendor</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Business</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="business-profile.html"><i class="bi bi-shop" aria-hidden="true"></i> Business Profile</a></li>
+        <li><a href="services.html"><i class="bi bi-box-seam" aria-hidden="true"></i> Services
+          <span class="nav-count">3</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="booking-requests.html"><i class="bi bi-inbox" aria-hidden="true"></i> Booking Requests
+          <span class="nav-count">2</span></a></li>
+        <li><a href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i> Calendar</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="reviews.html"><i class="bi bi-star" aria-hidden="true"></i> Reviews</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Booking Requests</h1>
+          <p class="topbar-sub">Client &rarr; Event &rarr; Service &rarr; Booking</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="booking-requests.html" class="icon-btn" aria-label="Booking requests">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="business-profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">LL</span>
+          <span>
+            <span class="who d-block">Lens &amp; Light Studio</span>
+            <span class="role">Vendor account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-booking-requests>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo booking requests.</strong> 7 sample requests.
+           EVB-0003 is the same booking the demo client raised on
+           <em>client/bookings.html</em>, seen from your side. Accepting or rejecting changes this
+           page only — nothing is saved and no client is notified.</p>
+      </div>
+
+      <div class="br-toolbar">
+        <div class="br-filters" role="group" aria-label="Filter booking requests by status">
+            <button type="button" class="faq-filter is-active" data-br-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="faq-filter" data-br-filter="pending" aria-pressed="false">Pending</button>
+            <button type="button" class="faq-filter" data-br-filter="accepted" aria-pressed="false">Accepted</button>
+            <button type="button" class="faq-filter" data-br-filter="rejected" aria-pressed="false">Rejected</button>
+            <button type="button" class="faq-filter" data-br-filter="completed" aria-pressed="false">Completed</button>
+            <button type="button" class="faq-filter" data-br-filter="cancelled" aria-pressed="false">Cancelled</button>
+        </div>
+
+        <div class="bookings-search">
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <label for="br-search" class="visually-hidden">Search booking requests</label>
+          <input type="search" id="br-search" data-br-search
+                 placeholder="Search by booking ID, client, event or service" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="dash-section-head">
+        <h2 data-br-count aria-live="polite"></h2>
+        <a href="services.html">Manage services</a>
+      </div>
+
+      <!-- FUTURE PHP: load booking requests for this vendor
+           SELECT b.booking_id, b.booking_date, b.total_amount, b.status, b.created_at,
+                  e.event_id, e.event_name, e.event_date,
+                  s.service_id, s.title,
+                  u.name AS client_name, cp.client_id
+           FROM bookings b
+           JOIN events e          ON e.event_id   = b.event_id
+           JOIN services s        ON s.service_id = b.service_id
+           JOIN client_profiles cp ON cp.client_id = b.client_id
+           JOIN users u           ON u.id = cp.user_id
+           WHERE b.vendor_id = :vendor_id
+           ORDER BY FIELD(b.status,'pending','accepted','completed','rejected','cancelled'),
+                    b.created_at DESC;
+
+           vendor_id is vendor_profiles.vendor_id from the session — never users.id.
+           Actions are decided server-side from b.status; a terminal booking must
+           never be rendered with Accept, Reject or Mark Completed. -->
+      <div class="br-list">
+          <article class="br-card glass-card is-pending"
+                   data-booking-id="3"
+                   data-ref="EVB-0003"
+                   data-status="pending"
+                   data-client="Demo Client"
+                   data-event="Sample Wedding"
+                   data-service="Full-Day Coverage">
+            <div class="br-card-top">
+              <div class="br-ref">
+                <span class="ref-id">EVB-0003</span>
+                <span class="booking-status pending">pending</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="br-amount">
+                <span class="a-label">Booking amount</span>
+                Rs. 110,000
+                <span class="a-net">Rs. 99,000 to you after 10% commission</span>
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor -> Booking. Every booking belongs to
+                 an event (bookings.event_id NOT NULL), so the event is shown
+                 first rather than treated as metadata. -->
+            <div class="br-chain">
+              <div class="br-step">
+                <span class="k"><i class="bi bi-person" aria-hidden="true"></i> Client</span>
+                <span class="v">Demo Client</span>
+                <span class="sub">Requested 9 Jun 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Wedding</span>
+                <span class="sub">15 Dec 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Full-Day Coverage</span>
+                <span class="sub">Photography</span>
+              </div>
+            </div>
+
+            <div class="br-card-foot">
+              <span class="br-requested">Booking date 15 Dec 2026</span>
+              <div class="br-actions">
+                <a href="../client/booking-detail.html?booking_id=3" class="btn-eventora btn-ghost">View Details</a>
+                <button type="button" class="btn-eventora btn-reject" data-br-action="rejected" data-ref="EVB-0003">Reject</button>
+                <button type="button" class="btn-eventora btn-accept" data-br-action="accepted" data-ref="EVB-0003">Accept</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="br-card glass-card is-pending"
+                   data-booking-id="21"
+                   data-ref="EVB-0021"
+                   data-status="pending"
+                   data-client="Sample Client B"
+                   data-event="Sample Engagement Shoot"
+                   data-service="Half-Day Coverage">
+            <div class="br-card-top">
+              <div class="br-ref">
+                <span class="ref-id">EVB-0021</span>
+                <span class="booking-status pending">pending</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="br-amount">
+                <span class="a-label">Booking amount</span>
+                Rs. 65,000
+                <span class="a-net">Rs. 58,500 to you after 10% commission</span>
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor -> Booking. Every booking belongs to
+                 an event (bookings.event_id NOT NULL), so the event is shown
+                 first rather than treated as metadata. -->
+            <div class="br-chain">
+              <div class="br-step">
+                <span class="k"><i class="bi bi-person" aria-hidden="true"></i> Client</span>
+                <span class="v">Sample Client B</span>
+                <span class="sub">Requested 7 Jun 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Engagement Shoot</span>
+                <span class="sub">4 Oct 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Half-Day Coverage</span>
+                <span class="sub">Photography</span>
+              </div>
+            </div>
+
+            <div class="br-card-foot">
+              <span class="br-requested">Booking date 4 Oct 2026</span>
+              <div class="br-actions">
+                <a href="../client/booking-detail.html?booking_id=21" class="btn-eventora btn-ghost">View Details</a>
+                <button type="button" class="btn-eventora btn-reject" data-br-action="rejected" data-ref="EVB-0021">Reject</button>
+                <button type="button" class="btn-eventora btn-accept" data-br-action="accepted" data-ref="EVB-0021">Accept</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="br-card glass-card"
+                   data-booking-id="22"
+                   data-ref="EVB-0022"
+                   data-status="accepted"
+                   data-client="Sample Client C"
+                   data-event="Sample Corporate Launch"
+                   data-service="Cinematic Film Package">
+            <div class="br-card-top">
+              <div class="br-ref">
+                <span class="ref-id">EVB-0022</span>
+                <span class="booking-status accepted">accepted</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="br-amount">
+                <span class="a-label">Booking amount</span>
+                Rs. 156,000
+                <span class="a-net">Rs. 140,400 to you after 10% commission</span>
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor -> Booking. Every booking belongs to
+                 an event (bookings.event_id NOT NULL), so the event is shown
+                 first rather than treated as metadata. -->
+            <div class="br-chain">
+              <div class="br-step">
+                <span class="k"><i class="bi bi-person" aria-hidden="true"></i> Client</span>
+                <span class="v">Sample Client C</span>
+                <span class="sub">Requested 30 May 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Corporate Launch</span>
+                <span class="sub">12 Sep 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Cinematic Film Package</span>
+                <span class="sub">Photography</span>
+              </div>
+            </div>
+
+            <div class="br-card-foot">
+              <span class="br-requested">Booking date 12 Sep 2026</span>
+              <div class="br-actions">
+                <a href="../client/booking-detail.html?booking_id=22" class="btn-eventora btn-ghost">View Details</a>
+                <button type="button" class="btn-eventora btn-primary" data-br-action="completed" data-ref="EVB-0022">Mark Completed</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="br-card glass-card"
+                   data-booking-id="23"
+                   data-ref="EVB-0023"
+                   data-status="accepted"
+                   data-client="Sample Client D"
+                   data-event="Sample Birthday Party"
+                   data-service="Half-Day Coverage">
+            <div class="br-card-top">
+              <div class="br-ref">
+                <span class="ref-id">EVB-0023</span>
+                <span class="booking-status accepted">accepted</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="br-amount">
+                <span class="a-label">Booking amount</span>
+                Rs. 65,000
+                <span class="a-net">Rs. 58,500 to you after 10% commission</span>
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor -> Booking. Every booking belongs to
+                 an event (bookings.event_id NOT NULL), so the event is shown
+                 first rather than treated as metadata. -->
+            <div class="br-chain">
+              <div class="br-step">
+                <span class="k"><i class="bi bi-person" aria-hidden="true"></i> Client</span>
+                <span class="v">Sample Client D</span>
+                <span class="sub">Requested 24 May 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Birthday Party</span>
+                <span class="sub">22 Aug 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Half-Day Coverage</span>
+                <span class="sub">Photography</span>
+              </div>
+            </div>
+
+            <div class="br-card-foot">
+              <span class="br-requested">Booking date 22 Aug 2026</span>
+              <div class="br-actions">
+                <a href="../client/booking-detail.html?booking_id=23" class="btn-eventora btn-ghost">View Details</a>
+                <button type="button" class="btn-eventora btn-primary" data-br-action="completed" data-ref="EVB-0023">Mark Completed</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="br-card glass-card"
+                   data-booking-id="24"
+                   data-ref="EVB-0024"
+                   data-status="completed"
+                   data-client="Sample Client E"
+                   data-event="Sample Family Gathering"
+                   data-service="Full-Day Coverage">
+            <div class="br-card-top">
+              <div class="br-ref">
+                <span class="ref-id">EVB-0024</span>
+                <span class="booking-status completed">completed</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="br-amount">
+                <span class="a-label">Booking amount</span>
+                Rs. 110,000
+                <span class="a-net">Rs. 99,000 to you after 10% commission</span>
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor -> Booking. Every booking belongs to
+                 an event (bookings.event_id NOT NULL), so the event is shown
+                 first rather than treated as metadata. -->
+            <div class="br-chain">
+              <div class="br-step">
+                <span class="k"><i class="bi bi-person" aria-hidden="true"></i> Client</span>
+                <span class="v">Sample Client E</span>
+                <span class="sub">Requested 2 Mar 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Family Gathering</span>
+                <span class="sub">18 Apr 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Full-Day Coverage</span>
+                <span class="sub">Photography</span>
+              </div>
+            </div>
+
+            <div class="br-card-foot">
+              <span class="br-requested">Booking date 18 Apr 2026</span>
+              <div class="br-actions">
+                <a href="../client/booking-detail.html?booking_id=24" class="btn-eventora btn-ghost">View Details</a>
+                <span class="br-terminal-note">Service delivered. The client can now leave a review.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="br-card glass-card"
+                   data-booking-id="25"
+                   data-ref="EVB-0025"
+                   data-status="rejected"
+                   data-client="Sample Client F"
+                   data-event="Sample Conference"
+                   data-service="Half-Day Coverage">
+            <div class="br-card-top">
+              <div class="br-ref">
+                <span class="ref-id">EVB-0025</span>
+                <span class="booking-status rejected">rejected</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="br-amount">
+                <span class="a-label">Booking amount</span>
+                Rs. 65,000
+                <span class="a-net">Rs. 58,500 to you after 10% commission</span>
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor -> Booking. Every booking belongs to
+                 an event (bookings.event_id NOT NULL), so the event is shown
+                 first rather than treated as metadata. -->
+            <div class="br-chain">
+              <div class="br-step">
+                <span class="k"><i class="bi bi-person" aria-hidden="true"></i> Client</span>
+                <span class="v">Sample Client F</span>
+                <span class="sub">Requested 11 May 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Conference</span>
+                <span class="sub">9 Jul 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Half-Day Coverage</span>
+                <span class="sub">Photography</span>
+              </div>
+            </div>
+
+            <div class="br-card-foot">
+              <span class="br-requested">Booking date 9 Jul 2026</span>
+              <div class="br-actions">
+                <a href="../client/booking-detail.html?booking_id=25" class="btn-eventora btn-ghost">View Details</a>
+                <span class="br-terminal-note">You rejected this request. Rejection is final.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="br-card glass-card"
+                   data-booking-id="26"
+                   data-ref="EVB-0026"
+                   data-status="cancelled"
+                   data-client="Sample Client G"
+                   data-event="Sample Seminar Day"
+                   data-service="Cinematic Film Package">
+            <div class="br-card-top">
+              <div class="br-ref">
+                <span class="ref-id">EVB-0026</span>
+                <span class="booking-status cancelled">cancelled</span>
+                <span class="demo-tag muted">Demo</span>
+              </div>
+              <p class="br-amount">
+                <span class="a-label">Booking amount</span>
+                Rs. 156,000
+                <span class="a-net">Rs. 140,400 to you after 10% commission</span>
+              </p>
+            </div>
+
+            <!-- Event -> Service -> Vendor -> Booking. Every booking belongs to
+                 an event (bookings.event_id NOT NULL), so the event is shown
+                 first rather than treated as metadata. -->
+            <div class="br-chain">
+              <div class="br-step">
+                <span class="k"><i class="bi bi-person" aria-hidden="true"></i> Client</span>
+                <span class="v">Sample Client G</span>
+                <span class="sub">Requested 27 Apr 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-calendar-event" aria-hidden="true"></i> Event</span>
+                <span class="v">Sample Seminar Day</span>
+                <span class="sub">28 Jun 2026</span>
+              </div>
+              <div class="br-step">
+                <span class="k"><i class="bi bi-box-seam" aria-hidden="true"></i> Service</span>
+                <span class="v">Cinematic Film Package</span>
+                <span class="sub">Photography</span>
+              </div>
+            </div>
+
+            <div class="br-card-foot">
+              <span class="br-requested">Booking date 28 Jun 2026</span>
+              <div class="br-actions">
+                <a href="../client/booking-detail.html?booking_id=26" class="btn-eventora btn-ghost">View Details</a>
+                <span class="br-terminal-note">The client cancelled this booking.</span>
+              </div>
+            </div>
+          </article>
+      </div>
+
+      <div class="dash-empty glass-card" data-br-empty hidden>
+        <i class="bi bi-inbox" aria-hidden="true"></i>
+        <h4>No requests match</h4>
+        <p>Try a different status filter, or clear your search.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+  <!-- Accept, Reject and Mark Completed all confirm first. A vendor who
+       rejects by mistake cannot undo it — rejection is terminal. Reuses the
+       .eventora-modal component from section 24. -->
+  <div class="eventora-modal" data-confirm-modal role="dialog" aria-modal="true"
+       aria-labelledby="confirm-title">
+    <div class="modal-veil" data-confirm-cancel></div>
+    <div class="modal-panel glass-card confirm-panel">
+      <button type="button" class="modal-close" data-confirm-cancel aria-label="Close">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+
+      <div class="confirm-icon accept" data-confirm-icon><i class="bi bi-check2-circle"></i></div>
+      <h3 id="confirm-title" data-confirm-title>Confirm</h3>
+      <p class="modal-lede" data-confirm-text>Are you sure?</p>
+
+      <div class="confirm-summary">
+        <p><strong data-confirm-ref>EVB-0000</strong></p>
+        <p data-confirm-client>Client</p>
+        <p data-confirm-service>Service</p>
+      </div>
+
+      <!-- FUTURE PHP: POST /api/vendor/booking/accept.php -->
+      <!-- FUTURE PHP: POST /api/vendor/booking/reject.php -->
+      <!-- FUTURE PHP: POST /api/vendor/booking/complete.php -->
+      <div class="confirm-actions">
+        <button type="button" class="btn-eventora btn-ghost" data-confirm-cancel>Cancel</button>
+        <button type="button" class="btn-eventora btn-accept" data-confirm-go>Confirm</button>
+      </div>
+
+      <p class="booking-note">Demo mode — this updates the page only. No client is notified and
+         nothing is saved.</p>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

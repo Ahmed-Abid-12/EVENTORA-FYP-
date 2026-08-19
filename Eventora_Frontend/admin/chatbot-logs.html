@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chatbot Logs | Eventora Admin</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Admin navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Admin</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Overview</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="reports.html"><i class="bi bi-graph-up" aria-hidden="true"></i> Reports</a></li>
+      </ul>
+
+      <p class="dash-nav-label">People</p>
+      <ul>
+        <li><a href="users.html"><i class="bi bi-people" aria-hidden="true"></i> Users</a></li>
+        <li><a href="vendors.html"><i class="bi bi-shop" aria-hidden="true"></i> Vendors</a></li>
+        <li><a href="vendor-approval.html"><i class="bi bi-patch-check" aria-hidden="true"></i> Vendor Approval
+          <span class="nav-count">6</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Platform</p>
+      <ul>
+        <li><a href="categories.html"><i class="bi bi-tags" aria-hidden="true"></i> Categories</a></li>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> Bookings</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+        <li><a href="commission.html"><i class="bi bi-percent" aria-hidden="true"></i> Commission</a></li>
+        <li><a href="chatbot-logs.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chatbot Logs</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Chatbot Logs</h1>
+          <p class="topbar-sub">Read-only AI monitoring</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="vendor-approval.html" class="icon-btn" aria-label="Vendor approvals">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="settings.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">EA</span>
+          <span>
+            <span class="who d-block">Eventora Admin</span>
+            <span class="role">Administrator</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-chatbot-logs>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demonstration data — the AI module is not built.</strong> Every entry below is an
+           invented sample used to construct this monitoring interface. <strong>No real user has ever
+           interacted with an Eventora chatbot</strong>, no message here came from a person, and no AI
+           service processed any of it. The chatbot is scheduled for a later development phase.</p>
+      </div>
+
+      <!-- This page is read-only, and that is a design decision, not an omission. -->
+      <div class="readonly-note">
+        <i class="bi bi-eye" aria-hidden="true"></i>
+        <p><strong>Read-only monitoring.</strong> <code>chatbot_logs</code> is a conversation history.
+           Database v1.0 defines no operation that modifies it, so this page offers none — there is no
+           delete, no bulk purge, no user ban and no model retraining control. Adding any of those
+           would imply backend capability that does not exist.</p>
+      </div>
+
+      <div class="adt-summary">
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon"><i class="bi bi-chat-dots" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value">18</p>
+          <p class="m-label">Log Entries</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon"><i class="bi bi-collection" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value">6</p>
+          <p class="m-label">Sessions</p>
+          <p class="m-sub">7 distinct demo users</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon green"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value">78%</p>
+          <p class="m-label">Answered</p>
+          <p class="m-sub">2 fallback · 2 clarify</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon gold"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value">338 ms</p>
+          <p class="m-label">Average Response</p>
+          <p class="m-sub">Illustrative — no service was called</p>
+        </div>
+      </div>
+
+      <div class="pay-formula">
+        <strong>What is stored, and what is not.</strong>
+        <code>chatbot_logs</code> holds <code>id</code>, <code>user_id</code>,
+        <code>session_id</code>, <code>sender_type</code>, <code>message_text</code> and
+        <code>created_at</code> — that is all. <strong>Intent, response time, model name and safety
+        flags have no column in Database v1.0</strong> and are shown here as demo-only fields to
+        illustrate what monitoring would look like. No column has been invented to support them.
+      </div>
+
+      <section class="log-toolbar glass-card">
+        <div class="f-block">
+          <label for="log-search">Search</label>
+          <input type="search" id="log-search" data-log-search
+                 placeholder="Log ID, session, user or message" autocomplete="off" />
+        </div>
+        <div class="f-block">
+          <label for="log-intent">Intent</label>
+          <select id="log-intent" class="evt-select evt-select--compact" data-log-filter="intent">
+            <option value="">All intents</option>
+            <option value="booking_status">Booking Status</option>
+            <option value="budget_help">Budget Help</option>
+            <option value="event_planning">Event Planning</option>
+            <option value="payment_query">Payment Query</option>
+            <option value="unrecognised">Unrecognised</option>
+            <option value="vendor_search">Vendor Search</option>
+          </select>
+        </div>
+        <div class="f-block">
+          <label for="log-status">Response status</label>
+          <select id="log-status" class="evt-select evt-select--compact" data-log-filter="status">
+            <option value="">All</option>
+            <option value="answered">Answered</option>
+            <option value="clarify">Clarification asked</option>
+            <option value="fallback">Fallback</option>
+          </select>
+        </div>
+        <div class="f-block">
+          <label for="log-date">Date</label>
+          <select id="log-date" class="evt-select evt-select--compact" data-log-filter="date">
+            <option value="">All dates</option>
+            <option value="2026-08-16">16 Aug 2026</option>
+            <option value="2026-08-15">15 Aug 2026</option>
+            <option value="2026-08-14">14 Aug 2026</option>
+            <option value="2026-08-13">13 Aug 2026</option>
+            <option value="2026-08-12">12 Aug 2026</option>
+          </select>
+        </div>
+        <div class="f-block adt-reset">
+          <button type="button" class="btn-eventora btn-ghost" data-log-reset>Reset filters</button>
+        </div>
+      </section>
+
+      <div class="dash-section-head">
+        <h2 data-log-count aria-live="polite"></h2>
+        <span class="rv-meta">Select a row to read the exchange</span>
+      </div>
+
+      <!-- FUTURE PHP:
+           SELECT id, user_id, session_id, sender_type, message_text, created_at
+           FROM chatbot_logs
+           ORDER BY created_at DESC
+           LIMIT 100;
+
+           A conversation is reconstructed by grouping on session_id and
+           ordering by created_at, with sender_type distinguishing the user
+           message from the bot reply.
+
+           There is NO UPDATE or DELETE endpoint for this table. Retention and
+           purging are not defined in v1.0 and must not be invented. -->
+      <section class="dash-panel glass-card" data-log-wrap>
+        <div class="dash-table-wrap">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Log</th><th>When</th><th>User</th><th>Message</th>
+                <th>Intent</th><th>Status</th><th class="adt-num">Response</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7004"
+                    data-log-id="7004"
+                    data-session="SES-202602-4101"
+                    data-user="Demo Client D"
+                    data-intent="event_planning"
+                    data-status="answered"
+                    data-date="2026-08-16"
+                    data-date-label="16 Aug 2026"
+                    data-time="18:51"
+                    data-ms="530"
+                    data-message="What do I need to book for a 250 guest wedding?"
+                    data-reply="Listed venue, catering, decoration, photography and mehndi as typical categories."
+                    data-search="7004 SES-202602-4101 Demo Client D What do I need to book for a 250 guest wedding? event_planning">
+                  <td>
+                    <span class="cell-strong">#7004</span>
+                    <span class="cell-sub txn-id">SES-202602-4101</span>
+                  </td>
+                  <td>16 Aug 2026<span class="cell-sub">18:51</span></td>
+                  <td>Demo Client D</td>
+                  <td><span class="log-msg">What do I need to book for a 250 guest wedding?</span></td>
+                  <td><span class="intent-badge ">event planning</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">530 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7003"
+                    data-log-id="7003"
+                    data-session="SES-202601-4100"
+                    data-user="Demo Client C"
+                    data-intent="booking_status"
+                    data-status="answered"
+                    data-date="2026-08-16"
+                    data-date-label="16 Aug 2026"
+                    data-time="15:34"
+                    data-ms="280"
+                    data-message="Has the caterer replied to my request yet?"
+                    data-reply="Checked the client's bookings and reported one pending response."
+                    data-search="7003 SES-202601-4100 Demo Client C Has the caterer replied to my request yet? booking_status">
+                  <td>
+                    <span class="cell-strong">#7003</span>
+                    <span class="cell-sub txn-id">SES-202601-4100</span>
+                  </td>
+                  <td>16 Aug 2026<span class="cell-sub">15:34</span></td>
+                  <td>Demo Client C</td>
+                  <td><span class="log-msg">Has the caterer replied to my request yet?</span></td>
+                  <td><span class="intent-badge ">booking status</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">280 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7002"
+                    data-log-id="7002"
+                    data-session="SES-202601-4100"
+                    data-user="Demo Client B"
+                    data-intent="budget_help"
+                    data-status="answered"
+                    data-date="2026-08-16"
+                    data-date-label="16 Aug 2026"
+                    data-time="12:17"
+                    data-ms="610"
+                    data-message="How should I split a 500,000 wedding budget?"
+                    data-reply="Suggested an allocation across venue, catering, decoration and photography."
+                    data-search="7002 SES-202601-4100 Demo Client B How should I split a 500,000 wedding budget? budget_help">
+                  <td>
+                    <span class="cell-strong">#7002</span>
+                    <span class="cell-sub txn-id">SES-202601-4100</span>
+                  </td>
+                  <td>16 Aug 2026<span class="cell-sub">12:17</span></td>
+                  <td>Demo Client B</td>
+                  <td><span class="log-msg">How should I split a 500,000 wedding budget?</span></td>
+                  <td><span class="intent-badge ">budget help</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">610 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7001"
+                    data-log-id="7001"
+                    data-session="SES-202601-4100"
+                    data-user="Demo Client A"
+                    data-intent="vendor_search"
+                    data-status="answered"
+                    data-date="2026-08-16"
+                    data-date-label="16 Aug 2026"
+                    data-time="09:00"
+                    data-ms="420"
+                    data-message="Show me photographers in Hyderabad under 80,000"
+                    data-reply="Found 3 photography vendors in Hyderabad within that budget."
+                    data-search="7001 SES-202601-4100 Demo Client A Show me photographers in Hyderabad under 80,000 vendor_search">
+                  <td>
+                    <span class="cell-strong">#7001</span>
+                    <span class="cell-sub txn-id">SES-202601-4100</span>
+                  </td>
+                  <td>16 Aug 2026<span class="cell-sub">09:00</span></td>
+                  <td>Demo Client A</td>
+                  <td><span class="log-msg">Show me photographers in Hyderabad under 80,000</span></td>
+                  <td><span class="intent-badge ">vendor search</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">420 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7008"
+                    data-log-id="7008"
+                    data-session="SES-202603-4102"
+                    data-user="Demo Client A"
+                    data-intent="budget_help"
+                    data-status="answered"
+                    data-date="2026-08-15"
+                    data-date-label="15 Aug 2026"
+                    data-time="19:59"
+                    data-ms="470"
+                    data-message="Is 60,000 enough for a birthday?"
+                    data-reply="Compared the figure against typical birthday service prices."
+                    data-search="7008 SES-202603-4102 Demo Client A Is 60,000 enough for a birthday? budget_help">
+                  <td>
+                    <span class="cell-strong">#7008</span>
+                    <span class="cell-sub txn-id">SES-202603-4102</span>
+                  </td>
+                  <td>15 Aug 2026<span class="cell-sub">19:59</span></td>
+                  <td>Demo Client A</td>
+                  <td><span class="log-msg">Is 60,000 enough for a birthday?</span></td>
+                  <td><span class="intent-badge ">budget help</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">470 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7007"
+                    data-log-id="7007"
+                    data-session="SES-202603-4102"
+                    data-user="Demo Client G"
+                    data-intent="unrecognised"
+                    data-status="fallback"
+                    data-date="2026-08-15"
+                    data-date-label="15 Aug 2026"
+                    data-time="16:42"
+                    data-ms="150"
+                    data-message="asdfgh"
+                    data-reply="Could not determine an intent; offered the vendor search and planning options."
+                    data-search="7007 SES-202603-4102 Demo Client G asdfgh unrecognised">
+                  <td>
+                    <span class="cell-strong">#7007</span>
+                    <span class="cell-sub txn-id">SES-202603-4102</span>
+                  </td>
+                  <td>15 Aug 2026<span class="cell-sub">16:42</span></td>
+                  <td>Demo Client G</td>
+                  <td><span class="log-msg">asdfgh</span></td>
+                  <td><span class="intent-badge unrecognised">unrecognised</span></td>
+                  <td><span class="log-status fallback">fallback</span></td>
+                  <td class="adt-num">150 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7006"
+                    data-log-id="7006"
+                    data-session="SES-202602-4101"
+                    data-user="Demo Client F"
+                    data-intent="vendor_search"
+                    data-status="answered"
+                    data-date="2026-08-15"
+                    data-date-label="15 Aug 2026"
+                    data-time="13:25"
+                    data-ms="390"
+                    data-message="Any DJs available in Larkana next month?"
+                    data-reply="Returned 1 DJ vendor serving Larkana."
+                    data-search="7006 SES-202602-4101 Demo Client F Any DJs available in Larkana next month? vendor_search">
+                  <td>
+                    <span class="cell-strong">#7006</span>
+                    <span class="cell-sub txn-id">SES-202602-4101</span>
+                  </td>
+                  <td>15 Aug 2026<span class="cell-sub">13:25</span></td>
+                  <td>Demo Client F</td>
+                  <td><span class="log-msg">Any DJs available in Larkana next month?</span></td>
+                  <td><span class="intent-badge ">vendor search</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">390 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7005"
+                    data-log-id="7005"
+                    data-session="SES-202602-4101"
+                    data-user="Demo Client E"
+                    data-intent="payment_query"
+                    data-status="answered"
+                    data-date="2026-08-15"
+                    data-date-label="15 Aug 2026"
+                    data-time="10:08"
+                    data-ms="310"
+                    data-message="When can I pay for an accepted booking?"
+                    data-reply="Explained that payment unlocks once a vendor accepts the request."
+                    data-search="7005 SES-202602-4101 Demo Client E When can I pay for an accepted booking? payment_query">
+                  <td>
+                    <span class="cell-strong">#7005</span>
+                    <span class="cell-sub txn-id">SES-202602-4101</span>
+                  </td>
+                  <td>15 Aug 2026<span class="cell-sub">10:08</span></td>
+                  <td>Demo Client E</td>
+                  <td><span class="log-msg">When can I pay for an accepted booking?</span></td>
+                  <td><span class="intent-badge ">payment query</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">310 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7011"
+                    data-log-id="7011"
+                    data-session="SES-202604-4103"
+                    data-user="Demo Client D"
+                    data-intent="vendor_search"
+                    data-status="clarify"
+                    data-date="2026-08-14"
+                    data-date-label="14 Aug 2026"
+                    data-time="17:50"
+                    data-ms="210"
+                    data-message="cheapest venue"
+                    data-reply="Asked for a city and guest count before returning venue results."
+                    data-search="7011 SES-202604-4103 Demo Client D cheapest venue vendor_search">
+                  <td>
+                    <span class="cell-strong">#7011</span>
+                    <span class="cell-sub txn-id">SES-202604-4103</span>
+                  </td>
+                  <td>14 Aug 2026<span class="cell-sub">17:50</span></td>
+                  <td>Demo Client D</td>
+                  <td><span class="log-msg">cheapest venue</span></td>
+                  <td><span class="intent-badge ">vendor search</span></td>
+                  <td><span class="log-status clarify">clarify</span></td>
+                  <td class="adt-num">210 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7010"
+                    data-log-id="7010"
+                    data-session="SES-202604-4103"
+                    data-user="Demo Client C"
+                    data-intent="event_planning"
+                    data-status="answered"
+                    data-date="2026-08-14"
+                    data-date-label="14 Aug 2026"
+                    data-time="14:33"
+                    data-ms="260"
+                    data-message="Can I book more than one vendor for one event?"
+                    data-reply="Confirmed that one event can hold several bookings."
+                    data-search="7010 SES-202604-4103 Demo Client C Can I book more than one vendor for one event? event_planning">
+                  <td>
+                    <span class="cell-strong">#7010</span>
+                    <span class="cell-sub txn-id">SES-202604-4103</span>
+                  </td>
+                  <td>14 Aug 2026<span class="cell-sub">14:33</span></td>
+                  <td>Demo Client C</td>
+                  <td><span class="log-msg">Can I book more than one vendor for one event?</span></td>
+                  <td><span class="intent-badge ">event planning</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">260 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7009"
+                    data-log-id="7009"
+                    data-session="SES-202603-4102"
+                    data-user="Demo Client B"
+                    data-intent="booking_status"
+                    data-status="answered"
+                    data-date="2026-08-14"
+                    data-date-label="14 Aug 2026"
+                    data-time="11:16"
+                    data-ms="350"
+                    data-message="Why was my decoration request rejected?"
+                    data-reply="Explained that a vendor may decline, and suggested alternative decorators."
+                    data-search="7009 SES-202603-4102 Demo Client B Why was my decoration request rejected? booking_status">
+                  <td>
+                    <span class="cell-strong">#7009</span>
+                    <span class="cell-sub txn-id">SES-202603-4102</span>
+                  </td>
+                  <td>14 Aug 2026<span class="cell-sub">11:16</span></td>
+                  <td>Demo Client B</td>
+                  <td><span class="log-msg">Why was my decoration request rejected?</span></td>
+                  <td><span class="intent-badge ">booking status</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">350 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7012"
+                    data-log-id="7012"
+                    data-session="SES-202604-4103"
+                    data-user="Demo Client E"
+                    data-intent="payment_query"
+                    data-status="answered"
+                    data-date="2026-08-14"
+                    data-date-label="14 Aug 2026"
+                    data-time="09:07"
+                    data-ms="190"
+                    data-message="Do you take JazzCash?"
+                    data-reply="Confirmed the supported payment methods."
+                    data-search="7012 SES-202604-4103 Demo Client E Do you take JazzCash? payment_query">
+                  <td>
+                    <span class="cell-strong">#7012</span>
+                    <span class="cell-sub txn-id">SES-202604-4103</span>
+                  </td>
+                  <td>14 Aug 2026<span class="cell-sub">09:07</span></td>
+                  <td>Demo Client E</td>
+                  <td><span class="log-msg">Do you take JazzCash?</span></td>
+                  <td><span class="intent-badge ">payment query</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">190 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7015"
+                    data-log-id="7015"
+                    data-session="SES-202605-4104"
+                    data-user="Demo Client A"
+                    data-intent="vendor_search"
+                    data-status="clarify"
+                    data-date="2026-08-13"
+                    data-date-label="13 Aug 2026"
+                    data-time="18:58"
+                    data-ms="330"
+                    data-message="mehndi artist for engagement"
+                    data-reply="Returned 2 mehndi vendors and asked for a city to narrow further."
+                    data-search="7015 SES-202605-4104 Demo Client A mehndi artist for engagement vendor_search">
+                  <td>
+                    <span class="cell-strong">#7015</span>
+                    <span class="cell-sub txn-id">SES-202605-4104</span>
+                  </td>
+                  <td>13 Aug 2026<span class="cell-sub">18:58</span></td>
+                  <td>Demo Client A</td>
+                  <td><span class="log-msg">mehndi artist for engagement</span></td>
+                  <td><span class="intent-badge ">vendor search</span></td>
+                  <td><span class="log-status clarify">clarify</span></td>
+                  <td class="adt-num">330 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7014"
+                    data-log-id="7014"
+                    data-session="SES-202605-4104"
+                    data-user="Demo Client G"
+                    data-intent="event_planning"
+                    data-status="answered"
+                    data-date="2026-08-13"
+                    data-date-label="13 Aug 2026"
+                    data-time="15:41"
+                    data-ms="480"
+                    data-message="How far in advance should I book a venue?"
+                    data-reply="Gave general guidance based on event size."
+                    data-search="7014 SES-202605-4104 Demo Client G How far in advance should I book a venue? event_planning">
+                  <td>
+                    <span class="cell-strong">#7014</span>
+                    <span class="cell-sub txn-id">SES-202605-4104</span>
+                  </td>
+                  <td>13 Aug 2026<span class="cell-sub">15:41</span></td>
+                  <td>Demo Client G</td>
+                  <td><span class="log-msg">How far in advance should I book a venue?</span></td>
+                  <td><span class="intent-badge ">event planning</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">480 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7013"
+                    data-log-id="7013"
+                    data-session="SES-202605-4104"
+                    data-user="Demo Client F"
+                    data-intent="unrecognised"
+                    data-status="fallback"
+                    data-date="2026-08-13"
+                    data-date-label="13 Aug 2026"
+                    data-time="12:24"
+                    data-ms="140"
+                    data-message="tell me a joke"
+                    data-reply="Explained that it only helps with event planning on Eventora."
+                    data-search="7013 SES-202605-4104 Demo Client F tell me a joke unrecognised">
+                  <td>
+                    <span class="cell-strong">#7013</span>
+                    <span class="cell-sub txn-id">SES-202605-4104</span>
+                  </td>
+                  <td>13 Aug 2026<span class="cell-sub">12:24</span></td>
+                  <td>Demo Client F</td>
+                  <td><span class="log-msg">tell me a joke</span></td>
+                  <td><span class="intent-badge unrecognised">unrecognised</span></td>
+                  <td><span class="log-status fallback">fallback</span></td>
+                  <td class="adt-num">140 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7016"
+                    data-log-id="7016"
+                    data-session="SES-202606-4105"
+                    data-user="Demo Client B"
+                    data-intent="booking_status"
+                    data-status="answered"
+                    data-date="2026-08-13"
+                    data-date-label="13 Aug 2026"
+                    data-time="10:15"
+                    data-ms="240"
+                    data-message="Where do I leave a review?"
+                    data-reply="Explained that reviews open once a booking is completed."
+                    data-search="7016 SES-202606-4105 Demo Client B Where do I leave a review? booking_status">
+                  <td>
+                    <span class="cell-strong">#7016</span>
+                    <span class="cell-sub txn-id">SES-202606-4105</span>
+                  </td>
+                  <td>13 Aug 2026<span class="cell-sub">10:15</span></td>
+                  <td>Demo Client B</td>
+                  <td><span class="log-msg">Where do I leave a review?</span></td>
+                  <td><span class="intent-badge ">booking status</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">240 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7018"
+                    data-log-id="7018"
+                    data-session="SES-202606-4105"
+                    data-user="Demo Client D"
+                    data-intent="vendor_search"
+                    data-status="answered"
+                    data-date="2026-08-12"
+                    data-date-label="12 Aug 2026"
+                    data-time="16:49"
+                    data-ms="440"
+                    data-message="caterers in Sukkur for 350 people"
+                    data-reply="Returned 1 catering vendor meeting that capacity in Sukkur."
+                    data-search="7018 SES-202606-4105 Demo Client D caterers in Sukkur for 350 people vendor_search">
+                  <td>
+                    <span class="cell-strong">#7018</span>
+                    <span class="cell-sub txn-id">SES-202606-4105</span>
+                  </td>
+                  <td>12 Aug 2026<span class="cell-sub">16:49</span></td>
+                  <td>Demo Client D</td>
+                  <td><span class="log-msg">caterers in Sukkur for 350 people</span></td>
+                  <td><span class="intent-badge ">vendor search</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">440 ms</td>
+                </tr>
+                <tr class="log-row" data-log-row tabindex="0" role="button"
+                    aria-label="Open log 7017"
+                    data-log-id="7017"
+                    data-session="SES-202606-4105"
+                    data-user="Demo Client C"
+                    data-intent="budget_help"
+                    data-status="answered"
+                    data-date="2026-08-12"
+                    data-date-label="12 Aug 2026"
+                    data-time="13:32"
+                    data-ms="290"
+                    data-message="What does the platform charge me?"
+                    data-reply="Explained that clients pay the service price and vendors pay the commission."
+                    data-search="7017 SES-202606-4105 Demo Client C What does the platform charge me? budget_help">
+                  <td>
+                    <span class="cell-strong">#7017</span>
+                    <span class="cell-sub txn-id">SES-202606-4105</span>
+                  </td>
+                  <td>12 Aug 2026<span class="cell-sub">13:32</span></td>
+                  <td>Demo Client C</td>
+                  <td><span class="log-msg">What does the platform charge me?</span></td>
+                  <td><span class="intent-badge ">budget help</span></td>
+                  <td><span class="log-status answered">answered</span></td>
+                  <td class="adt-num">290 ms</td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="dash-empty glass-card" data-log-empty hidden>
+        <i class="bi bi-chat-square" aria-hidden="true"></i>
+        <h4>No log entries match</h4>
+        <p>Try a different intent, status or date, or reset the filters.</p>
+      </div>
+
+      <p class="panel-note mt-3">Messages shown here are invented planning questions. No private or
+         personal client information appears in this dataset, and none should ever be surfaced in an
+         admin log view.</p>
+    </main>
+  </div>
+</div>
+
+  <!-- Read-only detail view. There is no action inside this dialog beyond
+       closing it — logs are never edited or removed. -->
+  <div class="eventora-modal" data-log-modal role="dialog" aria-modal="true" aria-labelledby="log-title">
+    <div class="modal-veil" data-log-close></div>
+    <div class="modal-panel glass-card">
+      <button type="button" class="modal-close" data-log-close aria-label="Close">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+
+      <p class="modal-eyebrow">Chatbot log</p>
+      <h3 id="log-title"><span data-log-id>#0000</span></h3>
+      <p class="modal-lede"><span data-log-session>SES-0000</span> · <span data-log-when>—</span></p>
+
+      <div class="chat-thread">
+        <div class="chat-bubble user">
+          <span class="cb-who">User · <span data-log-user>Demo client</span></span>
+          <span data-log-message>—</span>
+        </div>
+        <div class="chat-bubble bot">
+          <span class="cb-who">Eventora assistant</span>
+          <span data-log-reply>—</span>
+        </div>
+      </div>
+
+      <div class="log-meta-grid">
+        <div class="sys-row"><span class="s-key">Intent</span>
+          <span class="s-val"><span class="intent-badge" data-log-intent>—</span></span></div>
+        <div class="sys-row"><span class="s-key">Status</span>
+          <span class="s-val"><span class="log-status answered" data-log-status>—</span></span></div>
+        <div class="sys-row"><span class="s-key">Response time</span>
+          <span class="s-val" data-log-ms>—</span></div>
+        <div class="sys-row"><span class="s-key">Service</span>
+          <span class="s-val">Not built — demo entry</span></div>
+      </div>
+
+      <p class="booking-note">Demonstration data. This exchange never took place: no AI service has
+         been implemented and no real user was involved.</p>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

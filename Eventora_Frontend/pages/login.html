@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In | Eventora</title>
+  <meta name="description" content="Log in to your Eventora workspace to manage bookings, vendors, AI recommendations, and budgets from one unified platform." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <!-- Google Fonts: Fraunces (display), Manrope (body), Space Grotesk (labels) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <!-- Eventora stylesheets -->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="auth-body">
+
+  <!-- Ambient background glows -->
+  <div class="auth-glow glow-primary" aria-hidden="true"></div>
+  <div class="auth-glow glow-gold" aria-hidden="true"></div>
+
+  <div class="auth-wrapper">
+
+    <!-- ======================= Left: Brand Story ======================= -->
+    <div class="auth-hero">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+
+      <h1 class="auth-hero-title">
+        Plan. Book.<br />
+        <em class="accent-gold">Celebrate.</em><br />
+        Powered by AI.
+      </h1>
+
+      <p class="auth-hero-lede">Securely access your Eventora workspace to manage bookings, vendors, AI recommendations, budgets, and payments — all from one unified platform.</p>
+
+      <ul class="feature-list auth-feature-list">
+        <li>AI-powered event planning</li>
+        <li>Secure, role-based authentication</li>
+        <li>500+ verified vendors marketplace</li>
+      </ul>
+
+      <div class="glass-card auth-info-card reveal">
+        <div class="info-header">
+          <h3>AI Workspace</h3>
+          <span class="status-badge"><span class="pulse-dot"></span> Online</span>
+        </div>
+        <div class="info-items">
+          <p><i class="bi bi-calendar-week"></i> Upcoming events synced</p>
+          <p><i class="bi bi-pie-chart"></i> Budget insights ready</p>
+          <p><i class="bi bi-people"></i> New vendor matches waiting</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================= Right: Auth Panel ======================= -->
+    <div class="auth-panel">
+      <a href="../index.html" class="brand-mark auth-mobile-brand">Eventora</a>
+
+      <a href="../index.html" class="auth-back-link"><i class="bi bi-arrow-left"></i> Back to home</a>
+
+      <div class="glass-card auth-card">
+        <div class="auth-card-header">
+          <h2>Welcome back</h2>
+          <p>Sign in to your Eventora workspace</p>
+        </div>
+
+        <form data-auth-form novalidate>
+
+          <div class="form-group">
+            <label for="login-email">Email address</label>
+            <div class="input-wrapper">
+              <i class="bi bi-envelope input-icon"></i>
+              <input type="email" id="login-email" name="email" placeholder="you@example.com" data-validate="email" required />
+            </div>
+            <span class="field-error"><i class="bi bi-exclamation-circle"></i> Enter a valid email address</span>
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <div class="input-wrapper has-toggle">
+              <i class="bi bi-lock input-icon"></i>
+              <input type="password" id="login-password" name="password" placeholder="Enter your password" data-validate="password" required />
+              <button type="button" class="password-toggle" data-password-toggle aria-label="Show password">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+            <span class="field-error"><i class="bi bi-exclamation-circle"></i> Password must be at least 8 characters</span>
+          </div>
+
+          <div class="auth-options-row">
+            <label class="checkbox-row">
+              <input type="checkbox" name="remember" />
+              <span class="custom-checkbox"></span>
+              Remember me
+            </label>
+            <a href="forgot-password.html">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn-eventora btn-primary btn-block">
+            <span class="spinner"></span>
+            <span class="btn-label">Sign In</span>
+          </button>
+        </form>
+
+        <div class="auth-divider">OR</div>
+
+        <div class="social-auth-row">
+          <button type="button" class="btn-social">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="" />
+            Continue with Google
+          </button>
+          <button type="button" class="btn-social">
+            <i class="bi bi-microsoft" style="color: var(--color-primary-light);"></i>
+            Continue with Microsoft
+          </button>
+        </div>
+
+        <p class="auth-switch">Don't have an account? <a href="register.html">Create Account</a></p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bootstrap 5 JS bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

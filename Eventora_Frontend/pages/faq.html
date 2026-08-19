@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ | Eventora — AI-Powered Event Planning</title>
+  <meta name="description" content="Answers to common questions about Eventora: how booking works, what vendors are charged, how the AI recommendations are generated, and how your data is handled." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="inner-page">
+  <div class="auth-glow glow-primary" aria-hidden="true"></div>
+  <div class="auth-glow glow-gold" aria-hidden="true"></div>
+
+<header class="eventora-navbar">
+    <div class="container-xl">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="vendors.html">Find Vendors</a></li>
+          <li><a href="../index.html#categories">Categories</a></li>
+          <li><a href="../index.html#ai-planner">AI Planner</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-eventora btn-ghost btn-sm">Log In</a>
+        <a href="register.html" class="btn-eventora btn-primary btn-sm">Register</a>
+      </div>
+      <button type="button" class="navbar-toggler-custom" data-nav-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation">☰</button>
+    </div>
+    <nav id="mobile-menu" class="mobile-menu" data-mobile-menu aria-label="Mobile">
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="vendors.html">Find Vendors</a></li>
+        <li><a href="../index.html#categories">Categories</a></li>
+        <li><a href="../index.html#ai-planner">AI Planner</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Log In</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main data-faq>
+    <!-- ====================================================================
+         HERO + SEARCH
+         ==================================================================== -->
+    <section class="page-hero">
+      <div class="container-xl">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Help Centre</span>
+          <h2>Frequently asked <em class="accent-em">questions</em>.</h2>
+          <p>How booking works, what vendors are charged, how the AI actually decides — and what is
+             built versus still on the way.</p>
+        </div>
+
+        <!-- Search is client-side: every question is already in the page and this
+             filters what is shown. No backend call needed now or later. -->
+        <div class="faq-search reveal">
+          <i class="bi bi-search search-icon" aria-hidden="true"></i>
+          <label for="faq-search-input" class="visually-hidden">Search frequently asked questions</label>
+          <input type="search" id="faq-search-input" data-faq-search
+                 placeholder="Search questions — try “commission” or “cancel”"
+                 autocomplete="off" />
+          <button type="button" class="search-clear" data-faq-clear aria-label="Clear search">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CATEGORIES + ACCORDION
+         ==================================================================== -->
+    <section class="section flush-top">
+      <div class="container-xl">
+        <div class="faq-filters reveal" role="group" aria-label="Filter questions by category">
+          <button type="button" class="faq-filter is-active" data-faq-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="faq-filter" data-faq-filter="general" aria-pressed="false">General</button>
+          <button type="button" class="faq-filter" data-faq-filter="client" aria-pressed="false">For Clients</button>
+          <button type="button" class="faq-filter" data-faq-filter="vendor" aria-pressed="false">For Vendors</button>
+          <button type="button" class="faq-filter" data-faq-filter="booking" aria-pressed="false">Booking</button>
+          <button type="button" class="faq-filter" data-faq-filter="payments" aria-pressed="false">Payments</button>
+          <button type="button" class="faq-filter" data-faq-filter="ai" aria-pressed="false">AI Recommendations</button>
+          <button type="button" class="faq-filter" data-faq-filter="chatbot" aria-pressed="false">AI Chatbot</button>
+          <button type="button" class="faq-filter" data-faq-filter="account" aria-pressed="false">Account</button>
+          <button type="button" class="faq-filter" data-faq-filter="privacy" aria-pressed="false">Privacy &amp; Security</button>
+        </div>
+
+        <p class="faq-result-count" data-faq-count aria-live="polite"></p>
+
+        <div class="accordion faq-accordion" id="faqAccordion">
+          <div class="accordion-item" data-category="general">
+            <h3 class="accordion-header" id="h-faq-1-what-is-eventora">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-1-what-is-eventora" aria-expanded="false" aria-controls="c-faq-1-what-is-eventora">
+                <span data-faq-text>What is Eventora?</span>
+              </button>
+            </h3>
+            <div id="c-faq-1-what-is-eventora" class="accordion-collapse collapse" aria-labelledby="h-faq-1-what-is-eventora"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Eventora is an AI-powered event management platform. It connects people planning an event with local vendors — event planners, caterers, decorators, photographers, DJs, mehndi artists and venues — and handles the whole journey from search through booking, payment and review in one place.</p><p>It is built for every kind of event, not just weddings: birthdays, engagements, corporate events, conferences, seminars, family gatherings and cultural events are all in scope.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="general">
+            <h3 class="accordion-header" id="h-faq-2-is-eventora-live-yet">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-2-is-eventora-live-yet" aria-expanded="false" aria-controls="c-faq-2-is-eventora-live-yet">
+                <span data-faq-text>Is Eventora live yet?</span>
+              </button>
+            </h3>
+            <div id="c-faq-2-is-eventora-live-yet" class="accordion-collapse collapse" aria-labelledby="h-faq-2-is-eventora-live-yet"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Not yet. Eventora is a Final Year Project under active development in the Department of Information Technology at the University of Sindh, Jamshoro. A pilot in Hyderabad and Jamshoro is planned once the platform is complete.</p><p>Anything on this site that looks like vendor listings, ratings or client feedback is clearly labelled as demo or sample content. We do not present placeholder data as real.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="general">
+            <h3 class="accordion-header" id="h-faq-3-which-cities-will-eventora-cover">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-3-which-cities-will-eventora-cover" aria-expanded="false" aria-controls="c-faq-3-which-cities-will-eventora-cover">
+                <span data-faq-text>Which cities will Eventora cover?</span>
+              </button>
+            </h3>
+            <div id="c-faq-3-which-cities-will-eventora-cover" class="accordion-collapse collapse" aria-labelledby="h-faq-3-which-cities-will-eventora-cover"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>We start with Hyderabad and Jamshoro, then expand across Sindh — Sukkur, Larkana and Mirpurkhas — before going nationwide.</p><p>That order is deliberate. Existing platforms concentrate on Karachi and Lahore, which leaves secondary cities without a serious digital option. Those cities are our starting point, not an afterthought.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="general">
+            <h3 class="accordion-header" id="h-faq-4-what-types-of-events-can-i-plan">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-4-what-types-of-events-can-i-plan" aria-expanded="false" aria-controls="c-faq-4-what-types-of-events-can-i-plan">
+                <span data-faq-text>What types of events can I plan?</span>
+              </button>
+            </h3>
+            <div id="c-faq-4-what-types-of-events-can-i-plan" class="accordion-collapse collapse" aria-labelledby="h-faq-4-what-types-of-events-can-i-plan"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Weddings, birthdays, engagements, corporate events, conferences, seminars, family gatherings and cultural events.</p><p>Vendors are organised into seven categories: Event Planner, Catering, Decoration, Photography, DJ, Mehndi and Venue.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="general">
+            <h3 class="accordion-header" id="h-faq-5-does-eventora-cost-anything-to-use">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-5-does-eventora-cost-anything-to-use" aria-expanded="false" aria-controls="c-faq-5-does-eventora-cost-anything-to-use">
+                <span data-faq-text>Does Eventora cost anything to use?</span>
+              </button>
+            </h3>
+            <div id="c-faq-5-does-eventora-cost-anything-to-use" class="accordion-collapse collapse" aria-labelledby="h-faq-5-does-eventora-cost-anything-to-use"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Browsing vendors and creating a client account are free. You pay the vendor's price for whatever you book — nothing extra is added to your bill.</p><p>Eventora earns a commission from the vendor on completed bookings. See the Payments section for exactly how that is calculated.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="client">
+            <h3 class="accordion-header" id="h-faq-6-how-do-i-get-started-as-a-client">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-6-how-do-i-get-started-as-a-client" aria-expanded="false" aria-controls="c-faq-6-how-do-i-get-started-as-a-client">
+                <span data-faq-text>How do I get started as a client?</span>
+              </button>
+            </h3>
+            <div id="c-faq-6-how-do-i-get-started-as-a-client" class="accordion-collapse collapse" aria-labelledby="h-faq-6-how-do-i-get-started-as-a-client"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Create an account and choose the Client role, then create your event with its type, date, city, guest count and budget. From there you can browse vendors yourself or ask for AI recommendations scored against that event.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="client">
+            <h3 class="accordion-header" id="h-faq-7-why-do-i-have-to-create-an-event-before-i-can-bo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-7-why-do-i-have-to-create-an-event-before-i-can-bo" aria-expanded="false" aria-controls="c-faq-7-why-do-i-have-to-create-an-event-before-i-can-bo">
+                <span data-faq-text>Why do I have to create an event before I can book?</span>
+              </button>
+            </h3>
+            <div id="c-faq-7-why-do-i-have-to-create-an-event-before-i-can-bo" class="accordion-collapse collapse" aria-labelledby="h-faq-7-why-do-i-have-to-create-an-event-before-i-can-bo"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Eventora uses an event-first model: every booking belongs to an event. This is a deliberate architectural decision, not an extra hurdle.</p><p>A wedding usually means five or six separate vendors. Grouping them under one event keeps them as a single coherent plan — one budget, one date, one guest count — instead of six unrelated transactions. It is also what lets the recommendation engine understand your requirements.</p><p>You do not have to create the event first, though. If you click Book on a vendor before you have one, we ask you to pick an existing event or create one right there, then take you back to where you left off.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="client">
+            <h3 class="accordion-header" id="h-faq-8-can-i-book-more-than-one-vendor-for-the-same-eve">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-8-can-i-book-more-than-one-vendor-for-the-same-eve" aria-expanded="false" aria-controls="c-faq-8-can-i-book-more-than-one-vendor-for-the-same-eve">
+                <span data-faq-text>Can I book more than one vendor for the same event?</span>
+              </button>
+            </h3>
+            <div id="c-faq-8-can-i-book-more-than-one-vendor-for-the-same-eve" class="accordion-collapse collapse" aria-labelledby="h-faq-8-can-i-book-more-than-one-vendor-for-the-same-eve"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Yes, and that is the intended use. One event can hold as many bookings as you need — catering, photography, decoration, venue and so on — each tracked separately with its own status, but all visible together under that event.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="client">
+            <h3 class="accordion-header" id="h-faq-9-can-i-save-vendors-to-compare-later">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-9-can-i-save-vendors-to-compare-later" aria-expanded="false" aria-controls="c-faq-9-can-i-save-vendors-to-compare-later">
+                <span data-faq-text>Can I save vendors to compare later?</span>
+              </button>
+            </h3>
+            <div id="c-faq-9-can-i-save-vendors-to-compare-later" class="accordion-collapse collapse" aria-labelledby="h-faq-9-can-i-save-vendors-to-compare-later"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Yes. Saved vendors will live in your client dashboard so you can shortlist a few and come back to them. This feature is part of the planned client module and is not built yet.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="client">
+            <h3 class="accordion-header" id="h-faq-10-can-i-change-my-event-details-after-creating-it">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-10-can-i-change-my-event-details-after-creating-it" aria-expanded="false" aria-controls="c-faq-10-can-i-change-my-event-details-after-creating-it">
+                <span data-faq-text>Can I change my event details after creating it?</span>
+              </button>
+            </h3>
+            <div id="c-faq-10-can-i-change-my-event-details-after-creating-it" class="accordion-collapse collapse" aria-labelledby="h-faq-10-can-i-change-my-event-details-after-creating-it"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Yes — event details are editable from My Events.</p><p>Changing an event does not automatically change bookings a vendor has already accepted. If your date or guest count moves after a vendor has confirmed, contact that vendor directly so the booking can be updated or cancelled.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="vendor">
+            <h3 class="accordion-header" id="h-faq-11-how-do-i-register-as-a-vendor">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-11-how-do-i-register-as-a-vendor" aria-expanded="false" aria-controls="c-faq-11-how-do-i-register-as-a-vendor">
+                <span data-faq-text>How do I register as a vendor?</span>
+              </button>
+            </h3>
+            <div id="c-faq-11-how-do-i-register-as-a-vendor" class="accordion-collapse collapse" aria-labelledby="h-faq-11-how-do-i-register-as-a-vendor"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Sign up and choose the Vendor role, then complete your business profile — business name, description, city and address — and submit your verification information.</p><p>Your account starts with a status of <em>pending</em>. An administrator reviews your details before your profile becomes publicly visible.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="vendor">
+            <h3 class="accordion-header" id="h-faq-12-what-happens-after-i-submit-my-verification-docu">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-12-what-happens-after-i-submit-my-verification-docu" aria-expanded="false" aria-controls="c-faq-12-what-happens-after-i-submit-my-verification-docu">
+                <span data-faq-text>What happens after I submit my verification documents?</span>
+              </button>
+            </h3>
+            <div id="c-faq-12-what-happens-after-i-submit-my-verification-docu" class="accordion-collapse collapse" aria-labelledby="h-faq-12-what-happens-after-i-submit-my-verification-docu"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>An administrator reviews them and either approves or rejects your registration. Once approved, your status becomes <em>active</em>, your profile appears in the marketplace and you can start receiving booking requests.</p><p>If something is missing you will be asked to revise and resubmit rather than being turned away permanently.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="vendor">
+            <h3 class="accordion-header" id="h-faq-13-how-do-i-list-my-services">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-13-how-do-i-list-my-services" aria-expanded="false" aria-controls="c-faq-13-how-do-i-list-my-services">
+                <span data-faq-text>How do I list my services?</span>
+              </button>
+            </h3>
+            <div id="c-faq-13-how-do-i-list-my-services" class="accordion-collapse collapse" aria-labelledby="h-faq-13-how-do-i-list-my-services"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Each service is listed under one of the seven categories with a title, description, base price, capacity, an image and an availability toggle.</p><p>You can list as many services as you offer. A photographer might list a basic package, a premium package and a cinematic package, each priced separately — clients book a specific service, not the business in general.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="vendor">
+            <h3 class="accordion-header" id="h-faq-14-what-does-eventora-charge-vendors">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-14-what-does-eventora-charge-vendors" aria-expanded="false" aria-controls="c-faq-14-what-does-eventora-charge-vendors">
+                <span data-faq-text>What does Eventora charge vendors?</span>
+              </button>
+            </h3>
+            <div id="c-faq-14-what-does-eventora-charge-vendors" class="accordion-collapse collapse" aria-labelledby="h-faq-14-what-does-eventora-charge-vendors"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>A platform commission on completed bookings. For the current project and demo phase the rate is 10%. There is no listing fee and no charge for creating a profile.</p><p>The rate applied to a booking is recorded at the time of booking, so if the default rate ever changes it will not retroactively alter your past bookings or earnings.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="vendor">
+            <h3 class="accordion-header" id="h-faq-15-can-i-decline-a-booking-request">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-15-can-i-decline-a-booking-request" aria-expanded="false" aria-controls="c-faq-15-can-i-decline-a-booking-request">
+                <span data-faq-text>Can I decline a booking request?</span>
+              </button>
+            </h3>
+            <div id="c-faq-15-can-i-decline-a-booking-request" class="accordion-collapse collapse" aria-labelledby="h-faq-15-can-i-decline-a-booking-request"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Yes. Every incoming request arrives as <em>pending</em> and you choose Accept or Reject.</p><p>Rejecting is recorded distinctly from a client cancelling, so declining a request you genuinely cannot fulfil is treated as exactly that.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="booking">
+            <h3 class="accordion-header" id="h-faq-16-how-does-booking-work-from-start-to-finish">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-16-how-does-booking-work-from-start-to-finish" aria-expanded="false" aria-controls="c-faq-16-how-does-booking-work-from-start-to-finish">
+                <span data-faq-text>How does booking work from start to finish?</span>
+              </button>
+            </h3>
+            <div id="c-faq-16-how-does-booking-work-from-start-to-finish" class="accordion-collapse collapse" aria-labelledby="h-faq-16-how-does-booking-work-from-start-to-finish"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>The full sequence is:</p><ul><li>You select or create the event the booking belongs to</li><li>You choose a specific service from a vendor</li><li>You review the details and confirm — the request is sent as <em>pending</em></li><li>The vendor accepts or rejects it</li><li>Once accepted, payment is unlocked</li><li>After the service is delivered the booking is marked <em>completed</em></li><li>You can then leave a rating and review</li></ul><p>Nothing is saved as a booking until you confirm at the review step, so an abandoned booking never leaves a half-finished record behind.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="booking">
+            <h3 class="accordion-header" id="h-faq-17-what-do-the-booking-statuses-mean">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-17-what-do-the-booking-statuses-mean" aria-expanded="false" aria-controls="c-faq-17-what-do-the-booking-statuses-mean">
+                <span data-faq-text>What do the booking statuses mean?</span>
+              </button>
+            </h3>
+            <div id="c-faq-17-what-do-the-booking-statuses-mean" class="accordion-collapse collapse" aria-labelledby="h-faq-17-what-do-the-booking-statuses-mean"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <ul><li><strong>Pending</strong> — request sent, the vendor has not responded yet</li><li><strong>Accepted</strong> — the vendor has approved it and payment is now possible</li><li><strong>Rejected</strong> — the vendor declined the request</li><li><strong>Completed</strong> — the service has been delivered; you can now leave a review</li><li><strong>Cancelled</strong> — the booking was called off before delivery</li></ul><p>Rejected and cancelled are kept separate on purpose: one is a vendor declining, the other is a booking being called off. Collapsing them into a single status would hide which actually happened.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="booking">
+            <h3 class="accordion-header" id="h-faq-18-what-happens-if-a-vendor-rejects-my-request">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-18-what-happens-if-a-vendor-rejects-my-request" aria-expanded="false" aria-controls="c-faq-18-what-happens-if-a-vendor-rejects-my-request">
+                <span data-faq-text>What happens if a vendor rejects my request?</span>
+              </button>
+            </h3>
+            <div id="c-faq-18-what-happens-if-a-vendor-rejects-my-request" class="accordion-collapse collapse" aria-labelledby="h-faq-18-what-happens-if-a-vendor-rejects-my-request"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>The booking is marked <em>rejected</em> and you are notified. Your event and any other bookings under it are unaffected — you simply choose another vendor for that part of your plan.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="booking">
+            <h3 class="accordion-header" id="h-faq-19-can-i-cancel-a-booking">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-19-can-i-cancel-a-booking" aria-expanded="false" aria-controls="c-faq-19-can-i-cancel-a-booking">
+                <span data-faq-text>Can I cancel a booking?</span>
+              </button>
+            </h3>
+            <div id="c-faq-19-can-i-cancel-a-booking" class="accordion-collapse collapse" aria-labelledby="h-faq-19-can-i-cancel-a-booking"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Yes, a booking can be cancelled before the service is delivered.</p><p>Refund terms have not been finalised for the project yet. Until they are, we would rather say so than publish a policy we cannot honour. If money has already changed hands, contact the vendor and the Eventora team directly.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="booking">
+            <h3 class="accordion-header" id="h-faq-20-when-can-i-pay-for-a-booking">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-20-when-can-i-pay-for-a-booking" aria-expanded="false" aria-controls="c-faq-20-when-can-i-pay-for-a-booking">
+                <span data-faq-text>When can I pay for a booking?</span>
+              </button>
+            </h3>
+            <div id="c-faq-20-when-can-i-pay-for-a-booking" class="accordion-collapse collapse" aria-labelledby="h-faq-20-when-can-i-pay-for-a-booking"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Only after the vendor has accepted it. Payment is deliberately locked until then, so you never pay for a request that has not been confirmed.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="payments">
+            <h3 class="accordion-header" id="h-faq-21-which-payment-methods-will-be-supported">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-21-which-payment-methods-will-be-supported" aria-expanded="false" aria-controls="c-faq-21-which-payment-methods-will-be-supported">
+                <span data-faq-text>Which payment methods will be supported?</span>
+              </button>
+            </h3>
+            <div id="c-faq-21-which-payment-methods-will-be-supported" class="accordion-collapse collapse" aria-labelledby="h-faq-21-which-payment-methods-will-be-supported"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>EasyPaisa, JazzCash, bank transfer and card.</p><p>Payment processing is not live yet — it is part of a later development phase — so no real transaction can currently be made through the platform.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="payments">
+            <h3 class="accordion-header" id="h-faq-22-is-payment-secure">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-22-is-payment-secure" aria-expanded="false" aria-controls="c-faq-22-is-payment-secure">
+                <span data-faq-text>Is payment secure?</span>
+              </button>
+            </h3>
+            <div id="c-faq-22-is-payment-secure" class="accordion-collapse collapse" aria-labelledby="h-faq-22-is-payment-secure"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Payments will be handled through an established payment provider rather than by storing card details ourselves, and every transaction is recorded with its own transaction reference.</p><p>To be straightforward with you: the payment integration is not built yet, so we are describing how it is designed to work rather than something you can rely on today.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="payments">
+            <h3 class="accordion-header" id="h-faq-23-how-is-the-commission-calculated">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-23-how-is-the-commission-calculated" aria-expanded="false" aria-controls="c-faq-23-how-is-the-commission-calculated">
+                <span data-faq-text>How is the commission calculated?</span>
+              </button>
+            </h3>
+            <div id="c-faq-23-how-is-the-commission-calculated" class="accordion-collapse collapse" aria-labelledby="h-faq-23-how-is-the-commission-calculated"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>The commission is a percentage of the booking total, charged to the vendor. On a booking of Rs. 100,000 at the current 10% rate:</p><ul><li>You pay Rs. 100,000</li><li>Eventora receives Rs. 10,000</li><li>The vendor receives Rs. 90,000</li></ul><p>The percentage used is stored with each booking, so historical records stay accurate even if the default rate changes later.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="payments">
+            <h3 class="accordion-header" id="h-faq-24-will-i-get-a-receipt-for-my-payment">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-24-will-i-get-a-receipt-for-my-payment" aria-expanded="false" aria-controls="c-faq-24-will-i-get-a-receipt-for-my-payment">
+                <span data-faq-text>Will I get a receipt for my payment?</span>
+              </button>
+            </h3>
+            <div id="c-faq-24-will-i-get-a-receipt-for-my-payment" class="accordion-collapse collapse" aria-labelledby="h-faq-24-will-i-get-a-receipt-for-my-payment"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Yes. Every payment records the amount, the method used, a transaction reference, its status and the date. Clients see these in their payment history and vendors see the corresponding record — including the commission deducted — in their own dashboard.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="ai">
+            <h3 class="accordion-header" id="h-faq-25-how-does-the-ai-recommend-vendors">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-25-how-does-the-ai-recommend-vendors" aria-expanded="false" aria-controls="c-faq-25-how-does-the-ai-recommend-vendors">
+                <span data-faq-text>How does the AI recommend vendors?</span>
+              </button>
+            </h3>
+            <div id="c-faq-25-how-does-the-ai-recommend-vendors" class="accordion-collapse collapse" aria-labelledby="h-faq-25-how-does-the-ai-recommend-vendors"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>A Python recommendation engine built with Scikit-learn scores available services against the event you have created. It weighs your event type, date, city, guest count and budget against each service's price, capacity and category, along with the vendor's rating and the sentiment of their reviews.</p><p>It scores individual services rather than businesses, because one vendor may offer several packages at very different prices — but results are grouped and presented by vendor so they are easy to read.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="ai">
+            <h3 class="accordion-header" id="h-faq-26-why-do-i-need-to-log-in-to-get-ai-recommendation">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-26-why-do-i-need-to-log-in-to-get-ai-recommendation" aria-expanded="false" aria-controls="c-faq-26-why-do-i-need-to-log-in-to-get-ai-recommendation">
+                <span data-faq-text>Why do I need to log in to get AI recommendations?</span>
+              </button>
+            </h3>
+            <div id="c-faq-26-why-do-i-need-to-log-in-to-get-ai-recommendation" class="accordion-collapse collapse" aria-labelledby="h-faq-26-why-do-i-need-to-log-in-to-get-ai-recommendation"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Because the recommendations are scored against a specific event. Without a signed-in account and an event to work from there is no budget, date, city or guest count to match against — and the result would just be a generic list.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="ai">
+            <h3 class="accordion-header" id="h-faq-27-is-searching-the-vendor-list-the-same-as-the-ai-">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-27-is-searching-the-vendor-list-the-same-as-the-ai-" aria-expanded="false" aria-controls="c-faq-27-is-searching-the-vendor-list-the-same-as-the-ai-">
+                <span data-faq-text>Is searching the vendor list the same as the AI recommendation?</span>
+              </button>
+            </h3>
+            <div id="c-faq-27-is-searching-the-vendor-list-the-same-as-the-ai-" class="accordion-collapse collapse" aria-labelledby="h-faq-27-is-searching-the-vendor-list-the-same-as-the-ai-"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>No, and we are careful not to blur the two.</p><p><strong>Find Vendors</strong> is ordinary database filtering — it narrows the list by category, city, price and rating. Useful, fast, available to everyone without an account, but not AI.</p><p><strong>AI Recommendations</strong> is the scoring engine described above. It requires an account and an event, and it ranks results rather than just filtering them.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="ai">
+            <h3 class="accordion-header" id="h-faq-28-does-using-the-ai-features-cost-extra">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-28-does-using-the-ai-features-cost-extra" aria-expanded="false" aria-controls="c-faq-28-does-using-the-ai-features-cost-extra">
+                <span data-faq-text>Does using the AI features cost extra?</span>
+              </button>
+            </h3>
+            <div id="c-faq-28-does-using-the-ai-features-cost-extra" class="accordion-collapse collapse" aria-labelledby="h-faq-28-does-using-the-ai-features-cost-extra"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>No. Recommendations, budget estimation and the chatbot are part of the platform for every client account at no additional charge.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="ai">
+            <h3 class="accordion-header" id="h-faq-29-how-accurate-are-the-ai-suggestions">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-29-how-accurate-are-the-ai-suggestions" aria-expanded="false" aria-controls="c-faq-29-how-accurate-are-the-ai-suggestions">
+                <span data-faq-text>How accurate are the AI suggestions?</span>
+              </button>
+            </h3>
+            <div id="c-faq-29-how-accurate-are-the-ai-suggestions" class="accordion-collapse collapse" aria-labelledby="h-faq-29-how-accurate-are-the-ai-suggestions"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>The recommendation engine is still being developed, so we are not going to quote an accuracy figure we cannot yet back up.</p><p>Treat recommendations as a well-informed starting point rather than a verdict. You can always browse the full vendor list, compare for yourself and book whoever you prefer — the AI never limits what you are allowed to book.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="chatbot">
+            <h3 class="accordion-header" id="h-faq-30-what-will-the-ai-chatbot-be-able-to-do">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-30-what-will-the-ai-chatbot-be-able-to-do" aria-expanded="false" aria-controls="c-faq-30-what-will-the-ai-chatbot-be-able-to-do">
+                <span data-faq-text>What will the AI chatbot be able to do?</span>
+              </button>
+            </h3>
+            <div id="c-faq-30-what-will-the-ai-chatbot-be-able-to-do" class="accordion-collapse collapse" aria-labelledby="h-faq-30-what-will-the-ai-chatbot-be-able-to-do"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>It is designed to collect your event requirements conversationally, answer questions about how the platform works, guide you through planning decisions and point you toward relevant vendors — so you can describe what you need in plain language instead of filling in filters.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="chatbot">
+            <h3 class="accordion-header" id="h-faq-31-is-the-chatbot-available-now">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-31-is-the-chatbot-available-now" aria-expanded="false" aria-controls="c-faq-31-is-the-chatbot-available-now">
+                <span data-faq-text>Is the chatbot available now?</span>
+              </button>
+            </h3>
+            <div id="c-faq-31-is-the-chatbot-available-now" class="accordion-collapse collapse" aria-labelledby="h-faq-31-is-the-chatbot-available-now"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>No. The chatbot is scheduled for a later development phase alongside the recommendation engine and review analysis. Until it is built, use the contact page to reach the team.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="account">
+            <h3 class="accordion-header" id="h-faq-32-how-do-i-reset-my-password">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-32-how-do-i-reset-my-password" aria-expanded="false" aria-controls="c-faq-32-how-do-i-reset-my-password">
+                <span data-faq-text>How do I reset my password?</span>
+              </button>
+            </h3>
+            <div id="c-faq-32-how-do-i-reset-my-password" class="accordion-collapse collapse" aria-labelledby="h-faq-32-how-do-i-reset-my-password"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Use the “Forgot password?” link on the login page. You will receive a reset link by email that expires after a short period and can only be used once.</p><p>The password reset flow is currently being built.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="account">
+            <h3 class="accordion-header" id="h-faq-33-can-i-use-one-account-as-both-a-client-and-a-ven">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-33-can-i-use-one-account-as-both-a-client-and-a-ven" aria-expanded="false" aria-controls="c-faq-33-can-i-use-one-account-as-both-a-client-and-a-ven">
+                <span data-faq-text>Can I use one account as both a client and a vendor?</span>
+              </button>
+            </h3>
+            <div id="c-faq-33-can-i-use-one-account-as-both-a-client-and-a-ven" class="accordion-collapse collapse" aria-labelledby="h-faq-33-can-i-use-one-account-as-both-a-client-and-a-ven"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>No. Each account has a single role — client, vendor or admin — chosen when you register, and the dashboards and permissions differ for each.</p><p>If you want to both hire vendors and sell your own services, register two accounts with different email addresses.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="account">
+            <h3 class="accordion-header" id="h-faq-34-can-i-sign-in-with-google-or-microsoft">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-34-can-i-sign-in-with-google-or-microsoft" aria-expanded="false" aria-controls="c-faq-34-can-i-sign-in-with-google-or-microsoft">
+                <span data-faq-text>Can I sign in with Google or Microsoft?</span>
+              </button>
+            </h3>
+            <div id="c-faq-34-can-i-sign-in-with-google-or-microsoft" class="accordion-collapse collapse" aria-labelledby="h-faq-34-can-i-sign-in-with-google-or-microsoft"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Not yet. Those buttons appear on the login page but social sign-in has not been implemented, so they will not work — use your email address and password instead.</p><p>We would rather tell you that plainly than leave you clicking a button that quietly does nothing.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="account">
+            <h3 class="accordion-header" id="h-faq-35-how-do-i-update-my-profile">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-35-how-do-i-update-my-profile" aria-expanded="false" aria-controls="c-faq-35-how-do-i-update-my-profile">
+                <span data-faq-text>How do I update my profile?</span>
+              </button>
+            </h3>
+            <div id="c-faq-35-how-do-i-update-my-profile" class="accordion-collapse collapse" aria-labelledby="h-faq-35-how-do-i-update-my-profile"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Each role has its own profile page. Clients update their personal details and city; vendors manage their business profile, description, address and service listings from the vendor dashboard.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="privacy">
+            <h3 class="accordion-header" id="h-faq-36-how-are-my-passwords-stored">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-36-how-are-my-passwords-stored" aria-expanded="false" aria-controls="c-faq-36-how-are-my-passwords-stored">
+                <span data-faq-text>How are my passwords stored?</span>
+              </button>
+            </h3>
+            <div id="c-faq-36-how-are-my-passwords-stored" class="accordion-collapse collapse" aria-labelledby="h-faq-36-how-are-my-passwords-stored"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Passwords are never stored as plain text. They are hashed before being saved, and the hash cannot be reversed back into your password.</p><p>That means nobody at Eventora — including administrators — can read or retrieve your password. If you forget it, it has to be reset rather than looked up.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="privacy">
+            <h3 class="accordion-header" id="h-faq-37-who-can-see-my-personal-information">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-37-who-can-see-my-personal-information" aria-expanded="false" aria-controls="c-faq-37-who-can-see-my-personal-information">
+                <span data-faq-text>Who can see my personal information?</span>
+              </button>
+            </h3>
+            <div id="c-faq-37-who-can-see-my-personal-information" class="accordion-collapse collapse" aria-labelledby="h-faq-37-who-can-see-my-personal-information"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>Vendors see only what they need to fulfil a booking you have made with them: your name, contact details and the relevant event information. They cannot browse client accounts.</p><p>Administrators can access account records to manage the platform, approve vendors and resolve disputes. Your information is not sold or shared with third parties.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-category="privacy">
+            <h3 class="accordion-header" id="h-faq-38-what-information-does-eventora-store-about-me">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#c-faq-38-what-information-does-eventora-store-about-me" aria-expanded="false" aria-controls="c-faq-38-what-information-does-eventora-store-about-me">
+                <span data-faq-text>What information does Eventora store about me?</span>
+              </button>
+            </h3>
+            <div id="c-faq-38-what-information-does-eventora-store-about-me" class="accordion-collapse collapse" aria-labelledby="h-faq-38-what-information-does-eventora-store-about-me"
+                 data-bs-parent="#faqAccordion">
+              <div class="accordion-body" data-faq-text>
+                <p>For a client account: your name, email, phone, city and password hash; the events you create; your bookings, payments and reviews; and your conversations with the chatbot.</p><p>For a vendor account: the same account details plus your business profile, verification information, service listings, bookings and the commission recorded against them.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-empty" data-faq-empty>
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <h4>No questions match your search</h4>
+          <p>Try a different word, or clear the filters and browse by category.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         STILL NEED HELP
+         ==================================================================== -->
+    <section class="section">
+      <div class="container-xl">
+        <div class="section-heading center reveal">
+          <span class="eyebrow">Still Need Help?</span>
+          <h2>Ask us directly.</h2>
+          <p class="lede">Eventora is still in development, so the team answers questions personally.</p>
+        </div>
+
+        <div class="support-grid">
+          <div class="support-card glass-card reveal">
+            <div class="support-icon"><i class="bi bi-envelope" aria-hidden="true"></i></div>
+            <h4>Message the team</h4>
+            <p>Send us a question through the contact form and we will get back to you.</p>
+            <a href="contact.html" class="btn-eventora btn-primary">Contact Us</a>
+          </div>
+
+          <div class="support-card glass-card reveal">
+            <div class="support-icon"><i class="bi bi-info-circle" aria-hidden="true"></i></div>
+            <h4>Learn about the project</h4>
+            <p>Who is building Eventora, what problem it solves and where development stands.</p>
+            <a href="about.html" class="btn-eventora btn-outline-gold">About Eventora</a>
+          </div>
+
+          <div class="support-card glass-card reveal">
+            <div class="support-icon"><i class="bi bi-shop" aria-hidden="true"></i></div>
+            <h4>List your business</h4>
+            <p>Vendors across Hyderabad and Jamshoro can register ahead of the pilot launch.</p>
+            <a href="register.html" class="btn-eventora btn-outline-gold">Become a Vendor</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CALL TO ACTION
+         ==================================================================== -->
+    <section class="section flush-top" id="cta">
+      <div class="container-xl">
+        <div class="final-cta glass-card reveal">
+          <h2>Ready to plan your <em class="accent-em">perfect event</em>?</h2>
+          <p>Create an account now and be ready when the marketplace opens in Hyderabad and Jamshoro.</p>
+          <div class="cta-actions">
+            <a href="register.html" class="btn-eventora btn-primary">Get Started</a>
+            <a href="vendors.html" class="btn-eventora btn-outline-gold">Find Vendors</a>
+          </div>
+          <p class="fine-print">Free to browse · Vendors are charged a platform commission</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<footer class="eventora-footer">
+    <div class="container-xl">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="brand-mark">Eventora</span>
+          <p>AI-powered event management connecting clients and vendors across Hyderabad, Jamshoro, and beyond.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Platform</h5>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="vendors.html">Find Vendors</a></li>
+            <li><a href="../index.html#categories">Categories</a></li>
+            <li><a href="../index.html#ai-planner">AI Planner</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="vendors.html#become-a-vendor">Become a Vendor</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Account</h5>
+          <ul>
+            <li><a href="login.html">Log In</a></li>
+            <li><a href="register.html">Register</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Eventora. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Eventora on Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" aria-label="Eventora on Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" aria-label="Eventora on WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

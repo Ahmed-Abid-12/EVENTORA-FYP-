@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings | Eventora Vendor</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Vendor navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Vendor</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Business</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="business-profile.html"><i class="bi bi-shop" aria-hidden="true"></i> Business Profile</a></li>
+        <li><a href="services.html"><i class="bi bi-box-seam" aria-hidden="true"></i> Services
+          <span class="nav-count">3</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="booking-requests.html"><i class="bi bi-inbox" aria-hidden="true"></i> Booking Requests
+          <span class="nav-count">2</span></a></li>
+        <li><a href="calendar.html"><i class="bi bi-calendar3" aria-hidden="true"></i> Calendar</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="reviews.html"><i class="bi bi-star" aria-hidden="true"></i> Reviews</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Settings</h1>
+          <p class="topbar-sub">Account, notifications and verification</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="booking-requests.html" class="icon-btn" aria-label="Booking requests">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="business-profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">LL</span>
+          <span>
+            <span class="who d-block">Lens &amp; Light Studio</span>
+            <span class="role">Vendor account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-vendor-settings>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo settings.</strong> You are not signed in and nothing here is saved. Every
+           control resets when you reload the page.</p>
+      </div>
+
+      <div class="settings-layout">
+        <nav class="settings-nav glass-card" aria-label="Settings sections">
+          <ul>
+            <li><a href="#account" class="is-active"><i class="bi bi-person" aria-hidden="true"></i> Account</a></li>
+            <li><a href="#security"><i class="bi bi-shield-lock" aria-hidden="true"></i> Security</a></li>
+            <li><a href="#business"><i class="bi bi-shop" aria-hidden="true"></i> Business</a></li>
+            <li><a href="#notifications"><i class="bi bi-bell" aria-hidden="true"></i> Notifications</a></li>
+            <li><a href="#verification"><i class="bi bi-patch-check" aria-hidden="true"></i> Verification</a></li>
+            <li><a href="#privacy"><i class="bi bi-eye" aria-hidden="true"></i> Privacy</a></li>
+            <li><a href="#danger"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Account status</a></li>
+          </ul>
+        </nav>
+
+        <div>
+          <!-- ============================================================
+               ACCOUNT — users table. The account, not the vendor profile.
+               ============================================================ -->
+          <section class="settings-panel glass-card dash-form" id="account">
+            <h2>Account</h2>
+            <p class="panel-sub">Your sign-in details &mdash; stored on <code>users</code></p>
+
+            <form data-settings-form novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="set-email">Email</label>
+                  <input type="text" id="set-email" name="email"
+                         value="demo.vendor@eventora.local" />
+                </div>
+                <div class="form-group">
+                  <label for="set-phone">Phone</label>
+                  <input type="text" id="set-phone" name="phone" value="+92 300 0000000" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Account status</label>
+                <p class="panel-note">
+                  <span class="account-status active">active</span>
+                  &nbsp;Your account can sign in and trade on the platform. This is
+                  <code>users.status</code>, and it is separate from whether your business documents
+                  have been verified.
+                </p>
+              </div>
+
+              <!-- FUTURE BACKEND: UPDATE users SET email, phone WHERE id = :user_id
+                   users.id is the ACCOUNT. vendor_profiles.vendor_id is the VENDOR.
+                   vendor_profiles.user_id is the foreign key joining them. Business
+                   fields live on vendor_profiles and are edited from the Business
+                   section below, not here. -->
+              <div class="settings-save-bar">
+                <button type="submit" class="btn-eventora btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </section>
+
+          <!-- ============================================================
+               SECURITY
+               ============================================================ -->
+          <section class="settings-panel glass-card dash-form" id="security">
+            <h2>Password &amp; security</h2>
+            <p class="panel-sub">Your password is stored only as a hash and cannot be retrieved</p>
+
+            <form data-settings-form novalidate>
+              <div class="form-group">
+                <label for="set-current">Current password</label>
+                <input type="password" id="set-current" name="current_password" placeholder="••••••••" />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="set-new">New password</label>
+                  <input type="password" id="set-new" name="password" placeholder="At least 8 characters" />
+                </div>
+                <div class="form-group">
+                  <label for="set-confirm">Confirm new password</label>
+                  <input type="password" id="set-confirm" name="confirm_password" placeholder="Re-enter it" />
+                </div>
+              </div>
+              <!-- FUTURE BACKEND: password_verify() the current password, then
+                   UPDATE users SET password_hash = password_hash(:new, PASSWORD_DEFAULT)
+                   WHERE id = :user_id, and invalidate other sessions. -->
+              <div class="settings-save-bar">
+                <button type="submit" class="btn-eventora btn-primary">Update Password</button>
+                <a href="../pages/forgot-password.html" class="btn-eventora btn-ghost">Forgot password?</a>
+              </div>
+            </form>
+
+            <div class="dash-section-head mt-4"><h2>Active sessions</h2></div>
+            <div class="session-row">
+              <span class="s-icon"><i class="bi bi-laptop" aria-hidden="true"></i></span>
+              <div class="s-body">
+                <p class="s-title">This device</p>
+                <p class="s-meta">Demo session &mdash; session tracking is not implemented</p>
+              </div>
+              <span class="s-tag">Current</span>
+            </div>
+            <p class="panel-note mt-3">Eventora Database v1.0 does not model sessions, so no session
+               history is shown. When authentication is built, signing out everywhere will simply
+               invalidate the PHP session.</p>
+          </section>
+
+          <!-- ============================================================
+               BUSINESS PREFERENCES — vendor_profiles
+               ============================================================ -->
+          <section class="settings-panel glass-card dash-form" id="business">
+            <h2>Business preferences</h2>
+            <p class="panel-sub">Stored on <code>vendor_profiles</code> &mdash; how you are matched to events</p>
+
+            <form data-settings-form novalidate>
+              <div class="form-group">
+                <label for="set-business">Business name</label>
+                <input type="text" id="set-business" name="business_name"
+                       value="Lens & Light Studio" />
+                <span class="field-hint">This is what clients see in the marketplace. Full business
+                  details are edited on your <a href="business-profile.html">business profile</a>.</span>
+              </div>
+
+              <div class="form-group">
+                <label>Categories you work in</label>
+                <div class="type-grid">
+              <div class="type-option">
+                <input type="checkbox" id="cat-event-planner" name="preferred_categories"
+                       value="event-planner" />
+                <label for="cat-event-planner">Event Planner</label>
+              </div>
+              <div class="type-option">
+                <input type="checkbox" id="cat-catering" name="preferred_categories"
+                       value="catering" />
+                <label for="cat-catering">Catering</label>
+              </div>
+              <div class="type-option">
+                <input type="checkbox" id="cat-decoration" name="preferred_categories"
+                       value="decoration" />
+                <label for="cat-decoration">Decoration</label>
+              </div>
+              <div class="type-option">
+                <input type="checkbox" id="cat-photography" name="preferred_categories"
+                       value="photography" checked />
+                <label for="cat-photography">Photography</label>
+              </div>
+              <div class="type-option">
+                <input type="checkbox" id="cat-dj" name="preferred_categories"
+                       value="dj" />
+                <label for="cat-dj">DJ</label>
+              </div>
+              <div class="type-option">
+                <input type="checkbox" id="cat-mehndi" name="preferred_categories"
+                       value="mehndi" />
+                <label for="cat-mehndi">Mehndi</label>
+              </div>
+              <div class="type-option">
+                <input type="checkbox" id="cat-venue" name="preferred_categories"
+                       value="venue" />
+                <label for="cat-venue">Venue</label>
+              </div>
+                </div>
+                <span class="field-hint">Each service you list carries its own category
+                  (<code>services.category_id</code>), so you can offer across more than one.</span>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="set-city">Primary city</label>
+                  <select class="evt-select" id="set-city" name="city">
+                  <option selected>Hyderabad</option>
+                  <option>Jamshoro</option>
+                  <option>Sukkur</option>
+                  <option>Larkana</option>
+                  <option>Mirpurkhas</option>
+                  </select>
+                  <span class="field-hint">Matched against <code>events.city</code> by the
+                    recommendation engine.</span>
+                </div>
+                <div class="form-group">
+                  <label for="set-lead">Availability preference</label>
+                  <select class="evt-select" id="set-lead" name="availability_preference">
+                    <option>Accepting new bookings</option>
+                    <option>Limited availability</option>
+                    <option>Not accepting new bookings</option>
+                  </select>
+                  <span class="field-hint">Demo control only &mdash; see the note below.</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="set-min">Minimum budget</label>
+                  <div class="input-prefix">
+                    <span class="prefix">Rs.</span>
+                    <input type="number" id="set-min" name="min_budget"
+                           value="65000" min="0" step="5000" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="set-max">Maximum budget</label>
+                  <div class="input-prefix">
+                    <span class="prefix">Rs.</span>
+                    <input type="number" id="set-max" name="max_budget"
+                           value="156000" min="0" step="5000" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- FUTURE BACKEND: UPDATE vendor_profiles
+                     SET business_name, city, min_budget, max_budget
+                   WHERE vendor_id = :vendor_id
+                   NOTE (flagged): "availability preference" and "categories you work in"
+                   have NO column in Database v1.0. Availability exists per service
+                   (services.is_available) and category exists per service
+                   (services.category_id). These two controls are therefore demo-only
+                   until a vendor-level preference is approved. Not inventing one. -->
+              <div class="settings-save-bar">
+                <button type="submit" class="btn-eventora btn-primary">Save Preferences</button>
+                <a href="services.html" class="btn-eventora btn-ghost">Manage services</a>
+              </div>
+            </form>
+          </section>
+
+          <!-- ============================================================
+               NOTIFICATIONS — no database backing in v1.0
+               ============================================================ -->
+          <section class="settings-panel glass-card" id="notifications">
+            <h2>Notifications</h2>
+            <p class="panel-sub">Which updates you want to receive</p>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">New booking requests</p>
+                <p class="t-desc">When a client sends you a booking request.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="New booking requests" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Booking status updates</p>
+                <p class="t-desc">When a client cancels, or a booking is marked completed.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Booking status updates" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Payment notifications</p>
+                <p class="t-desc">When a payment is recorded against one of your bookings.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Payment notifications" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Review notifications</p>
+                <p class="t-desc">When a client leaves a review after a completed booking.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Review notifications" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Verification updates</p>
+                <p class="t-desc">When an administrator approves or queries your documents.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Verification updates" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">System notifications</p>
+                <p class="t-desc">Platform announcements and policy changes.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" aria-label="System notifications" />
+                <span class="track"></span>
+              </label>
+            </div>
+            <p class="rv-nlp-note">None of these preferences has a column in Eventora Database v1.0.
+               The <code>notifications</code> table stores messages, not per-user delivery settings.
+               These switches are frontend demo controls until a settings table is approved.</p>
+          </section>
+
+          <!-- ============================================================
+               VERIFICATION — is_verified, distinct from status
+               ============================================================ -->
+          <section class="settings-panel glass-card" id="verification">
+            <h2>Verification</h2>
+            <p class="panel-sub">Document approval &mdash; <code>vendor_profiles.is_verified</code></p>
+
+            <div class="biz-field">
+              <span class="b-key">Verification state</span>
+              <span class="b-val">
+                <span class="verify-badge verified"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified</span>
+              </span>
+            </div>
+            <div class="biz-field">
+              <span class="b-key">Profile state</span>
+              <span class="b-val"><span class="vendor-account-status active">active</span></span>
+            </div>
+            <div class="biz-field">
+              <span class="b-key">Documents</span>
+              <span class="b-val">CNIC on file &mdash; reviewed by an administrator</span>
+            </div>
+
+            <p class="panel-note mt-3">These are two independent fields.
+               <code>is_verified</code> records whether an administrator approved your documents;
+               <code>vendor_profiles.status</code> records whether your profile may trade. A verified
+               vendor can still be blocked, and an unverified vendor is never publicly listed &mdash;
+               which is why merging them into one flag would be wrong.</p>
+
+            <!-- FUTURE BACKEND: documents live in vendor_documents (extension table).
+                 Only an administrator may change is_verified — a vendor can upload
+                 and resubmit, never self-approve. -->
+            <div class="profile-actions">
+              <a href="business-profile.html" class="btn-eventora btn-primary">View Business Profile</a>
+              <a href="../pages/contact.html" class="btn-eventora btn-ghost">Query verification</a>
+            </div>
+          </section>
+
+          <!-- ============================================================
+               PRIVACY
+               ============================================================ -->
+          <section class="settings-panel glass-card" id="privacy">
+            <h2>Privacy</h2>
+            <p class="panel-sub">What clients and the platform can see</p>
+
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">List my business publicly</p>
+                <p class="t-desc">When off, your profile is hidden from the marketplace. Existing
+                   bookings are unaffected and you can still be contacted about them.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="List my business publicly" />
+                <span class="track"></span>
+              </label>
+            </div>
+
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Show my address on my public page</p>
+                <p class="t-desc">Your city is always shown because vendors are matched to events by
+                   city. The street address is optional.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Show my address on my public page" />
+                <span class="track"></span>
+              </label>
+            </div>
+
+            <p class="rv-nlp-note">Clients only ever see contact details for bookings they have made
+               with you. Administrators can access account records to manage the platform and resolve
+               disputes. Like the notification switches, these have no column in Database v1.0 yet.</p>
+          </section>
+
+          <!-- ============================================================
+               DANGER ZONE
+               ============================================================ -->
+          <section class="settings-panel glass-card danger-zone" id="danger">
+            <h2>Account status</h2>
+            <p class="panel-sub">Deactivating is reversible &mdash; deletion is not offered</p>
+
+            <div class="danger-row">
+              <div class="d-body">
+                <p class="d-title">Deactivate my vendor account</p>
+                <p class="d-desc">Your account status is set to <strong>blocked</strong>, your
+                   listings are removed from the marketplace and you can no longer sign in. Nothing
+                   is deleted. This demo account carries 31 completed bookings,
+                   Rs. 3,420,000 in gross earnings and Rs. 342,000 of recorded commission &mdash;
+                   the platform and the clients involved need that history for accounting, so it is
+                   preserved. Any accepted booking not yet delivered must be settled with the client
+                   first.</p>
+              </div>
+              <!-- FUTURE BACKEND: UPDATE users SET status = 'blocked' WHERE id = :user_id
+                   and UPDATE vendor_profiles SET status = 'blocked' WHERE vendor_id = :vendor_id.
+                   Never DELETE: bookings, payments, commissions and reviews hold foreign
+                   keys with ON DELETE RESTRICT, so the delete would fail regardless. -->
+              <button type="button" class="btn-eventora btn-danger-outline" data-deactivate>
+                Deactivate Account
+              </button>
+            </div>
+
+            <div class="danger-row mt-4">
+              <div class="d-body">
+                <p class="d-title">Sign out</p>
+                <p class="d-desc">End this session on this device. Your listings and bookings are
+                   unaffected.</p>
+              </div>
+              <!-- FUTURE BACKEND: logout.php destroys the session, then redirects to login -->
+              <a href="../pages/login.html" class="btn-eventora btn-ghost">Sign Out</a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

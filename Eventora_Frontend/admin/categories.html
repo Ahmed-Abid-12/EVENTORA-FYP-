@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Categories | Eventora Admin</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Admin navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Admin</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Overview</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="reports.html"><i class="bi bi-graph-up" aria-hidden="true"></i> Reports</a></li>
+      </ul>
+
+      <p class="dash-nav-label">People</p>
+      <ul>
+        <li><a href="users.html"><i class="bi bi-people" aria-hidden="true"></i> Users</a></li>
+        <li><a href="vendors.html"><i class="bi bi-shop" aria-hidden="true"></i> Vendors</a></li>
+        <li><a href="vendor-approval.html"><i class="bi bi-patch-check" aria-hidden="true"></i> Vendor Approval
+          <span class="nav-count">6</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Platform</p>
+      <ul>
+        <li><a href="categories.html"><i class="bi bi-tags" aria-hidden="true"></i> Categories</a></li>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> Bookings</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+        <li><a href="commission.html"><i class="bi bi-percent" aria-hidden="true"></i> Commission</a></li>
+        <li><a href="chatbot-logs.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chatbot Logs</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Categories</h1>
+          <p class="topbar-sub">Soft deactivation — services are preserved</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="vendor-approval.html" class="icon-btn" aria-label="Vendor approvals">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="settings.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">EA</span>
+          <span>
+            <span class="who d-block">Eventora Admin</span>
+            <span class="role">Administrator</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-admin-categories>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo categories.</strong> The 7 seeded categories. Vendor and service
+           counts are derived from the marketplace data, so they match the public pages. Activating
+           or deactivating changes this page only — nothing is saved.</p>
+      </div>
+
+      <!-- The governing rule for this page. -->
+      <div class="pay-formula">
+        <strong>Categories are deactivated, never deleted.</strong>
+        <code>services.category_id</code> references <code>categories.id</code> with
+        <code>ON DELETE RESTRICT</code>, so a category that has services cannot be removed from the
+        database at all — the delete would be refused. Deactivation
+        (<code>categories.is_active = 0</code>) is the supported operation: the category disappears
+        from public filters and from new service creation, while every existing service keeps its
+        category and stays bookable. Vendors are never silently delisted.
+      </div>
+
+      <div class="adt-summary">
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon"><i class="bi bi-tags" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value">7</p>
+          <p class="m-label">Total Categories</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon green"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value" data-stat-active>7</p>
+          <p class="m-label">Active</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon"><i class="bi bi-eye-slash" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value" data-stat-inactive>0</p>
+          <p class="m-label">Inactive</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top">
+            <span class="m-icon gold"><i class="bi bi-box-seam" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+          <p class="m-value">54</p>
+          <p class="m-label">Services Categorised</p>
+        </div>
+      </div>
+
+      <div class="ad-toolbar">
+        <div class="ad-filters" role="group" aria-label="Filter categories by state">
+            <button type="button" class="faq-filter is-active" data-cat-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="faq-filter" data-cat-filter="active" aria-pressed="false">Active</button>
+            <button type="button" class="faq-filter" data-cat-filter="inactive" aria-pressed="false">Inactive</button>
+        </div>
+        <div class="bookings-search">
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <label for="cat-search" class="visually-hidden">Search categories</label>
+          <input type="search" id="cat-search" data-cat-search
+                 placeholder="Search by name or slug" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="dash-section-head">
+        <h2 data-cat-count aria-live="polite"></h2>
+        <a href="categories.html?add=1">+ Add category</a>
+      </div>
+
+      <!-- FUTURE PHP:
+           SELECT c.id, c.name, c.slug, c.description, c.is_active,
+                  COUNT(DISTINCT s.service_id) AS service_count,
+                  COUNT(DISTINCT s.vendor_id)  AS vendor_count
+           FROM categories c
+           LEFT JOIN services s ON s.category_id = c.id
+           GROUP BY c.id ORDER BY c.id;
+
+           Toggle: UPDATE categories SET is_active = :flag WHERE id = :id
+           There is deliberately NO delete endpoint. Public queries add
+           AND c.is_active = 1; admin queries do not, so an admin still sees
+           inactive categories and their services.
+
+           Add/Edit below: INSERT INTO categories (name, slug, description, is_active)
+           or UPDATE categories SET ... WHERE id = :id.
+           slug must stay UNIQUE, and the seven seeded slugs are frozen because
+           frontend links reference them (vendors.html?category=<slug>). -->
+      <div class="cat-grid">
+          <article class="cat-card glass-card"
+                   data-category-id="1"
+                   data-state="active"
+                   data-name="Event Planner"
+                   data-slug="event-planner"
+                   data-description="Full-service event planning and coordination."
+                   data-services="4"
+                   data-vendors="2">
+            <div class="cat-card-top">
+              <span class="cat-icon"><i class="bi bi-clipboard2-check" aria-hidden="true"></i></span>
+              <div class="cat-title-block">
+                <h3>Event Planner</h3>
+                <p class="cat-slug">/event-planner</p>
+              </div>
+              <span class="cat-state active" data-cat-badge>active</span>
+            </div>
+
+            <p class="cat-desc">Full-service event planning and coordination.</p>
+
+            <div class="cat-stats">
+              <div class="cs-block">
+                <span class="cs-key">Vendors</span>
+                <span class="cs-val">2</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Services</span>
+                <span class="cs-val">4</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Category ID</span>
+                <span class="cs-val">1</span>
+              </div>
+            </div>
+
+            <!-- Shown only while the category is inactive. -->
+            <div class="cat-warning" data-cat-warning hidden>
+              <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+              <p>This category is inactive. Existing services are preserved — they keep this
+                 category, stay intact and remain bookable. It is hidden from public filters and
+                 from new service creation.</p>
+            </div>
+
+            <div class="cat-card-foot">
+              <a href="categories.html?edit=1" class="btn-eventora btn-ghost">Edit</a>
+              <button type="button" class="btn-eventora btn-outline-gold"
+                      data-cat-toggle="inactive">Deactivate</button>
+            </div>
+          </article>
+
+          <article class="cat-card glass-card"
+                   data-category-id="2"
+                   data-state="active"
+                   data-name="Catering"
+                   data-slug="catering"
+                   data-description="Food and beverage services for events of any size."
+                   data-services="12"
+                   data-vendors="4">
+            <div class="cat-card-top">
+              <span class="cat-icon"><i class="bi bi-egg-fried" aria-hidden="true"></i></span>
+              <div class="cat-title-block">
+                <h3>Catering</h3>
+                <p class="cat-slug">/catering</p>
+              </div>
+              <span class="cat-state active" data-cat-badge>active</span>
+            </div>
+
+            <p class="cat-desc">Food and beverage services for events of any size.</p>
+
+            <div class="cat-stats">
+              <div class="cs-block">
+                <span class="cs-key">Vendors</span>
+                <span class="cs-val">4</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Services</span>
+                <span class="cs-val">12</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Category ID</span>
+                <span class="cs-val">2</span>
+              </div>
+            </div>
+
+            <!-- Shown only while the category is inactive. -->
+            <div class="cat-warning" data-cat-warning hidden>
+              <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+              <p>This category is inactive. Existing services are preserved — they keep this
+                 category, stay intact and remain bookable. It is hidden from public filters and
+                 from new service creation.</p>
+            </div>
+
+            <div class="cat-card-foot">
+              <a href="categories.html?edit=2" class="btn-eventora btn-ghost">Edit</a>
+              <button type="button" class="btn-eventora btn-outline-gold"
+                      data-cat-toggle="inactive">Deactivate</button>
+            </div>
+          </article>
+
+          <article class="cat-card glass-card"
+                   data-category-id="3"
+                   data-state="active"
+                   data-name="Decoration"
+                   data-slug="decoration"
+                   data-description="Venue styling, floral arrangements, and stage design."
+                   data-services="9"
+                   data-vendors="3">
+            <div class="cat-card-top">
+              <span class="cat-icon"><i class="bi bi-flower1" aria-hidden="true"></i></span>
+              <div class="cat-title-block">
+                <h3>Decoration</h3>
+                <p class="cat-slug">/decoration</p>
+              </div>
+              <span class="cat-state active" data-cat-badge>active</span>
+            </div>
+
+            <p class="cat-desc">Venue styling, floral arrangements, and stage design.</p>
+
+            <div class="cat-stats">
+              <div class="cs-block">
+                <span class="cs-key">Vendors</span>
+                <span class="cs-val">3</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Services</span>
+                <span class="cs-val">9</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Category ID</span>
+                <span class="cs-val">3</span>
+              </div>
+            </div>
+
+            <!-- Shown only while the category is inactive. -->
+            <div class="cat-warning" data-cat-warning hidden>
+              <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+              <p>This category is inactive. Existing services are preserved — they keep this
+                 category, stay intact and remain bookable. It is hidden from public filters and
+                 from new service creation.</p>
+            </div>
+
+            <div class="cat-card-foot">
+              <a href="categories.html?edit=3" class="btn-eventora btn-ghost">Edit</a>
+              <button type="button" class="btn-eventora btn-outline-gold"
+                      data-cat-toggle="inactive">Deactivate</button>
+            </div>
+          </article>
+
+          <article class="cat-card glass-card"
+                   data-category-id="4"
+                   data-state="active"
+                   data-name="Photography"
+                   data-slug="photography"
+                   data-description="Photography and videography coverage."
+                   data-services="9"
+                   data-vendors="3">
+            <div class="cat-card-top">
+              <span class="cat-icon"><i class="bi bi-camera" aria-hidden="true"></i></span>
+              <div class="cat-title-block">
+                <h3>Photography</h3>
+                <p class="cat-slug">/photography</p>
+              </div>
+              <span class="cat-state active" data-cat-badge>active</span>
+            </div>
+
+            <p class="cat-desc">Photography and videography coverage.</p>
+
+            <div class="cat-stats">
+              <div class="cs-block">
+                <span class="cs-key">Vendors</span>
+                <span class="cs-val">3</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Services</span>
+                <span class="cs-val">9</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Category ID</span>
+                <span class="cs-val">4</span>
+              </div>
+            </div>
+
+            <!-- Shown only while the category is inactive. -->
+            <div class="cat-warning" data-cat-warning hidden>
+              <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+              <p>This category is inactive. Existing services are preserved — they keep this
+                 category, stay intact and remain bookable. It is hidden from public filters and
+                 from new service creation.</p>
+            </div>
+
+            <div class="cat-card-foot">
+              <a href="categories.html?edit=4" class="btn-eventora btn-ghost">Edit</a>
+              <button type="button" class="btn-eventora btn-outline-gold"
+                      data-cat-toggle="inactive">Deactivate</button>
+            </div>
+          </article>
+
+          <article class="cat-card glass-card"
+                   data-category-id="5"
+                   data-state="active"
+                   data-name="DJ"
+                   data-slug="dj"
+                   data-description="DJ, sound systems, and live music."
+                   data-services="4"
+                   data-vendors="2">
+            <div class="cat-card-top">
+              <span class="cat-icon"><i class="bi bi-music-note-beamed" aria-hidden="true"></i></span>
+              <div class="cat-title-block">
+                <h3>DJ</h3>
+                <p class="cat-slug">/dj</p>
+              </div>
+              <span class="cat-state active" data-cat-badge>active</span>
+            </div>
+
+            <p class="cat-desc">DJ, sound systems, and live music.</p>
+
+            <div class="cat-stats">
+              <div class="cs-block">
+                <span class="cs-key">Vendors</span>
+                <span class="cs-val">2</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Services</span>
+                <span class="cs-val">4</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Category ID</span>
+                <span class="cs-val">5</span>
+              </div>
+            </div>
+
+            <!-- Shown only while the category is inactive. -->
+            <div class="cat-warning" data-cat-warning hidden>
+              <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+              <p>This category is inactive. Existing services are preserved — they keep this
+                 category, stay intact and remain bookable. It is hidden from public filters and
+                 from new service creation.</p>
+            </div>
+
+            <div class="cat-card-foot">
+              <a href="categories.html?edit=5" class="btn-eventora btn-ghost">Edit</a>
+              <button type="button" class="btn-eventora btn-outline-gold"
+                      data-cat-toggle="inactive">Deactivate</button>
+            </div>
+          </article>
+
+          <article class="cat-card glass-card"
+                   data-category-id="6"
+                   data-state="active"
+                   data-name="Mehndi"
+                   data-slug="mehndi"
+                   data-description="Mehndi and bridal makeup artists."
+                   data-services="4"
+                   data-vendors="2">
+            <div class="cat-card-top">
+              <span class="cat-icon"><i class="bi bi-brush" aria-hidden="true"></i></span>
+              <div class="cat-title-block">
+                <h3>Mehndi</h3>
+                <p class="cat-slug">/mehndi</p>
+              </div>
+              <span class="cat-state active" data-cat-badge>active</span>
+            </div>
+
+            <p class="cat-desc">Mehndi and bridal makeup artists.</p>
+
+            <div class="cat-stats">
+              <div class="cs-block">
+                <span class="cs-key">Vendors</span>
+                <span class="cs-val">2</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Services</span>
+                <span class="cs-val">4</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Category ID</span>
+                <span class="cs-val">6</span>
+              </div>
+            </div>
+
+            <!-- Shown only while the category is inactive. -->
+            <div class="cat-warning" data-cat-warning hidden>
+              <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+              <p>This category is inactive. Existing services are preserved — they keep this
+                 category, stay intact and remain bookable. It is hidden from public filters and
+                 from new service creation.</p>
+            </div>
+
+            <div class="cat-card-foot">
+              <a href="categories.html?edit=6" class="btn-eventora btn-ghost">Edit</a>
+              <button type="button" class="btn-eventora btn-outline-gold"
+                      data-cat-toggle="inactive">Deactivate</button>
+            </div>
+          </article>
+
+          <article class="cat-card glass-card"
+                   data-category-id="7"
+                   data-state="active"
+                   data-name="Venue"
+                   data-slug="venue"
+                   data-description="Marriage halls, marquees, banquet and outdoor venues."
+                   data-services="12"
+                   data-vendors="4">
+            <div class="cat-card-top">
+              <span class="cat-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
+              <div class="cat-title-block">
+                <h3>Venue</h3>
+                <p class="cat-slug">/venue</p>
+              </div>
+              <span class="cat-state active" data-cat-badge>active</span>
+            </div>
+
+            <p class="cat-desc">Marriage halls, marquees, banquet and outdoor venues.</p>
+
+            <div class="cat-stats">
+              <div class="cs-block">
+                <span class="cs-key">Vendors</span>
+                <span class="cs-val">4</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Services</span>
+                <span class="cs-val">12</span>
+              </div>
+              <div class="cs-block">
+                <span class="cs-key">Category ID</span>
+                <span class="cs-val">7</span>
+              </div>
+            </div>
+
+            <!-- Shown only while the category is inactive. -->
+            <div class="cat-warning" data-cat-warning hidden>
+              <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+              <p>This category is inactive. Existing services are preserved — they keep this
+                 category, stay intact and remain bookable. It is hidden from public filters and
+                 from new service creation.</p>
+            </div>
+
+            <div class="cat-card-foot">
+              <a href="categories.html?edit=7" class="btn-eventora btn-ghost">Edit</a>
+              <button type="button" class="btn-eventora btn-outline-gold"
+                      data-cat-toggle="inactive">Deactivate</button>
+            </div>
+          </article>
+      </div>
+
+      <div class="dash-empty glass-card" data-cat-empty hidden>
+        <i class="bi bi-tags" aria-hidden="true"></i>
+        <h4>No categories match</h4>
+        <p>Try a different state filter, or clear your search.</p>
+      </div>
+
+      <!-- ================================================================
+           ADD / EDIT — prepared for PHP, not persisting anything yet
+           ================================================================ -->
+      <section class="settings-panel glass-card dash-form mt-4" id="add-category">
+        <h2>Add or edit a category</h2>
+        <p class="panel-sub">Writes to <code>categories</code> once the backend exists</p>
+
+        <form data-settings-form novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="new-cat-name">Category name</label>
+              <input type="text" id="new-cat-name" name="name" placeholder="e.g. Lighting" maxlength="100" />
+              <span class="field-hint">Shown to clients in filters and on vendor listings.</span>
+            </div>
+            <div class="form-group">
+              <label for="new-cat-slug">URL slug</label>
+              <input type="text" id="new-cat-slug" name="slug" placeholder="e.g. lighting" maxlength="50" />
+              <span class="field-hint">Must be unique. Used as <code>vendors.html?category=&lt;slug&gt;</code>.
+                The seven existing slugs are frozen and must not be changed.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="new-cat-desc">Description</label>
+            <textarea id="new-cat-desc" name="description"
+                      placeholder="What kind of services belong in this category."></textarea>
+          </div>
+
+          <div class="form-group">
+            <div class="avail-row">
+              <div class="a-body">
+                <p class="a-title">Active</p>
+                <p class="a-desc">Inactive categories are hidden from public filters and cannot be
+                   chosen for new services. Existing services are unaffected.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" name="is_active" value="1" checked aria-label="Active" />
+                <span class="track"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-save-bar">
+            <button type="submit" class="btn-eventora btn-primary">Save Category</button>
+            <a href="categories.html" class="btn-eventora btn-ghost">Cancel</a>
+          </div>
+        </form>
+
+        <p class="panel-note mt-3">An eighth category ("Makeup") was raised during planning and
+           deliberately not added. That decision is still deferred and must not be pre-empted here.</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+  <!-- Deactivation affects what clients can see, so it confirms first and
+       states plainly that existing services survive. -->
+  <div class="eventora-modal" data-cat-modal role="dialog" aria-modal="true"
+       aria-labelledby="cat-title">
+    <div class="modal-veil" data-cat-cancel></div>
+    <div class="modal-panel glass-card confirm-panel">
+      <button type="button" class="modal-close" data-cat-cancel aria-label="Close">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+
+      <div class="confirm-icon reject" data-cat-icon><i class="bi bi-eye-slash"></i></div>
+      <h3 id="cat-title" data-cat-title>Confirm</h3>
+      <p class="modal-lede" data-cat-text>Are you sure?</p>
+
+      <div class="confirm-summary">
+        <p><strong data-cat-name>Category</strong></p>
+        <p data-cat-detail>slug · services · vendors</p>
+      </div>
+
+      <div class="confirm-actions">
+        <button type="button" class="btn-eventora btn-ghost" data-cat-cancel>Cancel</button>
+        <button type="button" class="btn-eventora btn-outline-gold" data-cat-go>Confirm</button>
+      </div>
+
+      <p class="booking-note">Demo mode — this updates the page only. Nothing is saved.</p>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

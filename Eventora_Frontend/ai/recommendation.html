@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Recommendations | Eventora</title>
+  <meta name="description" content="Personalised vendor and service recommendations scored against your event." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="../client/dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="../client/create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="../client/my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="../client/budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="../client/bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="../client/saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="../client/reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="../payment/history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="../client/notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="../client/profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="../client/settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>AI Recommendations</h1>
+          <p class="topbar-sub">Scored against your selected event</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="../client/notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="../client/profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-ai-recommendations>
+
+      <!-- The AI backend does not exist. This must be unmissable. -->
+      <div class="ai-banner">
+        <span class="ai-icon"><i class="bi bi-cpu" aria-hidden="true"></i></span>
+        <div class="ai-body">
+          <p class="ai-title">AI Recommendation Preview <span class="ai-preview-tag">
+            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> Preview</span></p>
+          <p>The Python recommendation service has <strong>not been built</strong>. Nothing below was calculated by a model. These are preview recommendations that resolve to real vendor and service records in the marketplace, with match scores written at build time so the interface and the integration contract can be reviewed.</p>
+        </div>
+      </div>
+
+      <!-- ==================================================================
+           EVENT CONTEXT — recommendations are scored against ONE event
+           ================================================================== -->
+      <section class="evt-context glass-card">
+        <div class="evt-context-head">
+          <div>
+            <h2>Sample Wedding</h2>
+            <p class="ec-sub">event_id 1 · recommendations are scored against this event</p>
+          </div>
+          <a href="../client/my-events.html" class="btn-eventora btn-ghost">Change event</a>
+        </div>
+
+        <!-- FUTURE PHP: SELECT event_type, event_date, city, venue, guest_count,
+             total_budget, special_requirements FROM events
+             WHERE event_id = :event_id AND client_id = :client_id; -->
+        <div class="ec-grid">
+          <div class="ec-item"><span class="ec-key">Event type</span>
+            <span class="ec-val">Wedding</span></div>
+          <div class="ec-item"><span class="ec-key">Date</span>
+            <span class="ec-val">15 Dec 2026</span></div>
+          <div class="ec-item"><span class="ec-key">City</span>
+            <span class="ec-val">Hyderabad</span></div>
+          <div class="ec-item"><span class="ec-key">Venue</span>
+            <span class="ec-val">Riverside Banquet Hall</span></div>
+          <div class="ec-item"><span class="ec-key">Guests</span>
+            <span class="ec-val">250</span></div>
+          <div class="ec-item"><span class="ec-key">Budget</span>
+            <span class="ec-val">Rs. 500,000</span></div>
+          <div class="ec-item ec-requirements"><span class="ec-key">Special requirements</span>
+            <span class="ec-val">Vegetarian options for 40 guests. Ground-floor access needed for elderly relatives.</span></div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           HOW THE SCORING IS MEANT TO WORK
+           ================================================================== -->
+      <div class="pay-formula">
+        <strong>What the engine will score, and against what.</strong>
+        The recommendation target is the <strong>service</strong>, not the business:
+        <code>recommendations.service_id</code> points at <code>services.service_id</code>, while
+        <code>recommendations.vendor_id</code> is carried alongside so results can be presented as
+        vendor recommendations without a join. Each service will be scored against this event's
+        <code>event_type</code>, <code>event_date</code>, <code>city</code>,
+        <code>guest_count</code> and <code>total_budget</code>, combined with the vendor's
+        <code>avg_rating</code> and the sentiment of their reviews. Public vendor filtering on
+        <a href="../pages/vendors.html">Find Vendors</a> is <strong>not</strong> this — that is a SQL
+        WHERE clause and is never labelled AI.
+      </div>
+
+      <div class="ad-toolbar">
+        <div class="results-sort">
+          <label for="rec-category">Category</label>
+          <select id="rec-category" class="evt-select evt-select--compact" data-rec-category>
+            <option value="">All categories</option>
+              <option value="Catering">Catering</option>
+              <option value="Decoration">Decoration</option>
+              <option value="Event Planner">Event Planner</option>
+              <option value="Mehndi">Mehndi</option>
+              <option value="Photography">Photography</option>
+              <option value="Venue">Venue</option>
+          </select>
+        </div>
+        <div class="results-sort">
+          <label for="rec-sort">Sort by</label>
+          <select id="rec-sort" class="evt-select evt-select--compact" data-rec-sort>
+            <option value="score">Match score</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="rating">Highest rated</option>
+          </select>
+        </div>
+        <button type="button" class="btn-eventora btn-outline-gold" data-rec-regenerate>
+          Regenerate recommendations
+        </button>
+      </div>
+
+      <div class="dash-section-head">
+        <h2 data-rec-count aria-live="polite"></h2>
+        <a href="../pages/vendors.html">Browse all vendors</a>
+      </div>
+
+      <!-- FUTURE AI: POST /api/recommend.php
+           Request:  { event_id }
+           Response: [ { service_id, vendor_id, score }, ... ] ordered by score DESC
+
+           PHP resolves client_id from the session, forwards the event context to
+           the Python service, writes the returned rows to `recommendations`
+           (client_id, event_id, service_id, vendor_id, score, recommended_on),
+           then joins back to services and vendor_profiles for display.
+
+           The browser must NEVER call the Python service directly. PHP is the
+           only browser-facing layer. -->
+      <div class="rec-grid">
+          <article class="rec-card glass-card"
+                   data-service-id="11"
+                   data-vendor-id="1"
+                   data-category="Venue"
+                   data-score="92"
+                   data-price="180000"
+                   data-rating="4.8">
+            <div class="rec-card-top">
+              <div class="rec-identity">
+                <p class="rec-cat">Venue</p>
+                <h3>Riverside Banquet Hall</h3>
+                <p class="rec-service">Main Hall Booking</p>
+              </div>
+              <!-- Preview score. recommendations.score in the future schema. -->
+              <div class="score-ring high">
+                <span class="sr-num">92%</span>
+                <span class="sr-label">Match</span>
+              </div>
+            </div>
+
+            <div class="rec-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.8</span> (42)</span>
+              <span><i class="bi bi-people" aria-hidden="true"></i> Up to 600</span>
+            </div>
+
+            <!-- The reason is a plain checkable statement about the real
+                 record, not a generated explanation. -->
+            <div class="rec-reason">
+              <i class="bi bi-info-circle" aria-hidden="true"></i>
+              <p>Capacity 600 covers 250 guests, in Hyderabad, and it is already this event's venue.</p>
+            </div>
+
+            <div class="rec-price">
+              <span class="rp-val">Rs. 180,000</span>
+              <span class="rp-share">36% of your budget</span>
+            </div>
+
+            <div class="rec-actions">
+              <!-- Both resolve to REAL records in the marketplace dataset. -->
+              <a href="../pages/vendor-detail.html?vendor_id=1"
+                 class="btn-eventora btn-ghost">View Vendor</a>
+              <a href="../pages/vendor-detail.html?vendor_id=1#services"
+                 class="btn-eventora btn-primary">Book This</a>
+            </div>
+          </article>
+
+          <article class="rec-card glass-card"
+                   data-service-id="32"
+                   data-vendor-id="3"
+                   data-category="Photography"
+                   data-score="89"
+                   data-price="110000"
+                   data-rating="4.9">
+            <div class="rec-card-top">
+              <div class="rec-identity">
+                <p class="rec-cat">Photography</p>
+                <h3>Lens &amp; Light Studio</h3>
+                <p class="rec-service">Full-Day Coverage</p>
+              </div>
+              <!-- Preview score. recommendations.score in the future schema. -->
+              <div class="score-ring">
+                <span class="sr-num">89%</span>
+                <span class="sr-label">Match</span>
+              </div>
+            </div>
+
+            <div class="rec-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.9</span> (31)</span>
+              
+            </div>
+
+            <!-- The reason is a plain checkable statement about the real
+                 record, not a generated explanation. -->
+            <div class="rec-reason">
+              <i class="bi bi-info-circle" aria-hidden="true"></i>
+              <p>Highest rated photographer in Hyderabad (4.9) and full-day coverage suits a wedding.</p>
+            </div>
+
+            <div class="rec-price">
+              <span class="rp-val">Rs. 110,000</span>
+              <span class="rp-share">22% of your budget</span>
+            </div>
+
+            <div class="rec-actions">
+              <!-- Both resolve to REAL records in the marketplace dataset. -->
+              <a href="../pages/vendor-detail.html?vendor_id=3"
+                 class="btn-eventora btn-ghost">View Vendor</a>
+              <a href="../pages/vendor-detail.html?vendor_id=3#services"
+                 class="btn-eventora btn-primary">Book This</a>
+            </div>
+          </article>
+
+          <article class="rec-card glass-card"
+                   data-service-id="22"
+                   data-vendor-id="2"
+                   data-category="Catering"
+                   data-score="86"
+                   data-price="128000"
+                   data-rating="4.6">
+            <div class="rec-card-top">
+              <div class="rec-identity">
+                <p class="rec-cat">Catering</p>
+                <h3>Golden Spoon Catering</h3>
+                <p class="rec-service">Premium Buffet</p>
+              </div>
+              <!-- Preview score. recommendations.score in the future schema. -->
+              <div class="score-ring">
+                <span class="sr-num">86%</span>
+                <span class="sr-label">Match</span>
+              </div>
+            </div>
+
+            <div class="rec-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.6</span> (58)</span>
+              <span><i class="bi bi-people" aria-hidden="true"></i> Up to 400</span>
+            </div>
+
+            <!-- The reason is a plain checkable statement about the real
+                 record, not a generated explanation. -->
+            <div class="rec-reason">
+              <i class="bi bi-info-circle" aria-hidden="true"></i>
+              <p>Catering capacity 400 covers 250 guests and the premium buffet fits the remaining budget.</p>
+            </div>
+
+            <div class="rec-price">
+              <span class="rp-val">Rs. 128,000</span>
+              <span class="rp-share">26% of your budget</span>
+            </div>
+
+            <div class="rec-actions">
+              <!-- Both resolve to REAL records in the marketplace dataset. -->
+              <a href="../pages/vendor-detail.html?vendor_id=2"
+                 class="btn-eventora btn-ghost">View Vendor</a>
+              <a href="../pages/vendor-detail.html?vendor_id=2#services"
+                 class="btn-eventora btn-primary">Book This</a>
+            </div>
+          </article>
+
+          <article class="rec-card glass-card"
+                   data-service-id="41"
+                   data-vendor-id="4"
+                   data-category="Decoration"
+                   data-score="81"
+                   data-price="45000"
+                   data-rating="4.4">
+            <div class="rec-card-top">
+              <div class="rec-identity">
+                <p class="rec-cat">Decoration</p>
+                <h3>Bloom Decor House</h3>
+                <p class="rec-service">Stage &amp; Backdrop</p>
+              </div>
+              <!-- Preview score. recommendations.score in the future schema. -->
+              <div class="score-ring">
+                <span class="sr-num">81%</span>
+                <span class="sr-label">Match</span>
+              </div>
+            </div>
+
+            <div class="rec-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.4</span> (27)</span>
+              
+            </div>
+
+            <!-- The reason is a plain checkable statement about the real
+                 record, not a generated explanation. -->
+            <div class="rec-reason">
+              <i class="bi bi-info-circle" aria-hidden="true"></i>
+              <p>Decoration in Hyderabad; stage and backdrop is the common wedding package.</p>
+            </div>
+
+            <div class="rec-price">
+              <span class="rp-val">Rs. 45,000</span>
+              <span class="rp-share">9% of your budget</span>
+            </div>
+
+            <div class="rec-actions">
+              <!-- Both resolve to REAL records in the marketplace dataset. -->
+              <a href="../pages/vendor-detail.html?vendor_id=4"
+                 class="btn-eventora btn-ghost">View Vendor</a>
+              <a href="../pages/vendor-detail.html?vendor_id=4#services"
+                 class="btn-eventora btn-primary">Book This</a>
+            </div>
+          </article>
+
+          <article class="rec-card glass-card"
+                   data-service-id="61"
+                   data-vendor-id="6"
+                   data-category="Mehndi"
+                   data-score="78"
+                   data-price="18000"
+                   data-rating="4.7">
+            <div class="rec-card-top">
+              <div class="rec-identity">
+                <p class="rec-cat">Mehndi</p>
+                <h3>Henna Atelier</h3>
+                <p class="rec-service">Bridal Mehndi</p>
+              </div>
+              <!-- Preview score. recommendations.score in the future schema. -->
+              <div class="score-ring">
+                <span class="sr-num">78%</span>
+                <span class="sr-label">Match</span>
+              </div>
+            </div>
+
+            <div class="rec-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.7</span> (36)</span>
+              
+            </div>
+
+            <!-- The reason is a plain checkable statement about the real
+                 record, not a generated explanation. -->
+            <div class="rec-reason">
+              <i class="bi bi-info-circle" aria-hidden="true"></i>
+              <p>Mehndi is typical for a wedding, rated 4.7, and the lowest-cost category here.</p>
+            </div>
+
+            <div class="rec-price">
+              <span class="rp-val">Rs. 18,000</span>
+              <span class="rp-share">4% of your budget</span>
+            </div>
+
+            <div class="rec-actions">
+              <!-- Both resolve to REAL records in the marketplace dataset. -->
+              <a href="../pages/vendor-detail.html?vendor_id=6"
+                 class="btn-eventora btn-ghost">View Vendor</a>
+              <a href="../pages/vendor-detail.html?vendor_id=6#services"
+                 class="btn-eventora btn-primary">Book This</a>
+            </div>
+          </article>
+
+          <article class="rec-card glass-card"
+                   data-service-id="71"
+                   data-vendor-id="7"
+                   data-category="Event Planner"
+                   data-score="74"
+                   data-price="120000"
+                   data-rating="4.5">
+            <div class="rec-card-top">
+              <div class="rec-identity">
+                <p class="rec-cat">Event Planner</p>
+                <h3>Milestone Event Planners</h3>
+                <p class="rec-service">Day-of Coordination</p>
+              </div>
+              <!-- Preview score. recommendations.score in the future schema. -->
+              <div class="score-ring">
+                <span class="sr-num">74%</span>
+                <span class="sr-label">Match</span>
+              </div>
+            </div>
+
+            <div class="rec-meta">
+              <span><i class="bi bi-geo-alt" aria-hidden="true"></i> Hyderabad</span>
+              <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                <span class="rating-value">4.5</span> (23)</span>
+              
+            </div>
+
+            <!-- The reason is a plain checkable statement about the real
+                 record, not a generated explanation. -->
+            <div class="rec-reason">
+              <i class="bi bi-info-circle" aria-hidden="true"></i>
+              <p>Event planner in Hyderabad for coordinating five vendors on one date.</p>
+            </div>
+
+            <div class="rec-price">
+              <span class="rp-val">Rs. 120,000</span>
+              <span class="rp-share">24% of your budget</span>
+            </div>
+
+            <div class="rec-actions">
+              <!-- Both resolve to REAL records in the marketplace dataset. -->
+              <a href="../pages/vendor-detail.html?vendor_id=7"
+                 class="btn-eventora btn-ghost">View Vendor</a>
+              <a href="../pages/vendor-detail.html?vendor_id=7#services"
+                 class="btn-eventora btn-primary">Book This</a>
+            </div>
+          </article>
+      </div>
+
+      <div class="dash-empty glass-card" data-rec-empty hidden>
+        <i class="bi bi-stars" aria-hidden="true"></i>
+        <h4>No recommendations in that category</h4>
+        <p>Choose a different category, or browse all vendors.</p>
+      </div>
+
+      <!-- ==================================================================
+           BUDGET — arithmetic on the real prices above
+           ================================================================== -->
+      <section class="rs-panel glass-card mt-4">
+        <h2>Budget impact</h2>
+        <p class="panel-sub">Share of your Rs. 500,000 budget per recommendation</p>
+            <div class="bar-row">
+              <span class="bar-label">Venue</span>
+              <div class="bar-track"><span data-pct="36"></span></div>
+              <span class="bar-val">36%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Photography</span>
+              <div class="bar-track"><span data-pct="22"></span></div>
+              <span class="bar-val">22%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Catering</span>
+              <div class="bar-track"><span data-pct="26"></span></div>
+              <span class="bar-val">26%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Decoration</span>
+              <div class="bar-track"><span data-pct="9"></span></div>
+              <span class="bar-val">9%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Mehndi</span>
+              <div class="bar-track"><span data-pct="4"></span></div>
+              <span class="bar-val">4%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Event Planner</span>
+              <div class="bar-track"><span data-pct="24"></span></div>
+              <span class="bar-val">24%</span>
+            </div>
+
+        <div class="rpt-figure is-total">
+          <span class="f-key">All 6 recommendations</span>
+          <span class="f-val">Rs. 601,000</span>
+        </div>
+
+        <!-- The recommended set exceeds the budget. Saying so is the useful
+             thing to do; quietly showing an unaffordable list would not be. -->
+        <div class="budget-warn">
+          <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+          <p>Booking all 6 would cost <strong>Rs. 601,000</strong>, which is
+             <strong>Rs. 101,000 over</strong> this event's Rs. 500,000 budget.
+             Recommendations are options, not a basket. The lowest-scoring suggestion is
+             Event Planner at 74%
+             (Rs. 120,000); without it the remaining five come to
+             <strong>Rs. 481,000</strong>, which fits.</p>
+        </div>
+
+        <p class="panel-note mt-3">These figures are arithmetic on the real service prices above, not
+           the output of a budget model. Budget estimation is a separate planned AI feature.</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

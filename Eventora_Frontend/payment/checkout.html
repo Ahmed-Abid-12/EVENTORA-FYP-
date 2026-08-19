@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | Eventora</title>
+  <meta name="description" content="Pay for an accepted Eventora booking." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="../client/dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="../client/create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="../client/my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="../client/budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="../client/bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="../client/saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="../client/reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="../ai/recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="../ai/chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="../ai/review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="../client/notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="../client/profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="../client/settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Checkout</h1>
+          <p class="topbar-sub">Pay for an accepted booking</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="../client/notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="../client/profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-checkout data-booking-status="accepted"
+          data-booking-ref="EVB-0001">
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo checkout.</strong> Payment processing is not connected. Confirming below will
+           <strong>not charge any account</strong> and will not create a payment record — no
+           EasyPaisa, JazzCash, bank or card transaction takes place.</p>
+      </div>
+
+      <!-- Payment is offered ONLY on an accepted booking. -->
+      <div class="pay-formula">
+        <strong>Why this booking can be paid.</strong>
+        Its status is <span class="booking-status accepted">accepted</span> — the vendor has agreed to
+        deliver. Payment is <strong>not</strong> available for a
+        <code>pending</code> booking (the vendor has not responded), a <code>rejected</code> or
+        <code>cancelled</code> one (there is nothing to deliver), or a <code>completed</code> one
+        (already paid — a second charge would be a duplicate). The server repeats this check; the
+        page cannot be used to pay for an ineligible booking.
+      </div>
+
+      <div class="pm-layout">
+        <div>
+          <!-- ==========================================================
+               WHAT IS BEING PAID FOR
+               ========================================================== -->
+          <section class="pm-panel glass-card">
+            <h2>Booking</h2>
+            <p class="panel-sub">Reference <strong>EVB-0001</strong> · booking_id 1</p>
+
+            <!-- FUTURE PHP: GET /api/booking.php?booking_id=
+                 Ownership is guarded: AND client_id = :session_client_id.
+                 Zero rows returns 404, never 403. -->
+            <div class="pm-booking-row">
+              <span class="pb-key">Event</span>
+              <span class="pb-val">Sample Wedding</span>
+            </div>
+            <div class="pm-booking-row">
+              <span class="pb-key">Event date</span>
+              <span class="pb-val">15 Dec 2026</span>
+            </div>
+            <div class="pm-booking-row">
+              <span class="pb-key">Vendor</span>
+              <span class="pb-val">Riverside Banquet Hall</span>
+            </div>
+            <div class="pm-booking-row">
+              <span class="pb-key">Service</span>
+              <span class="pb-val">Main Hall Booking</span>
+            </div>
+            <div class="pm-booking-row">
+              <span class="pb-key">Category</span>
+              <span class="pb-val">Venue</span>
+            </div>
+            <div class="pm-booking-row">
+              <span class="pb-key">Booking status</span>
+              <span class="pb-val"><span class="booking-status accepted">accepted</span></span>
+            </div>
+          </section>
+
+          <!-- ==========================================================
+               PAYMENT METHOD
+               ========================================================== -->
+          <section class="pm-panel glass-card">
+            <h2>Payment method</h2>
+            <p class="panel-sub">Stored in <code>payments.payment_method</code> — four approved values</p>
+
+            <form data-checkout-form novalidate>
+              <div class="pm-methods">
+            <div class="pm-method">
+              <input type="radio" id="pm-easypaisa" name="payment_method" value="easypaisa"
+                     checked />
+              <label for="pm-easypaisa">
+                <span class="pm-icon"><i class="bi bi-phone" aria-hidden="true"></i></span>
+                <span class="pm-body">
+                  <span class="pm-name">EasyPaisa</span>
+                  <!-- The UI label and the database ENUM value differ for Card.
+                       The stored value is credit_card and must not change. -->
+                  <span class="pm-enum">payment_method = <code>easypaisa</code></span>
+                </span>
+              </label>
+            </div>
+            <div class="pm-method">
+              <input type="radio" id="pm-jazzcash" name="payment_method" value="jazzcash"
+                      />
+              <label for="pm-jazzcash">
+                <span class="pm-icon"><i class="bi bi-phone-vibrate" aria-hidden="true"></i></span>
+                <span class="pm-body">
+                  <span class="pm-name">JazzCash</span>
+                  <!-- The UI label and the database ENUM value differ for Card.
+                       The stored value is credit_card and must not change. -->
+                  <span class="pm-enum">payment_method = <code>jazzcash</code></span>
+                </span>
+              </label>
+            </div>
+            <div class="pm-method">
+              <input type="radio" id="pm-bank_transfer" name="payment_method" value="bank_transfer"
+                      />
+              <label for="pm-bank_transfer">
+                <span class="pm-icon"><i class="bi bi-bank" aria-hidden="true"></i></span>
+                <span class="pm-body">
+                  <span class="pm-name">Bank Transfer</span>
+                  <!-- The UI label and the database ENUM value differ for Card.
+                       The stored value is credit_card and must not change. -->
+                  <span class="pm-enum">payment_method = <code>bank_transfer</code></span>
+                </span>
+              </label>
+            </div>
+            <div class="pm-method">
+              <input type="radio" id="pm-credit_card" name="payment_method" value="credit_card"
+                      />
+              <label for="pm-credit_card">
+                <span class="pm-icon"><i class="bi bi-credit-card" aria-hidden="true"></i></span>
+                <span class="pm-body">
+                  <span class="pm-name">Card</span>
+                  <!-- The UI label and the database ENUM value differ for Card.
+                       The stored value is credit_card and must not change. -->
+                  <span class="pm-enum">payment_method = <code>credit_card</code></span>
+                </span>
+              </label>
+            </div>
+              </div>
+
+              <!-- No card number, CVV, OTP, PIN or account credential is
+                   collected anywhere on this page. A demo frontend has no
+                   business handling real payment credentials, and a real one
+                   would hand off to the provider's own hosted form. -->
+              <div class="pm-lock">
+                <i class="bi bi-shield-lock-fill" aria-hidden="true"></i>
+                <p><strong>No payment credentials are collected.</strong> This page asks for no card
+                   number, CVV, OTP, PIN or account login. When payment is built, you will be handed
+                   to the provider's own secure page, and Eventora will store only the method and the
+                   returned transaction reference — never your credentials.</p>
+              </div>
+
+              <div class="settings-save-bar mt-4">
+                <button type="submit" class="btn-eventora btn-primary" data-checkout-submit>
+                  <span class="spinner"></span>
+                  <span class="btn-label">Confirm Payment</span>
+                </button>
+                <a href="../client/booking-detail.html?booking_id=1"
+                   class="btn-eventora btn-ghost">Back to booking</a>
+              </div>
+            </form>
+          </section>
+
+          <section class="pm-panel glass-card">
+            <h2>Paying for a different booking?</h2>
+            <p class="panel-sub">Only accepted bookings appear here</p>
+            <div class="results-sort">
+              <label for="co-booking">Accepted bookings (5)</label>
+              <select id="co-booking" class="evt-select">
+              <option value="EVB-0001" selected>
+                EVB-0001 — Riverside Banquet Hall — Rs. 180,000</option>
+              <option value="EVB-0002">
+                EVB-0002 — Golden Spoon Catering — Rs. 128,000</option>
+              <option value="EVB-0006">
+                EVB-0006 — Indus View Marquee — Rs. 140,000</option>
+              <option value="EVB-0007">
+                EVB-0007 — Campus Caterers — Rs. 52,000</option>
+              <option value="EVB-0008">
+                EVB-0008 — Frame Story Photography — Rs. 40,000</option>
+              </select>
+            </div>
+            <p class="panel-note mt-3">Your other bookings are not listed because they are not
+               payable: one is awaiting a vendor response, one was rejected, one was cancelled, and
+               two are already complete.</p>
+          </section>
+        </div>
+
+        <!-- ==============================================================
+             AMOUNT SUMMARY
+             ============================================================== -->
+        <aside>
+          <section class="pm-summary glass-card">
+            <h2>Amount</h2>
+            <p class="panel-sub">Reference EVB-0001</p>
+
+            <div class="pm-sum-row">
+              <span class="ps-key">Service price</span>
+              <span class="ps-val">Rs. 180,000</span>
+            </div>
+
+            <!-- Commission is shown for transparency. It is deducted from the
+                 VENDOR payout — it is never added to what the client pays. -->
+            <div class="pm-sum-row is-info">
+              <span class="ps-key">Platform commission (10%, paid by the vendor)</span>
+              <span class="ps-val">Rs. 18,000</span>
+            </div>
+            <div class="pm-sum-row is-info">
+              <span class="ps-key">Vendor receives</span>
+              <span class="ps-val">Rs. 162,000</span>
+            </div>
+
+            <div class="pm-sum-row is-total">
+              <span class="ps-key">You pay</span>
+              <span class="ps-val">Rs. 180,000</span>
+            </div>
+
+            <p class="pm-note">The commission is <strong>not added to your bill</strong>. You pay the
+               service price; Eventora's 10% is deducted from the vendor's payout. The
+               rate is recorded against this booking when payment is made, so a later change to the
+               platform rate will not alter it.</p>
+
+            <div class="pm-sum-row">
+              <span class="ps-key">Method</span>
+              <span class="ps-val" data-selected-method>EasyPaisa</span>
+            </div>
+
+            <p class="pm-note">Transaction ID is issued by the payment provider and stored in
+               <code>payments.transaction_id</code>. None exists until a real payment is made.</p>
+
+            <!-- FUTURE PHP: POST /api/payment-create.php { booking_id, payment_method }
+                 One transaction:
+                   1. verify booking belongs to this client AND status = 'accepted'
+                   2. INSERT INTO payments (booking_id, amount, payment_method,
+                                            transaction_id, status)
+                      amount read from bookings.total_amount, NEVER from the request
+                   3. INSERT INTO commissions (booking_id, vendor_id,
+                                               commission_percentage, commission_amount)
+                      percentage SNAPSHOTTED from vendor_profiles.commission_rate
+                   4. redirect to success.php or failed.php on the real result
+                 The booking status is NOT changed here — the vendor marks it
+                 completed after delivering the service. -->
+          </section>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

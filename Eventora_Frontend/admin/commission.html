@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commission | Eventora Admin</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Admin navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Admin</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Overview</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="reports.html"><i class="bi bi-graph-up" aria-hidden="true"></i> Reports</a></li>
+      </ul>
+
+      <p class="dash-nav-label">People</p>
+      <ul>
+        <li><a href="users.html"><i class="bi bi-people" aria-hidden="true"></i> Users</a></li>
+        <li><a href="vendors.html"><i class="bi bi-shop" aria-hidden="true"></i> Vendors</a></li>
+        <li><a href="vendor-approval.html"><i class="bi bi-patch-check" aria-hidden="true"></i> Vendor Approval
+          <span class="nav-count">6</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Platform</p>
+      <ul>
+        <li><a href="categories.html"><i class="bi bi-tags" aria-hidden="true"></i> Categories</a></li>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> Bookings</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+        <li><a href="commission.html"><i class="bi bi-percent" aria-hidden="true"></i> Commission</a></li>
+        <li><a href="chatbot-logs.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chatbot Logs</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Commission</h1>
+          <p class="topbar-sub">Authoritative commission records</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="vendor-approval.html" class="icon-btn" aria-label="Vendor approvals">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="settings.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">EA</span>
+          <span>
+            <span class="who d-block">Eventora Admin</span>
+            <span class="role">Administrator</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-admin-table>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo commission records.</strong> 33 records, one per completed booking.
+           Eventora has not launched — no commission has actually been collected.</p>
+      </div>
+
+      <div class="adt-summary">
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon"><i class="bi bi-file-earmark-text" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value" data-adt-total="count">33</p>
+          <p class="m-label">Commission Records</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon"><i class="bi bi-graph-up" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value" data-adt-total="amount">Rs. 3,496,000</p>
+          <p class="m-label">Gross Booking Value</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon gold"><i class="bi bi-percent" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value" data-adt-total="commission">Rs. 349,600</p>
+          <p class="m-label">Total Commission</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon green"><i class="bi bi-wallet2" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value" data-adt-total="net">Rs. 3,146,400</p>
+          <p class="m-label">Total Vendor Net</p>
+        </div>
+      </div>
+
+      <div class="pay-formula">
+        <strong>The commission model.</strong>
+        <code>commission_amount = gross &times; commission_percentage</code> and
+        <code>vendor net = gross &minus; commission_amount</code>.
+        The default FYP rate is 10%. Vendor net is derived in the query and
+        never stored, so it cannot drift from the commission record. There is deliberately no
+        <code>bookings.platform_commission</code> column — <code>commissions</code> is the single
+        source of truth.
+      </div>
+
+      <div class="pay-formula">
+        <strong>Historical snapshot rule.</strong>
+        <code>commissions.commission_percentage</code> is the rate that was actually applied when the
+        booking was placed. It is never recalculated from a vendor's current
+        <code>commission_rate</code>. If the platform rate changes tomorrow, a booking taken at
+        10% today keeps 10% forever — otherwise past
+        earnings would silently rewrite themselves and the records would no longer be auditable.
+      </div>
+
+      <div class="pay-formula">
+        <strong>No payout lifecycle.</strong>
+        Database v1.0 records what each booking earned and the commission taken. It does <em>not</em>
+        model when money moves to a vendor's bank account, so there is no Paid, Pending Payout,
+        Released or Refunded state on this page. Inventing one would make the schema look more
+        complete than it is. <code>payments.status</code> describes a client payment, not a vendor
+        payout.
+      </div>
+
+      <section class="adt-filters glass-card">
+        <div class="f-block">
+          <label for="cm-search">Search</label>
+          <input type="search" id="cm-search" data-adt-search
+                 placeholder="Commission ID, booking, vendor or event" autocomplete="off" />
+        </div>
+        <div class="f-block">
+          <label for="cm-vendor">Vendor</label>
+          <select id="cm-vendor" class="evt-select evt-select--compact" data-adt-filter="vendor">
+            <option value="">All vendors</option>
+                <option value="Bloom Decor House">Bloom Decor House</option>
+                <option value="Henna Atelier">Henna Atelier</option>
+                <option value="Lens &amp; Light Studio">Lens &amp; Light Studio</option>
+          </select>
+        </div>
+        <div class="f-block adt-reset">
+          <button type="button" class="btn-eventora btn-ghost" data-adt-reset>Reset filters</button>
+        </div>
+      </section>
+
+      <div class="dash-section-head">
+        <h2 data-adt-count aria-live="polite"></h2>
+        <span class="rv-meta">commissions is the authoritative source</span>
+      </div>
+
+      <!-- FUTURE PHP:
+           SELECT cm.commission_id, cm.commission_percentage, cm.commission_amount,
+                  cm.created_at, b.booking_id, b.total_amount,
+                  (b.total_amount - cm.commission_amount) AS vendor_net,
+                  vp.business_name, e.event_name, s.title
+           FROM commissions cm
+           JOIN bookings b         ON b.booking_id = cm.booking_id
+           JOIN vendor_profiles vp ON vp.vendor_id = cm.vendor_id
+           JOIN events e           ON e.event_id   = b.event_id
+           JOIN services s         ON s.service_id = b.service_id
+           ORDER BY cm.created_at DESC;
+
+           commission_percentage is READ from the record, never recomputed from
+           vendor_profiles.commission_rate. vendor_net is computed in the query
+           and is not a stored column. -->
+      <section class="dash-panel glass-card" data-adt-wrap>
+        <div class="dash-table-wrap">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Commission</th><th>Booking</th><th>Vendor &amp; service</th><th>Event</th>
+                <th class="adt-num">Gross</th><th class="adt-num">Rate</th>
+                <th class="adt-num">Commission</th><th class="adt-num">Vendor net</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="9004 EVB-1001 Lens &amp; Light Studio Sample Wedding Reception Half-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9004</span>
+                    <span class="cell-sub">4 Jun 2026</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1001</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Half-Day Coverage</span></td>
+                  <td>Sample Wedding Reception</td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 6,500</td>
+                  <td class="adt-num net">Rs. 58,500</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Henna Atelier"
+                    data-amount="18000"
+                    data-commission="1800"
+                    data-net="16200"
+                    data-search="9001 EVB-0009 Henna Atelier Sample Birthday Bridal Mehndi">
+                  <td>
+                    <span class="cell-strong">#9001</span>
+                    <span class="cell-sub">10 May 2026</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-0009</span></td>
+                  <td>Henna Atelier<span class="cell-sub">Bridal Mehndi</span></td>
+                  <td>Sample Birthday</td>
+                  <td class="adt-num cell-strong">Rs. 18,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 1,800</td>
+                  <td class="adt-num net">Rs. 16,200</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Bloom Decor House"
+                    data-amount="58000"
+                    data-commission="5800"
+                    data-net="52200"
+                    data-search="9002 EVB-0010 Bloom Decor House Sample Birthday Floral Package">
+                  <td>
+                    <span class="cell-strong">#9002</span>
+                    <span class="cell-sub">10 May 2026</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-0010</span></td>
+                  <td>Bloom Decor House<span class="cell-sub">Floral Package</span></td>
+                  <td>Sample Birthday</td>
+                  <td class="adt-num cell-strong">Rs. 58,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 5,800</td>
+                  <td class="adt-num net">Rs. 52,200</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="9005 EVB-1002 Lens &amp; Light Studio Sample Mehndi Night Full-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9005</span>
+                    <span class="cell-sub">7 May 2026</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1002</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Full-Day Coverage</span></td>
+                  <td>Sample Mehndi Night</td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 11,000</td>
+                  <td class="adt-num net">Rs. 99,000</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="9003 EVB-0024 Lens &amp; Light Studio Sample Family Gathering Full-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9003</span>
+                    <span class="cell-sub">18 Apr 2026</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-0024</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Full-Day Coverage</span></td>
+                  <td>Sample Family Gathering</td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 11,000</td>
+                  <td class="adt-num net">Rs. 99,000</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="9006 EVB-1003 Lens &amp; Light Studio Sample Corporate Gala Cinematic Film Package">
+                  <td>
+                    <span class="cell-strong">#9006</span>
+                    <span class="cell-sub">10 Apr 2026</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1003</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Cinematic Film Package</span></td>
+                  <td>Sample Corporate Gala</td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 15,600</td>
+                  <td class="adt-num net">Rs. 140,400</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="9007 EVB-1004 Lens &amp; Light Studio Sample Engagement Dinner Half-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9007</span>
+                    <span class="cell-sub">13 Mar 2026</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1004</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Half-Day Coverage</span></td>
+                  <td>Sample Engagement Dinner</td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 6,500</td>
+                  <td class="adt-num net">Rs. 58,500</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="9008 EVB-1005 Lens &amp; Light Studio Sample Birthday Celebration Full-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9008</span>
+                    <span class="cell-sub">16 Feb 2026</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1005</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Full-Day Coverage</span></td>
+                  <td>Sample Birthday Celebration</td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 11,000</td>
+                  <td class="adt-num net">Rs. 99,000</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="9009 EVB-1006 Lens &amp; Light Studio Sample Anniversary Cinematic Film Package">
+                  <td>
+                    <span class="cell-strong">#9009</span>
+                    <span class="cell-sub">19 Jan 2026</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1006</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Cinematic Film Package</span></td>
+                  <td>Sample Anniversary</td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 15,600</td>
+                  <td class="adt-num net">Rs. 140,400</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="9010 EVB-1007 Lens &amp; Light Studio Sample Product Launch Half-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9010</span>
+                    <span class="cell-sub">22 Dec 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1007</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Half-Day Coverage</span></td>
+                  <td>Sample Product Launch</td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 6,500</td>
+                  <td class="adt-num net">Rs. 58,500</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="9011 EVB-1008 Lens &amp; Light Studio Sample Graduation Party Full-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9011</span>
+                    <span class="cell-sub">25 Nov 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1008</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Full-Day Coverage</span></td>
+                  <td>Sample Graduation Party</td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 11,000</td>
+                  <td class="adt-num net">Rs. 99,000</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="9012 EVB-1009 Lens &amp; Light Studio Sample Family Reunion Cinematic Film Package">
+                  <td>
+                    <span class="cell-strong">#9012</span>
+                    <span class="cell-sub">4 Oct 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1009</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Cinematic Film Package</span></td>
+                  <td>Sample Family Reunion</td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 15,600</td>
+                  <td class="adt-num net">Rs. 140,400</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="9013 EVB-1010 Lens &amp; Light Studio Sample Award Evening Half-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9013</span>
+                    <span class="cell-sub">7 Sep 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1010</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Half-Day Coverage</span></td>
+                  <td>Sample Award Evening</td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 6,500</td>
+                  <td class="adt-num net">Rs. 58,500</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="9014 EVB-1011 Lens &amp; Light Studio Sample Wedding Reception Full-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9014</span>
+                    <span class="cell-sub">10 Aug 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1011</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Full-Day Coverage</span></td>
+                  <td>Sample Wedding Reception</td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 11,000</td>
+                  <td class="adt-num net">Rs. 99,000</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="9015 EVB-1012 Lens &amp; Light Studio Sample Mehndi Night Cinematic Film Package">
+                  <td>
+                    <span class="cell-strong">#9015</span>
+                    <span class="cell-sub">13 Jul 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1012</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Cinematic Film Package</span></td>
+                  <td>Sample Mehndi Night</td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 15,600</td>
+                  <td class="adt-num net">Rs. 140,400</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="9016 EVB-1013 Lens &amp; Light Studio Sample Corporate Gala Half-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9016</span>
+                    <span class="cell-sub">16 Jun 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1013</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Half-Day Coverage</span></td>
+                  <td>Sample Corporate Gala</td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 6,500</td>
+                  <td class="adt-num net">Rs. 58,500</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="9017 EVB-1014 Lens &amp; Light Studio Sample Engagement Dinner Full-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9017</span>
+                    <span class="cell-sub">19 May 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1014</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Full-Day Coverage</span></td>
+                  <td>Sample Engagement Dinner</td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 11,000</td>
+                  <td class="adt-num net">Rs. 99,000</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="9018 EVB-1015 Lens &amp; Light Studio Sample Birthday Celebration Cinematic Film Package">
+                  <td>
+                    <span class="cell-strong">#9018</span>
+                    <span class="cell-sub">22 Apr 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1015</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Cinematic Film Package</span></td>
+                  <td>Sample Birthday Celebration</td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 15,600</td>
+                  <td class="adt-num net">Rs. 140,400</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="9019 EVB-1016 Lens &amp; Light Studio Sample Anniversary Half-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9019</span>
+                    <span class="cell-sub">25 Mar 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1016</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Half-Day Coverage</span></td>
+                  <td>Sample Anniversary</td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 6,500</td>
+                  <td class="adt-num net">Rs. 58,500</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="9020 EVB-1017 Lens &amp; Light Studio Sample Product Launch Full-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9020</span>
+                    <span class="cell-sub">4 Feb 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1017</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Full-Day Coverage</span></td>
+                  <td>Sample Product Launch</td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 11,000</td>
+                  <td class="adt-num net">Rs. 99,000</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="9021 EVB-1018 Lens &amp; Light Studio Sample Graduation Party Cinematic Film Package">
+                  <td>
+                    <span class="cell-strong">#9021</span>
+                    <span class="cell-sub">7 Jan 2025</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1018</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Cinematic Film Package</span></td>
+                  <td>Sample Graduation Party</td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 15,600</td>
+                  <td class="adt-num net">Rs. 140,400</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="9022 EVB-1019 Lens &amp; Light Studio Sample Family Reunion Half-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9022</span>
+                    <span class="cell-sub">10 Dec 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1019</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Half-Day Coverage</span></td>
+                  <td>Sample Family Reunion</td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 6,500</td>
+                  <td class="adt-num net">Rs. 58,500</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="9023 EVB-1020 Lens &amp; Light Studio Sample Award Evening Full-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9023</span>
+                    <span class="cell-sub">13 Nov 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1020</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Full-Day Coverage</span></td>
+                  <td>Sample Award Evening</td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 11,000</td>
+                  <td class="adt-num net">Rs. 99,000</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="9024 EVB-1021 Lens &amp; Light Studio Sample Wedding Reception Cinematic Film Package">
+                  <td>
+                    <span class="cell-strong">#9024</span>
+                    <span class="cell-sub">16 Oct 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1021</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Cinematic Film Package</span></td>
+                  <td>Sample Wedding Reception</td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 15,600</td>
+                  <td class="adt-num net">Rs. 140,400</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="9025 EVB-1022 Lens &amp; Light Studio Sample Mehndi Night Half-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9025</span>
+                    <span class="cell-sub">19 Sep 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1022</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Half-Day Coverage</span></td>
+                  <td>Sample Mehndi Night</td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 6,500</td>
+                  <td class="adt-num net">Rs. 58,500</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="9026 EVB-1023 Lens &amp; Light Studio Sample Corporate Gala Full-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9026</span>
+                    <span class="cell-sub">22 Aug 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1023</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Full-Day Coverage</span></td>
+                  <td>Sample Corporate Gala</td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 11,000</td>
+                  <td class="adt-num net">Rs. 99,000</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="9027 EVB-1024 Lens &amp; Light Studio Sample Engagement Dinner Cinematic Film Package">
+                  <td>
+                    <span class="cell-strong">#9027</span>
+                    <span class="cell-sub">25 Jul 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1024</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Cinematic Film Package</span></td>
+                  <td>Sample Engagement Dinner</td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 15,600</td>
+                  <td class="adt-num net">Rs. 140,400</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="9028 EVB-1025 Lens &amp; Light Studio Sample Birthday Celebration Half-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9028</span>
+                    <span class="cell-sub">4 Jun 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1025</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Half-Day Coverage</span></td>
+                  <td>Sample Birthday Celebration</td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 6,500</td>
+                  <td class="adt-num net">Rs. 58,500</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="9029 EVB-1026 Lens &amp; Light Studio Sample Anniversary Full-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9029</span>
+                    <span class="cell-sub">7 May 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1026</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Full-Day Coverage</span></td>
+                  <td>Sample Anniversary</td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 11,000</td>
+                  <td class="adt-num net">Rs. 99,000</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="9030 EVB-1027 Lens &amp; Light Studio Sample Product Launch Cinematic Film Package">
+                  <td>
+                    <span class="cell-strong">#9030</span>
+                    <span class="cell-sub">10 Apr 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1027</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Cinematic Film Package</span></td>
+                  <td>Sample Product Launch</td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 15,600</td>
+                  <td class="adt-num net">Rs. 140,400</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="9031 EVB-1028 Lens &amp; Light Studio Sample Graduation Party Half-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9031</span>
+                    <span class="cell-sub">13 Mar 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1028</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Half-Day Coverage</span></td>
+                  <td>Sample Graduation Party</td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 6,500</td>
+                  <td class="adt-num net">Rs. 58,500</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="9032 EVB-1029 Lens &amp; Light Studio Sample Family Reunion Full-Day Coverage">
+                  <td>
+                    <span class="cell-strong">#9032</span>
+                    <span class="cell-sub">16 Feb 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1029</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Full-Day Coverage</span></td>
+                  <td>Sample Family Reunion</td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 11,000</td>
+                  <td class="adt-num net">Rs. 99,000</td>
+                </tr>
+                <tr data-adt-row
+                    data-vendor="Lens &amp; Light Studio"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="9033 EVB-1030 Lens &amp; Light Studio Sample Award Evening Cinematic Film Package">
+                  <td>
+                    <span class="cell-strong">#9033</span>
+                    <span class="cell-sub">19 Jan 2024</span>
+                  </td>
+                  <td><span class="cell-strong">EVB-1030</span></td>
+                  <td>Lens &amp; Light Studio<span class="cell-sub">Cinematic Film Package</span></td>
+                  <td>Sample Award Evening</td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num">10.00%</td>
+                  <td class="adt-num commission">Rs. 15,600</td>
+                  <td class="adt-num net">Rs. 140,400</td>
+                </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4">Totals for the current view</td>
+                <td class="adt-num" data-adt-total="amount">Rs. 3,496,000</td>
+                <td class="adt-num">10.00%</td>
+                <td class="adt-num commission" data-adt-total="commission">Rs. 349,600</td>
+                <td class="adt-num net" data-adt-total="net">Rs. 3,146,400</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <div class="dash-empty glass-card" data-adt-empty hidden>
+        <i class="bi bi-percent" aria-hidden="true"></i>
+        <h4>No commission records match</h4>
+        <p>Try a different vendor, or reset the filters.</p>
+      </div>
+
+      <p class="panel-note mt-3">These totals reconcile with <em>admin/payments.html</em>
+         (Rs. 349,600) and <em>admin/reports.html</em>. <em>vendor/payments.html</em> shows
+         Rs. 342,000 for Lens &amp; Light Studio alone — a subset of this figure, not a
+         disagreement.</p>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

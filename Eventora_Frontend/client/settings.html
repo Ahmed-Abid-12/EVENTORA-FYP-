@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings | Eventora Client</title>
+  <meta name="description" content="Manage your Eventora account, notification preferences, planning preferences and privacy." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="../payment/history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="../ai/recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="../ai/chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="../ai/review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Settings</h1>
+          <p class="topbar-sub">Account, notifications, preferences and privacy</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-client-settings>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo settings.</strong> Every control below is frontend only. Nothing is saved,
+           and everything resets when you reload the page.</p>
+      </div>
+
+      <div class="settings-layout">
+        <nav class="settings-nav glass-card" aria-label="Settings sections">
+          <ul>
+            <li><a href="#account" class="is-active"><i class="bi bi-person" aria-hidden="true"></i> Account</a></li>
+            <li><a href="#security"><i class="bi bi-shield-lock" aria-hidden="true"></i> Security</a></li>
+            <li><a href="#notifications"><i class="bi bi-bell" aria-hidden="true"></i> Notifications</a></li>
+            <li><a href="#preferences"><i class="bi bi-sliders" aria-hidden="true"></i> Preferences</a></li>
+            <li><a href="#privacy"><i class="bi bi-eye" aria-hidden="true"></i> Privacy</a></li>
+            <li><a href="#danger"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Account status</a></li>
+          </ul>
+        </nav>
+
+        <div>
+          <!-- ============================================================
+               ACCOUNT — users table
+               ============================================================ -->
+          <section class="settings-panel glass-card dash-form" id="account">
+            <h2>Personal information</h2>
+            <p class="panel-sub">Stored on <code>users</code></p>
+
+            <form data-settings-form novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="set-name">Full name</label>
+                  <input type="text" id="set-name" name="name" value="Demo Client" />
+                </div>
+                <div class="form-group">
+                  <label for="set-email">Email</label>
+                  <input type="text" id="set-email" name="email" value="demo.client@eventora.local" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="set-phone">Phone</label>
+                <input type="text" id="set-phone" name="phone" value="+92 300 0000000" />
+              </div>
+              <!-- FUTURE PHP: UPDATE users SET name, email, phone WHERE id = :user_id -->
+              <div class="settings-save-bar">
+                <button type="submit" class="btn-eventora btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </section>
+
+          <!-- ============================================================
+               SECURITY
+               ============================================================ -->
+          <section class="settings-panel glass-card dash-form" id="security">
+            <h2>Password &amp; security</h2>
+            <p class="panel-sub">Your password is stored only as a hash and cannot be retrieved</p>
+
+            <form data-settings-form novalidate>
+              <div class="form-group">
+                <label for="set-current">Current password</label>
+                <input type="password" id="set-current" name="current_password" placeholder="••••••••" />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="set-new">New password</label>
+                  <input type="password" id="set-new" name="password" placeholder="At least 8 characters" />
+                </div>
+                <div class="form-group">
+                  <label for="set-confirm">Confirm new password</label>
+                  <input type="password" id="set-confirm" name="confirm_password" placeholder="Re-enter it" />
+                </div>
+              </div>
+              <!-- FUTURE PHP: verify with password_verify(), then
+                   UPDATE users SET password_hash = password_hash(:new, PASSWORD_DEFAULT)
+                   WHERE id = :user_id, and invalidate other sessions. -->
+              <div class="settings-save-bar">
+                <button type="submit" class="btn-eventora btn-primary">Update Password</button>
+                <a href="../pages/forgot-password.html" class="btn-eventora btn-ghost">Forgot password?</a>
+              </div>
+            </form>
+          </section>
+
+          <!-- ============================================================
+               NOTIFICATIONS
+               FLAGGED: Eventora Database v1.0 has no per-user notification
+               preference columns. These toggles are demo-only until a
+               settings table is approved. Not inventing one here.
+               ============================================================ -->
+          <section class="settings-panel glass-card" id="notifications">
+            <h2>Notifications</h2>
+            <p class="panel-sub">Which updates you want to receive</p>
+          <div class="toggle-row">
+            <div class="t-body">
+              <p class="t-title">Booking updates</p>
+              <p class="t-desc">When a vendor accepts, rejects or completes a booking.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" checked aria-label="Booking updates" />
+              <span class="track"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="t-body">
+              <p class="t-title">Payment updates</p>
+              <p class="t-desc">Payment confirmations and reminders for accepted bookings.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" checked aria-label="Payment updates" />
+              <span class="track"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="t-body">
+              <p class="t-title">Event reminders</p>
+              <p class="t-desc">Countdown reminders as one of your events approaches.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" checked aria-label="Event reminders" />
+              <span class="track"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="t-body">
+              <p class="t-title">AI recommendations</p>
+              <p class="t-desc">When new vendor recommendations are generated for an event.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" checked aria-label="AI recommendations" />
+              <span class="track"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="t-body">
+              <p class="t-title">Review reminders</p>
+              <p class="t-desc">A nudge to review a vendor after a booking completes.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" aria-label="Review reminders" />
+              <span class="track"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="t-body">
+              <p class="t-title">Marketing and offers</p>
+              <p class="t-desc">Occasional platform news and vendor promotions.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" aria-label="Marketing and offers" />
+              <span class="track"></span>
+            </label>
+          </div>
+            <p class="rv-nlp-note">These preferences have no column in Eventora Database v1.0 yet.
+               They are shown here as a demo control — a settings table would need to be approved
+               before they can be stored.</p>
+          </section>
+
+          <!-- ============================================================
+               PREFERENCES — client_profiles table
+               ============================================================ -->
+          <section class="settings-panel glass-card dash-form" id="preferences">
+            <h2>Planning preferences</h2>
+            <p class="panel-sub">Stored on <code>client_profiles</code> and used by the recommendation engine</p>
+
+            <form data-settings-form novalidate>
+              <div class="form-group">
+                <label>Preferred event types</label>
+                <div class="type-grid">
+            <div class="type-option">
+              <input type="checkbox" id="pref-wedding" name="preferred_event_types"
+                     value="Wedding" checked />
+              <label for="pref-wedding">Wedding</label>
+            </div>
+            <div class="type-option">
+              <input type="checkbox" id="pref-birthday" name="preferred_event_types"
+                     value="Birthday" checked />
+              <label for="pref-birthday">Birthday</label>
+            </div>
+            <div class="type-option">
+              <input type="checkbox" id="pref-engagement" name="preferred_event_types"
+                     value="Engagement" />
+              <label for="pref-engagement">Engagement</label>
+            </div>
+            <div class="type-option">
+              <input type="checkbox" id="pref-corporate" name="preferred_event_types"
+                     value="Corporate" checked />
+              <label for="pref-corporate">Corporate</label>
+            </div>
+            <div class="type-option">
+              <input type="checkbox" id="pref-conference" name="preferred_event_types"
+                     value="Conference" />
+              <label for="pref-conference">Conference</label>
+            </div>
+            <div class="type-option">
+              <input type="checkbox" id="pref-seminar" name="preferred_event_types"
+                     value="Seminar" />
+              <label for="pref-seminar">Seminar</label>
+            </div>
+            <div class="type-option">
+              <input type="checkbox" id="pref-family-gathering" name="preferred_event_types"
+                     value="Family Gathering" />
+              <label for="pref-family-gathering">Family Gathering</label>
+            </div>
+            <div class="type-option">
+              <input type="checkbox" id="pref-cultural-event" name="preferred_event_types"
+                     value="Cultural Event" />
+              <label for="pref-cultural-event">Cultural Event</label>
+            </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="set-city">Preferred city</label>
+                  <select class="evt-select" id="set-city" name="city">
+              <option selected>Hyderabad</option>
+              <option>Jamshoro</option>
+              <option>Sukkur</option>
+              <option>Larkana</option>
+              <option>Mirpurkhas</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="set-budget">Typical event budget</label>
+                  <div class="input-prefix">
+                    <span class="prefix">Rs.</span>
+                    <input type="number" id="set-budget" name="average_budget"
+                           value="300000" min="0" step="10000" />
+                  </div>
+                </div>
+              </div>
+              <!-- FUTURE PHP: UPDATE client_profiles
+                   SET city, preferred_event_types, average_budget
+                   WHERE client_id = :client_id -->
+              <div class="settings-save-bar">
+                <button type="submit" class="btn-eventora btn-primary">Save Preferences</button>
+              </div>
+            </form>
+          </section>
+
+          <!-- ============================================================
+               PRIVACY
+               ============================================================ -->
+          <section class="settings-panel glass-card" id="privacy">
+            <h2>Privacy</h2>
+            <p class="panel-sub">What vendors and other users can see</p>
+
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Show my name on reviews</p>
+                <p class="t-desc">If off, reviews you write appear without your name attached.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Show my name on reviews" />
+                <span class="track"></span>
+              </label>
+            </div>
+
+            <div class="toggle-row">
+              <div class="t-body">
+                <p class="t-title">Share event details with booked vendors</p>
+                <p class="t-desc">Vendors you book see the event date, city, guest count and any
+                   special requirements. Turning this off may prevent vendors from quoting
+                   accurately.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked aria-label="Share event details with booked vendors" />
+                <span class="track"></span>
+              </label>
+            </div>
+
+            <p class="rv-nlp-note">Vendors only ever see details for bookings you have made with
+               them. They cannot browse client accounts. Administrators can access account records
+               to manage the platform and resolve disputes. Like the notification toggles above,
+               these switches have no column in Database v1.0 yet.</p>
+          </section>
+
+          <!-- ============================================================
+               DANGER ZONE
+               ============================================================ -->
+          <section class="settings-panel glass-card danger-zone" id="danger">
+            <h2>Account status</h2>
+            <p class="panel-sub">Deactivating is reversible &mdash; deleting is not offered</p>
+
+            <div class="danger-row">
+              <div class="d-body">
+                <p class="d-title">Deactivate my account</p>
+                <p class="d-desc">Your account is set to <strong>blocked</strong> and you can no
+                   longer sign in. Nothing is deleted: your bookings, payments, commission records
+                   and reviews are kept, because vendors and the platform need that history for
+                   accounting. Any booking a vendor has already accepted must be settled with that
+                   vendor first.</p>
+              </div>
+              <!-- FUTURE PHP: UPDATE users SET status = 'blocked' WHERE id = :user_id
+                   Never DELETE — bookings/payments/commissions/reviews hold FKs with
+                   ON DELETE RESTRICT, so the delete would fail anyway. -->
+              <button type="button" class="btn-eventora btn-danger-outline" data-deactivate>
+                Deactivate Account
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

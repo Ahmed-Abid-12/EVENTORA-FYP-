@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bookings | Eventora Admin</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Admin navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Admin</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Overview</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="reports.html"><i class="bi bi-graph-up" aria-hidden="true"></i> Reports</a></li>
+      </ul>
+
+      <p class="dash-nav-label">People</p>
+      <ul>
+        <li><a href="users.html"><i class="bi bi-people" aria-hidden="true"></i> Users</a></li>
+        <li><a href="vendors.html"><i class="bi bi-shop" aria-hidden="true"></i> Vendors</a></li>
+        <li><a href="vendor-approval.html"><i class="bi bi-patch-check" aria-hidden="true"></i> Vendor Approval
+          <span class="nav-count">6</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Platform</p>
+      <ul>
+        <li><a href="categories.html"><i class="bi bi-tags" aria-hidden="true"></i> Categories</a></li>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> Bookings</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+        <li><a href="commission.html"><i class="bi bi-percent" aria-hidden="true"></i> Commission</a></li>
+        <li><a href="chatbot-logs.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chatbot Logs</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Bookings</h1>
+          <p class="topbar-sub">Platform-wide booking oversight</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="vendor-approval.html" class="icon-btn" aria-label="Vendor approvals">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="settings.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">EA</span>
+          <span>
+            <span class="who d-block">Eventora Admin</span>
+            <span class="role">Administrator</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-admin-table>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo bookings, platform-wide.</strong> 46 bookings across every client and
+           vendor, deduplicated — a booking seen by a client and by its vendor is one record, not two.
+           This differs from <em>client/bookings.html</em>, which shows one client's slice.</p>
+      </div>
+
+      <div class="adt-summary">
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon"><i class="bi bi-journal-check" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value" data-adt-total="count">46</p>
+          <p class="m-label">Bookings Shown</p>
+          <p class="m-sub">Updates with the filters below</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon"><i class="bi bi-graph-up" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value" data-adt-total="amount">Rs. 4,752,000</p>
+          <p class="m-label">Gross Value Shown</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon gold"><i class="bi bi-percent" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value" data-adt-total="commission">Rs. 349,600</p>
+          <p class="m-label">Commission Shown</p>
+          <p class="m-sub">Completed bookings only</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon gold"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value">2</p>
+          <p class="m-label">Awaiting Vendor</p>
+        </div>
+      </div>
+
+      <div class="pay-formula">
+        <strong>Admin is read-only here.</strong>
+        A booking's status is decided by the parties to it — the vendor accepts, rejects or completes
+        it; the client cancels it. This page gives the admin visibility, not the ability to overwrite
+        another party's decision. In particular, an <strong>accepted booking under a cancelled
+        event</strong> is flagged for admin handling, but no refund is issued: the refund workflow is
+        not defined in Database v1.0 and must not be invented.
+      </div>
+
+      <section class="adt-filters glass-card">
+        <div class="f-block">
+          <label for="bk-search">Search</label>
+          <input type="search" id="bk-search" data-adt-search
+                 placeholder="Booking ID, client, vendor, service" autocomplete="off" />
+        </div>
+        <div class="f-block">
+          <label for="bk-status">Status</label>
+          <select id="bk-status" class="evt-select evt-select--compact" data-adt-filter="status">
+            <option value="">All statuses</option>
+            <option value="pending">Pending</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="f-block">
+          <label for="bk-vendor">Vendor</label>
+          <select id="bk-vendor" class="evt-select evt-select--compact" data-adt-filter="vendor">
+            <option value="">All vendors</option>
+                <option value="Bloom Decor House">Bloom Decor House</option>
+                <option value="Campus Caterers">Campus Caterers</option>
+                <option value="Frame Story Photography">Frame Story Photography</option>
+                <option value="Golden Spoon Catering">Golden Spoon Catering</option>
+                <option value="Henna Atelier">Henna Atelier</option>
+                <option value="Indus View Marquee">Indus View Marquee</option>
+                <option value="Lens &amp; Light Studio">Lens &amp; Light Studio</option>
+                <option value="Riverside Banquet Hall">Riverside Banquet Hall</option>
+                <option value="Sound Circle Entertainment">Sound Circle Entertainment</option>
+          </select>
+        </div>
+        <div class="f-block">
+          <label for="bk-client">Client</label>
+          <select id="bk-client" class="evt-select evt-select--compact" data-adt-filter="client">
+            <option value="">All clients</option>
+                <option value="Demo Client">Demo Client</option>
+                <option value="Sample Client A1">Sample Client A1</option>
+                <option value="Sample Client A2">Sample Client A2</option>
+                <option value="Sample Client B">Sample Client B</option>
+                <option value="Sample Client B1">Sample Client B1</option>
+                <option value="Sample Client B2">Sample Client B2</option>
+                <option value="Sample Client C">Sample Client C</option>
+                <option value="Sample Client C1">Sample Client C1</option>
+                <option value="Sample Client C2">Sample Client C2</option>
+                <option value="Sample Client D">Sample Client D</option>
+                <option value="Sample Client D1">Sample Client D1</option>
+                <option value="Sample Client D2">Sample Client D2</option>
+                <option value="Sample Client E">Sample Client E</option>
+                <option value="Sample Client E1">Sample Client E1</option>
+                <option value="Sample Client F">Sample Client F</option>
+                <option value="Sample Client F1">Sample Client F1</option>
+                <option value="Sample Client G">Sample Client G</option>
+                <option value="Sample Client G1">Sample Client G1</option>
+                <option value="Sample Client H1">Sample Client H1</option>
+                <option value="Sample Client I1">Sample Client I1</option>
+                <option value="Sample Client J1">Sample Client J1</option>
+                <option value="Sample Client K1">Sample Client K1</option>
+                <option value="Sample Client L1">Sample Client L1</option>
+                <option value="Sample Client M1">Sample Client M1</option>
+                <option value="Sample Client N1">Sample Client N1</option>
+                <option value="Sample Client O1">Sample Client O1</option>
+                <option value="Sample Client P1">Sample Client P1</option>
+                <option value="Sample Client Q1">Sample Client Q1</option>
+                <option value="Sample Client R1">Sample Client R1</option>
+                <option value="Sample Client S1">Sample Client S1</option>
+                <option value="Sample Client T1">Sample Client T1</option>
+                <option value="Sample Client U1">Sample Client U1</option>
+                <option value="Sample Client V1">Sample Client V1</option>
+                <option value="Sample Client W1">Sample Client W1</option>
+                <option value="Sample Client X1">Sample Client X1</option>
+                <option value="Sample Client Y1">Sample Client Y1</option>
+                <option value="Sample Client Z1">Sample Client Z1</option>
+          </select>
+        </div>
+        <div class="f-block">
+          <label for="bk-event">Event</label>
+          <select id="bk-event" class="evt-select evt-select--compact" data-adt-filter="event">
+            <option value="">All events</option>
+                <option value="Sample Anniversary">Sample Anniversary</option>
+                <option value="Sample Award Evening">Sample Award Evening</option>
+                <option value="Sample Birthday">Sample Birthday</option>
+                <option value="Sample Birthday Celebration">Sample Birthday Celebration</option>
+                <option value="Sample Birthday Party">Sample Birthday Party</option>
+                <option value="Sample Conference">Sample Conference</option>
+                <option value="Sample Corporate Dinner">Sample Corporate Dinner</option>
+                <option value="Sample Corporate Gala">Sample Corporate Gala</option>
+                <option value="Sample Corporate Launch">Sample Corporate Launch</option>
+                <option value="Sample Engagement">Sample Engagement</option>
+                <option value="Sample Engagement Dinner">Sample Engagement Dinner</option>
+                <option value="Sample Engagement Shoot">Sample Engagement Shoot</option>
+                <option value="Sample Family Gathering">Sample Family Gathering</option>
+                <option value="Sample Family Reunion">Sample Family Reunion</option>
+                <option value="Sample Graduation Party">Sample Graduation Party</option>
+                <option value="Sample Mehndi Night">Sample Mehndi Night</option>
+                <option value="Sample Product Launch">Sample Product Launch</option>
+                <option value="Sample Seminar Day">Sample Seminar Day</option>
+                <option value="Sample Wedding">Sample Wedding</option>
+                <option value="Sample Wedding Reception">Sample Wedding Reception</option>
+          </select>
+        </div>
+        <div class="f-block adt-reset">
+          <button type="button" class="btn-eventora btn-ghost" data-adt-reset>Reset filters</button>
+        </div>
+      </section>
+
+      <div class="dash-section-head">
+        <h2 data-adt-count aria-live="polite"></h2>
+        <span class="rv-meta">Commission is authoritative in the commissions table</span>
+      </div>
+
+      <!-- FUTURE PHP:
+           SELECT b.booking_id, b.booking_date, b.total_amount, b.status,
+                  e.event_name, e.status AS event_status,
+                  s.title, cu.name AS client_name, vp.business_name,
+                  cm.commission_amount
+           FROM bookings b
+           JOIN events e           ON e.event_id   = b.event_id
+           JOIN services s         ON s.service_id = b.service_id
+           JOIN client_profiles cp ON cp.client_id = b.client_id
+           JOIN users cu           ON cu.id = cp.user_id
+           JOIN vendor_profiles vp ON vp.vendor_id = b.vendor_id
+           LEFT JOIN commissions cm ON cm.booking_id = b.booking_id
+           ORDER BY b.created_at DESC;
+
+           commission_amount is READ from commissions — this page never
+           recalculates it and never reads bookings.platform_commission, which
+           does not exist in v1.0.
+
+           Attention rule: b.status = 'accepted' AND e.status = 'cancelled'. -->
+      <section class="dash-panel glass-card" data-adt-wrap>
+        <div class="dash-table-wrap">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Booking</th><th>Event</th><th>Client</th><th>Vendor &amp; service</th>
+                <th class="adt-num">Gross</th><th class="adt-num">Commission</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr data-adt-row
+                    data-status="accepted"
+                    data-vendor="Riverside Banquet Hall"
+                    data-client="Demo Client"
+                    data-event="Sample Wedding"
+                    data-amount="180000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0001 Demo Client Riverside Banquet Hall Main Hall Booking Sample Wedding"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0001</span>
+                    <span class="cell-sub">15 Dec 2026</span>
+                  </td>
+                  <td>Sample Wedding</td>
+                  <td>Demo Client</td>
+                  <td>
+                    <span class="cell-strong">Riverside Banquet Hall</span>
+                    <span class="cell-sub">Main Hall Booking</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 180,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status accepted">accepted</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="accepted"
+                    data-vendor="Golden Spoon Catering"
+                    data-client="Demo Client"
+                    data-event="Sample Wedding"
+                    data-amount="128000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0002 Demo Client Golden Spoon Catering Premium Buffet Sample Wedding"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0002</span>
+                    <span class="cell-sub">15 Dec 2026</span>
+                  </td>
+                  <td>Sample Wedding</td>
+                  <td>Demo Client</td>
+                  <td>
+                    <span class="cell-strong">Golden Spoon Catering</span>
+                    <span class="cell-sub">Premium Buffet</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 128,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status accepted">accepted</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="pending"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Demo Client"
+                    data-event="Sample Wedding"
+                    data-amount="110000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0003 Demo Client Lens &amp; Light Studio Full-Day Coverage Sample Wedding"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0003</span>
+                    <span class="cell-sub">15 Dec 2026</span>
+                  </td>
+                  <td>Sample Wedding</td>
+                  <td>Demo Client</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status pending">pending</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="rejected"
+                    data-vendor="Bloom Decor House"
+                    data-client="Demo Client"
+                    data-event="Sample Wedding"
+                    data-amount="45000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0004 Demo Client Bloom Decor House Stage &amp; Backdrop Sample Wedding"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0004</span>
+                    <span class="cell-sub">15 Dec 2026</span>
+                  </td>
+                  <td>Sample Wedding</td>
+                  <td>Demo Client</td>
+                  <td>
+                    <span class="cell-strong">Bloom Decor House</span>
+                    <span class="cell-sub">Stage &amp; Backdrop</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 45,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status rejected">rejected</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="cancelled"
+                    data-vendor="Sound Circle Entertainment"
+                    data-client="Demo Client"
+                    data-event="Sample Corporate Dinner"
+                    data-amount="54000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0005 Demo Client Sound Circle Entertainment DJ with Lighting &amp; MC Sample Corporate Dinner"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0005</span>
+                    <span class="cell-sub">5 Feb 2027</span>
+                  </td>
+                  <td>Sample Corporate Dinner</td>
+                  <td>Demo Client</td>
+                  <td>
+                    <span class="cell-strong">Sound Circle Entertainment</span>
+                    <span class="cell-sub">DJ with Lighting &amp; MC</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 54,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status cancelled">cancelled</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="accepted"
+                    data-vendor="Indus View Marquee"
+                    data-client="Demo Client"
+                    data-event="Sample Engagement"
+                    data-amount="140000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0006 Demo Client Indus View Marquee Main Hall Booking Sample Engagement"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0006</span>
+                    <span class="cell-sub">20 Sep 2026</span>
+                  </td>
+                  <td>Sample Engagement</td>
+                  <td>Demo Client</td>
+                  <td>
+                    <span class="cell-strong">Indus View Marquee</span>
+                    <span class="cell-sub">Main Hall Booking</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 140,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status accepted">accepted</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="accepted"
+                    data-vendor="Campus Caterers"
+                    data-client="Demo Client"
+                    data-event="Sample Engagement"
+                    data-amount="52000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0007 Demo Client Campus Caterers Standard Menu Sample Engagement"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0007</span>
+                    <span class="cell-sub">20 Sep 2026</span>
+                  </td>
+                  <td>Sample Engagement</td>
+                  <td>Demo Client</td>
+                  <td>
+                    <span class="cell-strong">Campus Caterers</span>
+                    <span class="cell-sub">Standard Menu</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 52,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status accepted">accepted</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="accepted"
+                    data-vendor="Frame Story Photography"
+                    data-client="Demo Client"
+                    data-event="Sample Engagement"
+                    data-amount="40000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0008 Demo Client Frame Story Photography Half-Day Coverage Sample Engagement"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0008</span>
+                    <span class="cell-sub">20 Sep 2026</span>
+                  </td>
+                  <td>Sample Engagement</td>
+                  <td>Demo Client</td>
+                  <td>
+                    <span class="cell-strong">Frame Story Photography</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 40,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status accepted">accepted</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Henna Atelier"
+                    data-client="Demo Client"
+                    data-event="Sample Birthday"
+                    data-amount="18000"
+                    data-commission="1800"
+                    data-net="16200"
+                    data-search="EVB-0009 Demo Client Henna Atelier Bridal Mehndi Sample Birthday"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0009</span>
+                    <span class="cell-sub">10 May 2026</span>
+                  </td>
+                  <td>Sample Birthday</td>
+                  <td>Demo Client</td>
+                  <td>
+                    <span class="cell-strong">Henna Atelier</span>
+                    <span class="cell-sub">Bridal Mehndi</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 18,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 1,800</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Bloom Decor House"
+                    data-client="Demo Client"
+                    data-event="Sample Birthday"
+                    data-amount="58000"
+                    data-commission="5800"
+                    data-net="52200"
+                    data-search="EVB-0010 Demo Client Bloom Decor House Floral Package Sample Birthday"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0010</span>
+                    <span class="cell-sub">10 May 2026</span>
+                  </td>
+                  <td>Sample Birthday</td>
+                  <td>Demo Client</td>
+                  <td>
+                    <span class="cell-strong">Bloom Decor House</span>
+                    <span class="cell-sub">Floral Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 58,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 5,800</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="pending"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client B"
+                    data-event="Sample Engagement Shoot"
+                    data-amount="65000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0021 Sample Client B Lens &amp; Light Studio Half-Day Coverage Sample Engagement Shoot"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0021</span>
+                    <span class="cell-sub">4 Oct 2026</span>
+                  </td>
+                  <td>Sample Engagement Shoot</td>
+                  <td>Sample Client B</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status pending">pending</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="accepted"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client C"
+                    data-event="Sample Corporate Launch"
+                    data-amount="156000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0022 Sample Client C Lens &amp; Light Studio Cinematic Film Package Sample Corporate Launch"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0022</span>
+                    <span class="cell-sub">12 Sep 2026</span>
+                  </td>
+                  <td>Sample Corporate Launch</td>
+                  <td>Sample Client C</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status accepted">accepted</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="accepted"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client D"
+                    data-event="Sample Birthday Party"
+                    data-amount="65000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0023 Sample Client D Lens &amp; Light Studio Half-Day Coverage Sample Birthday Party"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0023</span>
+                    <span class="cell-sub">22 Aug 2026</span>
+                  </td>
+                  <td>Sample Birthday Party</td>
+                  <td>Sample Client D</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status accepted">accepted</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client E"
+                    data-event="Sample Family Gathering"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="EVB-0024 Sample Client E Lens &amp; Light Studio Full-Day Coverage Sample Family Gathering"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0024</span>
+                    <span class="cell-sub">18 Apr 2026</span>
+                  </td>
+                  <td>Sample Family Gathering</td>
+                  <td>Sample Client E</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 11,000</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="rejected"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client F"
+                    data-event="Sample Conference"
+                    data-amount="65000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0025 Sample Client F Lens &amp; Light Studio Half-Day Coverage Sample Conference"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0025</span>
+                    <span class="cell-sub">9 Jul 2026</span>
+                  </td>
+                  <td>Sample Conference</td>
+                  <td>Sample Client F</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status rejected">rejected</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="cancelled"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client G"
+                    data-event="Sample Seminar Day"
+                    data-amount="156000"
+                    data-commission="0"
+                    data-net="0"
+                    data-search="EVB-0026 Sample Client G Lens &amp; Light Studio Cinematic Film Package Sample Seminar Day"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-0026</span>
+                    <span class="cell-sub">28 Jun 2026</span>
+                  </td>
+                  <td>Sample Seminar Day</td>
+                  <td>Sample Client G</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num muted">—</span></td>
+                  <td><span class="booking-status cancelled">cancelled</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client A1"
+                    data-event="Sample Wedding Reception"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="EVB-1001 Sample Client A1 Lens &amp; Light Studio Half-Day Coverage Sample Wedding Reception"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1001</span>
+                    <span class="cell-sub">4 Jun 2026</span>
+                  </td>
+                  <td>Sample Wedding Reception</td>
+                  <td>Sample Client A1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 6,500</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client B1"
+                    data-event="Sample Mehndi Night"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="EVB-1002 Sample Client B1 Lens &amp; Light Studio Full-Day Coverage Sample Mehndi Night"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1002</span>
+                    <span class="cell-sub">7 May 2026</span>
+                  </td>
+                  <td>Sample Mehndi Night</td>
+                  <td>Sample Client B1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 11,000</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client C1"
+                    data-event="Sample Corporate Gala"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="EVB-1003 Sample Client C1 Lens &amp; Light Studio Cinematic Film Package Sample Corporate Gala"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1003</span>
+                    <span class="cell-sub">10 Apr 2026</span>
+                  </td>
+                  <td>Sample Corporate Gala</td>
+                  <td>Sample Client C1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 15,600</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client D1"
+                    data-event="Sample Engagement Dinner"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="EVB-1004 Sample Client D1 Lens &amp; Light Studio Half-Day Coverage Sample Engagement Dinner"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1004</span>
+                    <span class="cell-sub">13 Mar 2026</span>
+                  </td>
+                  <td>Sample Engagement Dinner</td>
+                  <td>Sample Client D1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 6,500</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client E1"
+                    data-event="Sample Birthday Celebration"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="EVB-1005 Sample Client E1 Lens &amp; Light Studio Full-Day Coverage Sample Birthday Celebration"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1005</span>
+                    <span class="cell-sub">16 Feb 2026</span>
+                  </td>
+                  <td>Sample Birthday Celebration</td>
+                  <td>Sample Client E1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 11,000</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client F1"
+                    data-event="Sample Anniversary"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="EVB-1006 Sample Client F1 Lens &amp; Light Studio Cinematic Film Package Sample Anniversary"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1006</span>
+                    <span class="cell-sub">19 Jan 2026</span>
+                  </td>
+                  <td>Sample Anniversary</td>
+                  <td>Sample Client F1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 15,600</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client G1"
+                    data-event="Sample Product Launch"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="EVB-1007 Sample Client G1 Lens &amp; Light Studio Half-Day Coverage Sample Product Launch"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1007</span>
+                    <span class="cell-sub">22 Dec 2025</span>
+                  </td>
+                  <td>Sample Product Launch</td>
+                  <td>Sample Client G1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 6,500</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client H1"
+                    data-event="Sample Graduation Party"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="EVB-1008 Sample Client H1 Lens &amp; Light Studio Full-Day Coverage Sample Graduation Party"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1008</span>
+                    <span class="cell-sub">25 Nov 2025</span>
+                  </td>
+                  <td>Sample Graduation Party</td>
+                  <td>Sample Client H1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 11,000</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client I1"
+                    data-event="Sample Family Reunion"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="EVB-1009 Sample Client I1 Lens &amp; Light Studio Cinematic Film Package Sample Family Reunion"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1009</span>
+                    <span class="cell-sub">4 Oct 2025</span>
+                  </td>
+                  <td>Sample Family Reunion</td>
+                  <td>Sample Client I1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 15,600</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client J1"
+                    data-event="Sample Award Evening"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="EVB-1010 Sample Client J1 Lens &amp; Light Studio Half-Day Coverage Sample Award Evening"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1010</span>
+                    <span class="cell-sub">7 Sep 2025</span>
+                  </td>
+                  <td>Sample Award Evening</td>
+                  <td>Sample Client J1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 6,500</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client K1"
+                    data-event="Sample Wedding Reception"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="EVB-1011 Sample Client K1 Lens &amp; Light Studio Full-Day Coverage Sample Wedding Reception"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1011</span>
+                    <span class="cell-sub">10 Aug 2025</span>
+                  </td>
+                  <td>Sample Wedding Reception</td>
+                  <td>Sample Client K1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 11,000</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client L1"
+                    data-event="Sample Mehndi Night"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="EVB-1012 Sample Client L1 Lens &amp; Light Studio Cinematic Film Package Sample Mehndi Night"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1012</span>
+                    <span class="cell-sub">13 Jul 2025</span>
+                  </td>
+                  <td>Sample Mehndi Night</td>
+                  <td>Sample Client L1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 15,600</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client M1"
+                    data-event="Sample Corporate Gala"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="EVB-1013 Sample Client M1 Lens &amp; Light Studio Half-Day Coverage Sample Corporate Gala"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1013</span>
+                    <span class="cell-sub">16 Jun 2025</span>
+                  </td>
+                  <td>Sample Corporate Gala</td>
+                  <td>Sample Client M1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 6,500</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client N1"
+                    data-event="Sample Engagement Dinner"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="EVB-1014 Sample Client N1 Lens &amp; Light Studio Full-Day Coverage Sample Engagement Dinner"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1014</span>
+                    <span class="cell-sub">19 May 2025</span>
+                  </td>
+                  <td>Sample Engagement Dinner</td>
+                  <td>Sample Client N1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 11,000</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client O1"
+                    data-event="Sample Birthday Celebration"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="EVB-1015 Sample Client O1 Lens &amp; Light Studio Cinematic Film Package Sample Birthday Celebration"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1015</span>
+                    <span class="cell-sub">22 Apr 2025</span>
+                  </td>
+                  <td>Sample Birthday Celebration</td>
+                  <td>Sample Client O1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 15,600</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client P1"
+                    data-event="Sample Anniversary"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="EVB-1016 Sample Client P1 Lens &amp; Light Studio Half-Day Coverage Sample Anniversary"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1016</span>
+                    <span class="cell-sub">25 Mar 2025</span>
+                  </td>
+                  <td>Sample Anniversary</td>
+                  <td>Sample Client P1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 6,500</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client Q1"
+                    data-event="Sample Product Launch"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="EVB-1017 Sample Client Q1 Lens &amp; Light Studio Full-Day Coverage Sample Product Launch"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1017</span>
+                    <span class="cell-sub">4 Feb 2025</span>
+                  </td>
+                  <td>Sample Product Launch</td>
+                  <td>Sample Client Q1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 11,000</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client R1"
+                    data-event="Sample Graduation Party"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="EVB-1018 Sample Client R1 Lens &amp; Light Studio Cinematic Film Package Sample Graduation Party"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1018</span>
+                    <span class="cell-sub">7 Jan 2025</span>
+                  </td>
+                  <td>Sample Graduation Party</td>
+                  <td>Sample Client R1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 15,600</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client S1"
+                    data-event="Sample Family Reunion"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="EVB-1019 Sample Client S1 Lens &amp; Light Studio Half-Day Coverage Sample Family Reunion"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1019</span>
+                    <span class="cell-sub">10 Dec 2024</span>
+                  </td>
+                  <td>Sample Family Reunion</td>
+                  <td>Sample Client S1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 6,500</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client T1"
+                    data-event="Sample Award Evening"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="EVB-1020 Sample Client T1 Lens &amp; Light Studio Full-Day Coverage Sample Award Evening"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1020</span>
+                    <span class="cell-sub">13 Nov 2024</span>
+                  </td>
+                  <td>Sample Award Evening</td>
+                  <td>Sample Client T1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 11,000</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client U1"
+                    data-event="Sample Wedding Reception"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="EVB-1021 Sample Client U1 Lens &amp; Light Studio Cinematic Film Package Sample Wedding Reception"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1021</span>
+                    <span class="cell-sub">16 Oct 2024</span>
+                  </td>
+                  <td>Sample Wedding Reception</td>
+                  <td>Sample Client U1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 15,600</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client V1"
+                    data-event="Sample Mehndi Night"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="EVB-1022 Sample Client V1 Lens &amp; Light Studio Half-Day Coverage Sample Mehndi Night"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1022</span>
+                    <span class="cell-sub">19 Sep 2024</span>
+                  </td>
+                  <td>Sample Mehndi Night</td>
+                  <td>Sample Client V1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 6,500</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client W1"
+                    data-event="Sample Corporate Gala"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="EVB-1023 Sample Client W1 Lens &amp; Light Studio Full-Day Coverage Sample Corporate Gala"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1023</span>
+                    <span class="cell-sub">22 Aug 2024</span>
+                  </td>
+                  <td>Sample Corporate Gala</td>
+                  <td>Sample Client W1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 11,000</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client X1"
+                    data-event="Sample Engagement Dinner"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="EVB-1024 Sample Client X1 Lens &amp; Light Studio Cinematic Film Package Sample Engagement Dinner"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1024</span>
+                    <span class="cell-sub">25 Jul 2024</span>
+                  </td>
+                  <td>Sample Engagement Dinner</td>
+                  <td>Sample Client X1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 15,600</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client Y1"
+                    data-event="Sample Birthday Celebration"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="EVB-1025 Sample Client Y1 Lens &amp; Light Studio Half-Day Coverage Sample Birthday Celebration"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1025</span>
+                    <span class="cell-sub">4 Jun 2024</span>
+                  </td>
+                  <td>Sample Birthday Celebration</td>
+                  <td>Sample Client Y1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 6,500</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client Z1"
+                    data-event="Sample Anniversary"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="EVB-1026 Sample Client Z1 Lens &amp; Light Studio Full-Day Coverage Sample Anniversary"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1026</span>
+                    <span class="cell-sub">7 May 2024</span>
+                  </td>
+                  <td>Sample Anniversary</td>
+                  <td>Sample Client Z1</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 11,000</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client A2"
+                    data-event="Sample Product Launch"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="EVB-1027 Sample Client A2 Lens &amp; Light Studio Cinematic Film Package Sample Product Launch"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1027</span>
+                    <span class="cell-sub">10 Apr 2024</span>
+                  </td>
+                  <td>Sample Product Launch</td>
+                  <td>Sample Client A2</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 15,600</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client B2"
+                    data-event="Sample Graduation Party"
+                    data-amount="65000"
+                    data-commission="6500"
+                    data-net="58500"
+                    data-search="EVB-1028 Sample Client B2 Lens &amp; Light Studio Half-Day Coverage Sample Graduation Party"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1028</span>
+                    <span class="cell-sub">13 Mar 2024</span>
+                  </td>
+                  <td>Sample Graduation Party</td>
+                  <td>Sample Client B2</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Half-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 65,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 6,500</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client C2"
+                    data-event="Sample Family Reunion"
+                    data-amount="110000"
+                    data-commission="11000"
+                    data-net="99000"
+                    data-search="EVB-1029 Sample Client C2 Lens &amp; Light Studio Full-Day Coverage Sample Family Reunion"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1029</span>
+                    <span class="cell-sub">16 Feb 2024</span>
+                  </td>
+                  <td>Sample Family Reunion</td>
+                  <td>Sample Client C2</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Full-Day Coverage</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 110,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 11,000</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+                <tr data-adt-row
+                    data-status="completed"
+                    data-vendor="Lens &amp; Light Studio"
+                    data-client="Sample Client D2"
+                    data-event="Sample Award Evening"
+                    data-amount="156000"
+                    data-commission="15600"
+                    data-net="140400"
+                    data-search="EVB-1030 Sample Client D2 Lens &amp; Light Studio Cinematic Film Package Sample Award Evening"
+                    class="">
+                  <td>
+                    <span class="cell-strong">EVB-1030</span>
+                    <span class="cell-sub">19 Jan 2024</span>
+                  </td>
+                  <td>Sample Award Evening</td>
+                  <td>Sample Client D2</td>
+                  <td>
+                    <span class="cell-strong">Lens &amp; Light Studio</span>
+                    <span class="cell-sub">Cinematic Film Package</span>
+                  </td>
+                  <td class="adt-num cell-strong">Rs. 156,000</td>
+                  <td class="adt-num"><span class="adt-num commission">Rs. 15,600</span></td>
+                  <td><span class="booking-status completed">completed</span></td>
+                </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4">Totals for the current view</td>
+                <td class="adt-num" data-adt-total="amount">Rs. 4,752,000</td>
+                <td class="adt-num commission" data-adt-total="commission">Rs. 349,600</td>
+                <td>&nbsp;</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <div class="dash-empty glass-card" data-adt-empty hidden>
+        <i class="bi bi-journal-x" aria-hidden="true"></i>
+        <h4>No bookings match</h4>
+        <p>Try different filters, or reset them.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

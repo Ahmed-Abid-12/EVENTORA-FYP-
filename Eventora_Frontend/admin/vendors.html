@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendors | Eventora Admin</title>
+  <meta name="description" content="Eventora vendor dashboard — services, booking requests, earnings and ratings." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Admin navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Admin</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Overview</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="reports.html"><i class="bi bi-graph-up" aria-hidden="true"></i> Reports</a></li>
+      </ul>
+
+      <p class="dash-nav-label">People</p>
+      <ul>
+        <li><a href="users.html"><i class="bi bi-people" aria-hidden="true"></i> Users</a></li>
+        <li><a href="vendors.html"><i class="bi bi-shop" aria-hidden="true"></i> Vendors</a></li>
+        <li><a href="vendor-approval.html"><i class="bi bi-patch-check" aria-hidden="true"></i> Vendor Approval
+          <span class="nav-count">6</span></a></li>
+      </ul>
+
+      <p class="dash-nav-label">Platform</p>
+      <ul>
+        <li><a href="categories.html"><i class="bi bi-tags" aria-hidden="true"></i> Categories</a></li>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> Bookings</a></li>
+        <li><a href="payments.html"><i class="bi bi-cash-coin" aria-hidden="true"></i> Payments</a></li>
+        <li><a href="commission.html"><i class="bi bi-percent" aria-hidden="true"></i> Commission</a></li>
+        <li><a href="chatbot-logs.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Chatbot Logs</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Vendors</h1>
+          <p class="topbar-sub">Verification and account management</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="vendor-approval.html" class="icon-btn" aria-label="Vendor approvals">
+          <i class="bi bi-inbox" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="settings.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">EA</span>
+          <span>
+            <span class="who d-block">Eventora Admin</span>
+            <span class="role">Administrator</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-admin-vendors>
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo vendor directory.</strong> All 20 vendors from the public marketplace,
+           with counts derived from the same dataset. Approving, rejecting or blocking changes this
+           page only — nothing is saved and no vendor is notified.</p>
+      </div>
+
+      <!-- The governing rule for this page. -->
+      <div class="pay-formula">
+        <strong>Verification and account status are two independent fields.</strong>
+        <code>vendor_profiles.is_verified</code> records whether an administrator approved the
+        business documents. <code>vendor_profiles.status</code> records whether the account may trade.
+        Approving documents does not unblock a blocked account, and blocking an account does not
+        revoke verification — a verified vendor can still be blocked. Both are admin-only:
+        <strong>a vendor can never self-verify or self-unblock.</strong> The two identities are also
+        distinct: <code>vendor_id</code> is the vendor profile, <code>users.id</code> is the account.
+      </div>
+
+      <div class="adt-summary">
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon"><i class="bi bi-shop" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value">20</p>
+          <p class="m-label">Total Vendors</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon green"><i class="bi bi-patch-check" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value" data-stat-verified>14</p>
+          <p class="m-label">Verified</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon gold"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value" data-stat-pending>6</p>
+          <p class="m-label">Awaiting Verification</p>
+        </div>
+        <div class="ad-metric glass-card">
+          <div class="m-top"><span class="m-icon danger"><i class="bi bi-slash-circle" aria-hidden="true"></i></span>
+            <span class="demo-tag muted">Demo</span></div>
+          <p class="m-value" data-stat-blocked>0</p>
+          <p class="m-label">Blocked Accounts</p>
+        </div>
+      </div>
+
+      <section class="adt-filters glass-card">
+        <div class="f-block">
+          <label for="vm-search">Search</label>
+          <input type="search" id="vm-search" data-vm-search
+                 placeholder="Business, owner, city or category" autocomplete="off" />
+        </div>
+        <div class="f-block">
+          <label for="vm-verify">Verification</label>
+          <select id="vm-verify" class="evt-select evt-select--compact" data-vm-filter="verify">
+            <option value="">All</option>
+            <option value="verified">Verified</option>
+            <option value="pending">Awaiting</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <div class="f-block">
+          <label for="vm-account">Account status</label>
+          <select id="vm-account" class="evt-select evt-select--compact" data-vm-filter="account">
+            <option value="">All</option>
+            <option value="active">Active</option>
+            <option value="pending">Pending</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </div>
+        <div class="f-block">
+          <label for="vm-city">City</label>
+          <select id="vm-city" class="evt-select evt-select--compact" data-vm-filter="city">
+            <option value="">All cities</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Jamshoro">Jamshoro</option>
+                <option value="Larkana">Larkana</option>
+                <option value="Mirpurkhas">Mirpurkhas</option>
+                <option value="Sukkur">Sukkur</option>
+          </select>
+        </div>
+        <div class="f-block">
+          <label for="vm-category">Category</label>
+          <select id="vm-category" class="evt-select evt-select--compact" data-vm-filter="category">
+            <option value="">All categories</option>
+                <option value="Catering">Catering</option>
+                <option value="DJ">DJ</option>
+                <option value="Decoration">Decoration</option>
+                <option value="Event Planner">Event Planner</option>
+                <option value="Mehndi">Mehndi</option>
+                <option value="Photography">Photography</option>
+                <option value="Venue">Venue</option>
+          </select>
+        </div>
+        <div class="f-block adt-reset">
+          <button type="button" class="btn-eventora btn-ghost" data-vm-reset>Reset filters</button>
+        </div>
+      </section>
+
+      <div class="dash-section-head">
+        <h2 data-vm-count aria-live="polite"></h2>
+        <a href="vendor-approval.html">Verification queue</a>
+      </div>
+
+      <!-- FUTURE PHP:
+           SELECT vp.vendor_id, vp.business_name, vp.owner_name, vp.city,
+                  vp.is_verified, vp.status, vp.avg_rating,
+                  u.id AS user_id, u.email, u.status AS account_status,
+                  COUNT(DISTINCT s.service_id) AS services,
+                  COUNT(DISTINCT b.booking_id) AS bookings,
+                  COALESCE(SUM(cm.commission_amount), 0) AS commission
+           FROM vendor_profiles vp
+           JOIN users u        ON u.id = vp.user_id
+           LEFT JOIN services s ON s.vendor_id = vp.vendor_id
+           LEFT JOIN bookings b ON b.vendor_id = vp.vendor_id
+           LEFT JOIN commissions cm ON cm.booking_id = b.booking_id
+           GROUP BY vp.vendor_id
+           ORDER BY vp.is_verified ASC, vp.business_name ASC;
+
+           Commission is READ from commissions — never recalculated here. -->
+      <section class="dash-panel glass-card" data-vm-wrap>
+        <div class="dash-table-wrap">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Business</th><th>Identity</th><th>City</th><th>Verification &amp; account</th>
+                <th class="adt-num">Services</th><th class="adt-num">Rating</th>
+                <th class="adt-num">Bookings</th><th class="adt-num">Commission</th>
+                <th class="cell-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr data-vm-row
+                    data-vendor-id="1"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Hyderabad"
+                    data-category="Venue"
+                    data-business="Riverside Banquet Hall"
+                    data-search="Riverside Banquet Hall Hyderabad Venue Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-building"></i></span>
+                      <span>
+                        <span class="cell-strong">Riverside Banquet Hall</span>
+                        <span class="cell-sub">Demo Vendor · Venue</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 1</span>
+                    <span class="cell-sub vm-ids">users.id 101</span>
+                  </td>
+                  <td>Hyderabad</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.8 <span class="cell-sub">(42)</span></td>
+                  <td class="adt-num">1</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="2"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Hyderabad"
+                    data-category="Catering"
+                    data-business="Golden Spoon Catering"
+                    data-search="Golden Spoon Catering Hyderabad Catering Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-egg-fried"></i></span>
+                      <span>
+                        <span class="cell-strong">Golden Spoon Catering</span>
+                        <span class="cell-sub">Demo Vendor · Catering</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 2</span>
+                    <span class="cell-sub vm-ids">users.id 102</span>
+                  </td>
+                  <td>Hyderabad</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.6 <span class="cell-sub">(58)</span></td>
+                  <td class="adt-num">1</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="3"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Hyderabad"
+                    data-category="Photography"
+                    data-business="Lens &amp; Light Studio"
+                    data-search="Lens &amp; Light Studio Hyderabad Photography Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-camera"></i></span>
+                      <span>
+                        <span class="cell-strong">Lens &amp; Light Studio</span>
+                        <span class="cell-sub">Demo Vendor · Photography</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 3</span>
+                    <span class="cell-sub vm-ids">users.id 103</span>
+                  </td>
+                  <td>Hyderabad</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.9 <span class="cell-sub">(31)</span></td>
+                  <td class="adt-num">37</td>
+                  <td class="adt-num commission">Rs. 342,000</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="4"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Hyderabad"
+                    data-category="Decoration"
+                    data-business="Bloom Decor House"
+                    data-search="Bloom Decor House Hyderabad Decoration Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-flower1"></i></span>
+                      <span>
+                        <span class="cell-strong">Bloom Decor House</span>
+                        <span class="cell-sub">Demo Vendor · Decoration</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 4</span>
+                    <span class="cell-sub vm-ids">users.id 104</span>
+                  </td>
+                  <td>Hyderabad</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.4 <span class="cell-sub">(27)</span></td>
+                  <td class="adt-num">2</td>
+                  <td class="adt-num commission">Rs. 5,800</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="5"
+                    data-verify="pending"
+                    data-account="pending"
+                    data-city="Hyderabad"
+                    data-category="DJ"
+                    data-business="Sound Circle Entertainment"
+                    data-search="Sound Circle Entertainment Hyderabad DJ Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-music-note-beamed"></i></span>
+                      <span>
+                        <span class="cell-strong">Sound Circle Entertainment</span>
+                        <span class="cell-sub">Demo Vendor · DJ</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 5</span>
+                    <span class="cell-sub vm-ids">users.id 105</span>
+                  </td>
+                  <td>Hyderabad</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">2</td>
+                  <td class="adt-num">4.2 <span class="cell-sub">(19)</span></td>
+                  <td class="adt-num">1</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="6"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Hyderabad"
+                    data-category="Mehndi"
+                    data-business="Henna Atelier"
+                    data-search="Henna Atelier Hyderabad Mehndi Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-brush"></i></span>
+                      <span>
+                        <span class="cell-strong">Henna Atelier</span>
+                        <span class="cell-sub">Demo Vendor · Mehndi</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 6</span>
+                    <span class="cell-sub vm-ids">users.id 106</span>
+                  </td>
+                  <td>Hyderabad</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">2</td>
+                  <td class="adt-num">4.7 <span class="cell-sub">(36)</span></td>
+                  <td class="adt-num">1</td>
+                  <td class="adt-num commission">Rs. 1,800</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="7"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Hyderabad"
+                    data-category="Event Planner"
+                    data-business="Milestone Event Planners"
+                    data-search="Milestone Event Planners Hyderabad Event Planner Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-clipboard2-check"></i></span>
+                      <span>
+                        <span class="cell-strong">Milestone Event Planners</span>
+                        <span class="cell-sub">Demo Vendor · Event Planner</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 7</span>
+                    <span class="cell-sub vm-ids">users.id 107</span>
+                  </td>
+                  <td>Hyderabad</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">2</td>
+                  <td class="adt-num">4.5 <span class="cell-sub">(23)</span></td>
+                  <td class="adt-num">0</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="8"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Jamshoro"
+                    data-category="Venue"
+                    data-business="Indus View Marquee"
+                    data-search="Indus View Marquee Jamshoro Venue Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-building"></i></span>
+                      <span>
+                        <span class="cell-strong">Indus View Marquee</span>
+                        <span class="cell-sub">Demo Vendor · Venue</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 8</span>
+                    <span class="cell-sub vm-ids">users.id 108</span>
+                  </td>
+                  <td>Jamshoro</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.3 <span class="cell-sub">(16)</span></td>
+                  <td class="adt-num">1</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="9"
+                    data-verify="pending"
+                    data-account="pending"
+                    data-city="Jamshoro"
+                    data-category="Catering"
+                    data-business="Campus Caterers"
+                    data-search="Campus Caterers Jamshoro Catering Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-egg-fried"></i></span>
+                      <span>
+                        <span class="cell-strong">Campus Caterers</span>
+                        <span class="cell-sub">Demo Vendor · Catering</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 9</span>
+                    <span class="cell-sub vm-ids">users.id 109</span>
+                  </td>
+                  <td>Jamshoro</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.1 <span class="cell-sub">(21)</span></td>
+                  <td class="adt-num">1</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="10"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Jamshoro"
+                    data-category="Photography"
+                    data-business="Frame Story Photography"
+                    data-search="Frame Story Photography Jamshoro Photography Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-camera"></i></span>
+                      <span>
+                        <span class="cell-strong">Frame Story Photography</span>
+                        <span class="cell-sub">Demo Vendor · Photography</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 10</span>
+                    <span class="cell-sub vm-ids">users.id 110</span>
+                  </td>
+                  <td>Jamshoro</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.6 <span class="cell-sub">(14)</span></td>
+                  <td class="adt-num">1</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="11"
+                    data-verify="pending"
+                    data-account="pending"
+                    data-city="Jamshoro"
+                    data-category="Decoration"
+                    data-business="Petal &amp; Drape"
+                    data-search="Petal &amp; Drape Jamshoro Decoration Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-flower1"></i></span>
+                      <span>
+                        <span class="cell-strong">Petal &amp; Drape</span>
+                        <span class="cell-sub">Demo Vendor · Decoration</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 11</span>
+                    <span class="cell-sub vm-ids">users.id 111</span>
+                  </td>
+                  <td>Jamshoro</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">3.9 <span class="cell-sub">(11)</span></td>
+                  <td class="adt-num">0</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="12"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Sukkur"
+                    data-category="Event Planner"
+                    data-business="Northern Star Events"
+                    data-search="Northern Star Events Sukkur Event Planner Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-clipboard2-check"></i></span>
+                      <span>
+                        <span class="cell-strong">Northern Star Events</span>
+                        <span class="cell-sub">Demo Vendor · Event Planner</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 12</span>
+                    <span class="cell-sub vm-ids">users.id 112</span>
+                  </td>
+                  <td>Sukkur</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">2</td>
+                  <td class="adt-num">4.4 <span class="cell-sub">(18)</span></td>
+                  <td class="adt-num">0</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="13"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Sukkur"
+                    data-category="Venue"
+                    data-business="Royal Court Banquet"
+                    data-search="Royal Court Banquet Sukkur Venue Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-building"></i></span>
+                      <span>
+                        <span class="cell-strong">Royal Court Banquet</span>
+                        <span class="cell-sub">Demo Vendor · Venue</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 13</span>
+                    <span class="cell-sub vm-ids">users.id 113</span>
+                  </td>
+                  <td>Sukkur</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.7 <span class="cell-sub">(29)</span></td>
+                  <td class="adt-num">0</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="14"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Sukkur"
+                    data-category="Catering"
+                    data-business="Spice Route Catering"
+                    data-search="Spice Route Catering Sukkur Catering Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-egg-fried"></i></span>
+                      <span>
+                        <span class="cell-strong">Spice Route Catering</span>
+                        <span class="cell-sub">Demo Vendor · Catering</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 14</span>
+                    <span class="cell-sub vm-ids">users.id 114</span>
+                  </td>
+                  <td>Sukkur</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.2 <span class="cell-sub">(24)</span></td>
+                  <td class="adt-num">0</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="15"
+                    data-verify="pending"
+                    data-account="pending"
+                    data-city="Larkana"
+                    data-category="DJ"
+                    data-business="Rhythm &amp; Beats DJ"
+                    data-search="Rhythm &amp; Beats DJ Larkana DJ Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-music-note-beamed"></i></span>
+                      <span>
+                        <span class="cell-strong">Rhythm &amp; Beats DJ</span>
+                        <span class="cell-sub">Demo Vendor · DJ</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 15</span>
+                    <span class="cell-sub vm-ids">users.id 115</span>
+                  </td>
+                  <td>Larkana</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">2</td>
+                  <td class="adt-num">4.0 <span class="cell-sub">(9)</span></td>
+                  <td class="adt-num">0</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="16"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Larkana"
+                    data-category="Venue"
+                    data-business="Heritage Hall Larkana"
+                    data-search="Heritage Hall Larkana Larkana Venue Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-building"></i></span>
+                      <span>
+                        <span class="cell-strong">Heritage Hall Larkana</span>
+                        <span class="cell-sub">Demo Vendor · Venue</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 16</span>
+                    <span class="cell-sub vm-ids">users.id 116</span>
+                  </td>
+                  <td>Larkana</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.1 <span class="cell-sub">(13)</span></td>
+                  <td class="adt-num">0</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="17"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Larkana"
+                    data-category="Mehndi"
+                    data-business="Bridal Henna Collective"
+                    data-search="Bridal Henna Collective Larkana Mehndi Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-brush"></i></span>
+                      <span>
+                        <span class="cell-strong">Bridal Henna Collective</span>
+                        <span class="cell-sub">Demo Vendor · Mehndi</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 17</span>
+                    <span class="cell-sub vm-ids">users.id 117</span>
+                  </td>
+                  <td>Larkana</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">2</td>
+                  <td class="adt-num">4.5 <span class="cell-sub">(17)</span></td>
+                  <td class="adt-num">0</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="18"
+                    data-verify="pending"
+                    data-account="pending"
+                    data-city="Mirpurkhas"
+                    data-category="Decoration"
+                    data-business="Desert Rose Decor"
+                    data-search="Desert Rose Decor Mirpurkhas Decoration Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-flower1"></i></span>
+                      <span>
+                        <span class="cell-strong">Desert Rose Decor</span>
+                        <span class="cell-sub">Demo Vendor · Decoration</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 18</span>
+                    <span class="cell-sub vm-ids">users.id 118</span>
+                  </td>
+                  <td>Mirpurkhas</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.3 <span class="cell-sub">(12)</span></td>
+                  <td class="adt-num">0</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="19"
+                    data-verify="pending"
+                    data-account="pending"
+                    data-city="Mirpurkhas"
+                    data-category="Photography"
+                    data-business="Sunrise Photography Co."
+                    data-search="Sunrise Photography Co. Mirpurkhas Photography Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-camera"></i></span>
+                      <span>
+                        <span class="cell-strong">Sunrise Photography Co.</span>
+                        <span class="cell-sub">Demo Vendor · Photography</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 19</span>
+                    <span class="cell-sub vm-ids">users.id 119</span>
+                  </td>
+                  <td>Mirpurkhas</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.0 <span class="cell-sub">(8)</span></td>
+                  <td class="adt-num">0</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+                <tr data-vm-row
+                    data-vendor-id="20"
+                    data-verify="verified"
+                    data-account="active"
+                    data-city="Mirpurkhas"
+                    data-category="Catering"
+                    data-business="Grand Union Caterers"
+                    data-search="Grand Union Caterers Mirpurkhas Catering Demo Vendor">
+                  <td>
+                    <span class="vm-name">
+                      <span class="vm-avatar" aria-hidden="true"><i class="bi bi-egg-fried"></i></span>
+                      <span>
+                        <span class="cell-strong">Grand Union Caterers</span>
+                        <span class="cell-sub">Demo Vendor · Catering</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="vm-ids">vendor_id 20</span>
+                    <span class="cell-sub vm-ids">users.id 120</span>
+                  </td>
+                  <td>Mirpurkhas</td>
+                  <td>
+                    <span class="vm-states">
+                      <span class="verify-badge unverified" data-vm-verify-badge></span>
+                      <span class="vendor-account-status active" data-vm-account-badge></span>
+                    </span>
+                  </td>
+                  <td class="adt-num">3</td>
+                  <td class="adt-num">4.4 <span class="cell-sub">(20)</span></td>
+                  <td class="adt-num">0</td>
+                  <td class="adt-num commission">—</td>
+                  <td class="cell-actions"><span class="vm-actions"></span></td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="dash-empty glass-card" data-vm-empty hidden>
+        <i class="bi bi-shop" aria-hidden="true"></i>
+        <h4>No vendors match</h4>
+        <p>Try different filters, or reset them.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+  <!-- Both verification and account changes confirm first, and each states
+       explicitly that it does not touch the other field. -->
+  <div class="eventora-modal" data-vm-modal role="dialog" aria-modal="true" aria-labelledby="vm-title">
+    <div class="modal-veil" data-vm-cancel></div>
+    <div class="modal-panel glass-card confirm-panel">
+      <button type="button" class="modal-close" data-vm-cancel aria-label="Close">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+
+      <div class="confirm-icon accept" data-vm-icon><i class="bi bi-patch-check"></i></div>
+      <h3 id="vm-title" data-vm-title>Confirm</h3>
+      <p class="modal-lede" data-vm-text>Are you sure?</p>
+
+      <div class="confirm-summary">
+        <p><strong data-vm-name>Vendor</strong></p>
+        <p data-vm-detail>vendor_id · category · city</p>
+      </div>
+
+      <div class="confirm-actions">
+        <button type="button" class="btn-eventora btn-ghost" data-vm-cancel>Cancel</button>
+        <button type="button" class="btn-eventora btn-accept" data-vm-go>Confirm</button>
+      </div>
+
+      <p class="booking-note">Demo mode — this updates the page only. Nothing is saved.</p>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

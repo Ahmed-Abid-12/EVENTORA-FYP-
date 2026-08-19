@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile | Eventora Client</title>
+  <meta name="description" content="Your Eventora client account and planning profile." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="../payment/history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="../ai/recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="../ai/chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="../ai/review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Profile</h1>
+          <p class="topbar-sub">Account and planning details</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content">
+
+      <div class="demo-notice">
+        <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <p><strong>Demo profile.</strong> You are not signed in. These details are sample data and
+           editing them saves nothing yet.</p>
+      </div>
+
+      <!-- FUTURE PHP: load the signed-in client
+           SELECT u.id, u.name, u.email, u.phone, u.profile_image, u.status, u.created_at,
+                  cp.client_id, cp.city, cp.preferred_event_types, cp.average_budget
+           FROM users u
+           JOIN client_profiles cp ON cp.user_id = u.id
+           WHERE u.id = :user_id;
+           users.id is the ACCOUNT. client_profiles.client_id is the PROFILE.
+           They are different numbers and must never be swapped. -->
+      <div class="profile-hero glass-card">
+        <div class="profile-avatar" aria-hidden="true">DC</div>
+        <div class="profile-hero-body">
+          <h1>Demo Client</h1>
+          <p class="p-sub">Client since 12 Mar 2026</p>
+          <div class="profile-hero-badges">
+            <span class="account-status active">active</span>
+            <span class="dash-role-tag">Client</span>
+            <span class="demo-tag muted">Demo account</span>
+          </div>
+        </div>
+        <div class="completion-box">
+          <div class="completion-ring"><span>86%</span></div>
+          <p class="c-label">Profile complete</p>
+        </div>
+      </div>
+
+      <div class="profile-grid">
+        <!-- ================================================================
+             ACCOUNT — the users table. Authentication identity.
+             ================================================================ -->
+        <section class="profile-panel glass-card">
+          <h2>Account</h2>
+          <p class="panel-sub">Your sign-in details &mdash; stored on <code>users</code></p>
+
+          <div class="profile-field">
+            <span class="f-key">Full name</span>
+            <span class="f-val">Demo Client</span>
+          </div>
+          <div class="profile-field">
+            <span class="f-key">Email</span>
+            <span class="f-val">demo.client@eventora.local</span>
+          </div>
+          <div class="profile-field">
+            <span class="f-key">Phone</span>
+            <span class="f-val">+92 300 0000000</span>
+          </div>
+          <div class="profile-field">
+            <span class="f-key">Password</span>
+            <span class="f-val">Last changed at registration</span>
+          </div>
+          <div class="profile-field">
+            <span class="f-key">Account status</span>
+            <span class="f-val"><span class="account-status active">active</span></span>
+          </div>
+          <div class="profile-field">
+            <span class="f-key">Profile photo</span>
+            <span class="f-val empty">Not uploaded</span>
+          </div>
+
+          <div class="profile-actions">
+            <a href="settings.html#account" class="btn-eventora btn-primary">Edit Account</a>
+            <a href="settings.html#security" class="btn-eventora btn-ghost">Change Password</a>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             CLIENT PROFILE — the client_profiles table. Planning identity.
+             ================================================================ -->
+        <section class="profile-panel glass-card">
+          <h2>Client profile</h2>
+          <p class="panel-sub">Planning preferences &mdash; stored on <code>client_profiles</code></p>
+
+          <div class="profile-field">
+            <span class="f-key">City</span>
+            <span class="f-val">Hyderabad</span>
+          </div>
+          <div class="profile-field">
+            <span class="f-key">Preferred event types</span>
+            <span class="f-val"><span class="profile-tags"><span class="profile-tag">Wedding</span><span class="profile-tag">Corporate</span><span class="profile-tag">Birthday</span></span></span>
+          </div>
+          <div class="profile-field">
+            <span class="f-key">Average budget</span>
+            <span class="f-val">Rs. 300,000</span>
+          </div>
+          <div class="profile-field">
+            <span class="f-key">Events created</span>
+            <span class="f-val">5</span>
+          </div>
+          <div class="profile-field">
+            <span class="f-key">Bookings placed</span>
+            <span class="f-val">10</span>
+          </div>
+          <div class="profile-field">
+            <span class="f-key">Reviews written</span>
+            <span class="f-val">1</span>
+          </div>
+
+          <div class="profile-actions">
+            <a href="settings.html#preferences" class="btn-eventora btn-primary">Edit Preferences</a>
+            <a href="my-events.html" class="btn-eventora btn-ghost">My Events</a>
+          </div>
+        </section>
+      </div>
+
+      <section class="profile-panel glass-card mt-3">
+        <h2>Why these are separate</h2>
+        <p class="panel-sub">Account vs profile</p>
+        <p class="panel-note">Your <strong>account</strong> is how you sign in — it is the same
+           whether you use Eventora as a client or, one day, as a vendor. Your <strong>client
+           profile</strong> holds how you plan events, and it is what bookings, events and reviews
+           are attached to. Keeping them apart is why a vendor and a client can never be confused
+           for one another in the system.</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

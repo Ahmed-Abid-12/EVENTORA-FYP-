@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us | Eventora — AI-Powered Event Planning</title>
+  <meta name="description" content="Get in touch with the Eventora team — whether you are a client planning an event or a vendor looking to join our platform, we would love to hear from you." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+
+</head>
+<body class="inner-page">
+  <div class="auth-glow glow-primary" aria-hidden="true"></div>
+  <div class="auth-glow glow-gold" aria-hidden="true"></div>
+
+  <header class="eventora-navbar">
+    <div class="container-xl">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="vendors.html">Find Vendors</a></li>
+          <li><a href="../index.html#categories">Categories</a></li>
+          <li><a href="../index.html#ai-planner">AI Planner</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html" class="is-active">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-eventora btn-ghost btn-sm">Log In</a>
+        <a href="register.html" class="btn-eventora btn-primary btn-sm">Register</a>
+      </div>
+      <button type="button" class="navbar-toggler-custom" data-nav-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation">☰</button>
+    </div>
+    <nav id="mobile-menu" class="mobile-menu" data-mobile-menu aria-label="Mobile">
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="vendors.html">Find Vendors</a></li>
+        <li><a href="../index.html#categories">Categories</a></li>
+        <li><a href="../index.html#ai-planner">AI Planner</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Log In</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container-xl">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Get in Touch</span>
+          <h2>We would love to hear <em class="accent-em">from you</em>.</h2>
+          <p>Whether you are planning your next celebration, looking to join as a vendor, or have a question about the platform — our team is here to help.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section flush-top">
+      <div class="container-xl">
+        <div class="contact-grid">
+          <div class="contact-form-card glass-card reveal">
+            <h3>Send a Message</h3>
+            <p class="form-intro">Fill out the form below and our team will get back to you within 24 hours.</p>
+            <form id="contact-form" data-contact-form data-live-validate novalidate aria-label="Contact form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="contact-first-name">First Name</label>
+                  <div class="input-wrapper">
+                    <i class="bi bi-person input-icon" aria-hidden="true"></i>
+                    <input type="text" id="contact-first-name" name="first_name" data-validate="text" placeholder="Ayesha" required autocomplete="given-name" />
+                  </div>
+                  <div class="field-error"><i class="bi bi-exclamation-circle"></i> Please enter your first name.</div>
+                </div>
+                <div class="form-group">
+                  <label for="contact-last-name">Last Name</label>
+                  <div class="input-wrapper">
+                    <i class="bi bi-person input-icon" aria-hidden="true"></i>
+                    <input type="text" id="contact-last-name" name="last_name" data-validate="text" placeholder="Khan" required autocomplete="family-name" />
+                  </div>
+                  <div class="field-error"><i class="bi bi-exclamation-circle"></i> Please enter your last name.</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="contact-email">Email Address</label>
+                <div class="input-wrapper">
+                  <i class="bi bi-envelope input-icon" aria-hidden="true"></i>
+                  <input type="email" id="contact-email" name="email" data-validate="email" placeholder="ayesha.khan@email.com" required autocomplete="email" />
+                </div>
+                <div class="field-error"><i class="bi bi-exclamation-circle"></i> Please enter a valid email address.</div>
+              </div>
+              <div class="form-group">
+                <label for="contact-reason">What can we help with?</label>
+                <div class="input-wrapper">
+                  <i class="bi bi-question-circle input-icon" aria-hidden="true"></i>
+                  <select class="evt-select" id="contact-reason" name="reason" data-validate="select" required aria-label="Reason for contact">
+                    <option value="" disabled selected>Select a topic</option>
+                    <option value="general">General Inquiry</option>
+                    <option value="vendor">Become a Vendor</option>
+                    <option value="booking">Booking Help</option>
+                    <option value="technical">Technical Support</option>
+                    <option value="partnership">Partnership</option>
+                    <option value="feedback">Feedback</option>
+                  </select>
+                </div>
+                <div class="field-error"><i class="bi bi-exclamation-circle"></i> Please select a topic.</div>
+              </div>
+              <div class="form-group">
+                <label for="contact-message">Your Message</label>
+                <div class="input-wrapper">
+                  <i class="bi bi-chat-dots input-icon icon-top" aria-hidden="true"></i>
+                  <textarea id="contact-message" name="message" data-validate="text" placeholder="Tell us about your event or question — the more detail, the better we can help..." required></textarea>
+                </div>
+                <div class="field-error"><i class="bi bi-exclamation-circle"></i> Please write your message.</div>
+              </div>
+              <div class="form-footer">
+                <span class="privacy-note"><i class="bi bi-shield-check" aria-hidden="true"></i> Your information is never shared.</span>
+                <button type="submit" class="btn-eventora btn-primary">
+                  <span class="spinner" aria-hidden="true"></span>
+                  <span class="btn-label">Send Message</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="contact-sidebar">
+            <div class="contact-info-card glass-card reveal">
+              <div class="info-header">
+                <div class="info-icon-circle"><i class="bi bi-headset"></i></div>
+                <div><h4>Contact Details</h4><p>Project contact</p></div>
+                <span class="demo-tag muted ms-auto">Placeholder</span>
+              </div>
+              <div class="info-detail"><i class="bi bi-telephone" aria-hidden="true"></i><div><div class="detail-label">Phone</div><div class="detail-text">+92 300 1234567</div></div></div>
+              <div class="info-detail"><i class="bi bi-envelope-open" aria-hidden="true"></i><div><div class="detail-label">Email</div><div class="detail-text">hello@eventora.pk</div></div></div>
+              <div class="info-detail"><i class="bi bi-geo-alt" aria-hidden="true"></i><div><div class="detail-label">Office</div><div class="detail-text">Auto Bhan Road, Latifabad<br />Hyderabad, Sindh — Pakistan</div></div></div>
+            </div>
+            <div class="social-connect-card glass-card reveal">
+              <h4>Connect With Us</h4>
+              <div class="social-connect-links">
+                <a href="#" aria-label="Eventora on Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" aria-label="Eventora on Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" aria-label="Eventora on WhatsApp"><i class="bi bi-whatsapp"></i></a>
+                <a href="#" aria-label="Eventora on Twitter / X"><i class="bi bi-twitter-x"></i></a>
+                <a href="#" aria-label="Eventora on LinkedIn"><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+            <!-- Eventora has no staffed support desk yet, so this states what is
+                 actually true rather than showing a live "Online Now" indicator. -->
+            <div class="glass-card reveal reply-time-card">
+              <span class="demo-tag muted">In development</span>
+              <span class="reply-time-text">Eventora is a Final Year Project under active development. Email is the fastest way to reach the team.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="map-section">
+      <div class="container-xl">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Find Us</span>
+          <h2>Swing by our Hyderabad office.</h2>
+        </div>
+        <div class="map-wrapper reveal">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115818.75505811206!2d68.28563764335938!3d25.392421999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x394c790001234567%3A0x1234567890abcdef!2sHyderabad%2C%20Sindh!5e0!3m2!1sen!2s!4v1690000000000" width="100%" height="380" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Eventora office location in Hyderabad, Sindh" aria-label="Google Maps showing Eventora office location"></iframe>
+        </div>
+        <div class="hours-card glass-card reveal">
+          <h4><i class="bi bi-clock" aria-hidden="true"></i> Office Hours</h4>
+          <div class="hours-block"><div class="day">Monday — Thursday</div><div class="time">9:00 AM — 6:00 PM PKT</div></div>
+          <div class="hours-block"><div class="day">Friday</div><div class="time">9:00 AM — 12:30 PM &amp; 2:30 PM — 6:00 PM PKT</div></div>
+          <div class="hours-block"><div class="day">Saturday</div><div class="time">10:00 AM — 4:00 PM PKT</div></div>
+          <div class="hours-block"><div class="day">Sunday</div><div class="time">Closed <span class="badge">AI chat planned</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section flush-top" id="cta">
+      <div class="container-xl">
+        <div class="final-cta glass-card reveal">
+          <h2>Prefer to talk <em class="accent-em">right now</em>?</h2>
+          <p>Chat with our AI assistant — it can answer questions, recommend vendors, and get you started in under a minute.</p>
+          <div class="cta-actions">
+            <a href="register.html" class="btn-eventora btn-primary">Start Planning Free</a>
+            <a href="vendors.html" class="btn-eventora btn-outline-gold">Browse Vendors</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="eventora-footer">
+    <div class="container-xl">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="brand-mark">Eventora</span>
+          <p>AI-powered event management connecting clients and vendors across Hyderabad, Jamshoro, and beyond.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Platform</h5>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="vendors.html">Find Vendors</a></li>
+            <li><a href="../index.html#categories">Categories</a></li>
+            <li><a href="../index.html#ai-planner">AI Planner</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="vendors.html#become-a-vendor">Become a Vendor</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Account</h5>
+          <ul>
+            <li><a href="login.html">Log In</a></li>
+            <li><a href="register.html">Register</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Eventora. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Eventora on Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" aria-label="Eventora on Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" aria-label="Eventora on WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planning Assistant | Eventora</title>
+  <meta name="description" content="The Eventora AI planning assistant — ask about vendors, budgets and event planning." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="dash-body">
+
+<!-- FUTURE BACKEND INTEGRATION — session guard, runs before anything renders
+     session_start();
+     if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'client') {
+         header('Location: ../pages/login.html'); exit;
+     }
+     $client_id = clientIdForUser($_SESSION['user_id']);   // client_profiles.client_id
+     Never pass users.id where client_id is expected — frozen ID rule. -->
+
+<div class="dash-layout" data-dash-shell>
+
+  <aside class="dash-sidebar" data-sidebar aria-label="Client navigation">
+    <div class="dash-sidebar-head">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <span class="dash-role-tag">Client</span>
+      <button type="button" class="sidebar-close" data-sidebar-close aria-label="Close menu">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="dash-nav">
+      <p class="dash-nav-label">Planning</p>
+      <ul>
+        <li><a href="../client/dashboard.html"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a href="../client/create-event.html"><i class="bi bi-plus-circle" aria-hidden="true"></i> Create Event</a></li>
+        <li><a href="../client/my-events.html"><i class="bi bi-calendar-event" aria-hidden="true"></i> My Events</a></li>
+        <li><a href="../client/budget-planner.html"><i class="bi bi-wallet2" aria-hidden="true"></i> Budget Planner</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Bookings</p>
+      <ul>
+        <li><a href="../client/bookings.html"><i class="bi bi-journal-check" aria-hidden="true"></i> My Bookings
+          <span class="nav-count">2</span></a></li>
+        <li><a href="../client/saved-vendors.html"><i class="bi bi-heart" aria-hidden="true"></i> Saved Vendors</a></li>
+        <li><a href="../client/reviews.html"><i class="bi bi-star" aria-hidden="true"></i> My Reviews</a></li>
+        <li><a href="../payment/history.html"><i class="bi bi-receipt" aria-hidden="true"></i> Payment History</a></li>
+      </ul>
+
+      <p class="dash-nav-label">AI Assistant</p>
+      <ul>
+        <li><a href="recommendation.html"><i class="bi bi-stars" aria-hidden="true"></i> AI Recommendations</a></li>
+        <li><a href="chatbot.html"><i class="bi bi-chat-dots" aria-hidden="true"></i> Planning Assistant</a></li>
+        <li><a href="review-summary.html"><i class="bi bi-file-text" aria-hidden="true"></i> Review Summaries</a></li>
+      </ul>
+
+      <p class="dash-nav-label">Account</p>
+      <ul>
+        <li><a href="../client/notifications.html"><i class="bi bi-bell" aria-hidden="true"></i> Notifications
+          <span class="nav-count">3</span></a></li>
+        <li><a href="../client/profile.html"><i class="bi bi-person" aria-hidden="true"></i> Profile</a></li>
+        <li><a href="../client/settings.html"><i class="bi bi-gear" aria-hidden="true"></i> Settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="dash-sidebar-foot">
+      <!-- FUTURE: logout.php destroys the session and redirects to login -->
+      <a href="../pages/login.html"><i class="bi bi-box-arrow-left" aria-hidden="true"></i> Sign out</a>
+    </div>
+  </aside>
+
+  <div class="sidebar-veil" data-sidebar-veil></div>
+
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button type="button" class="sidebar-open" data-sidebar-open
+                aria-label="Open menu" aria-expanded="false">
+          <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        <div>
+          <h1>Planning Assistant</h1>
+          <p class="topbar-sub">Ask about vendors, budgets and planning</p>
+        </div>
+      </div>
+
+      <div class="dash-topbar-actions">
+        <a href="../client/notifications.html" class="icon-btn" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <!-- FUTURE: users.name / users.profile_image for the signed-in client -->
+        <a href="../client/profile.html" class="dash-user">
+          <span class="avatar" aria-hidden="true">DC</span>
+          <span>
+            <span class="who d-block">Demo Client</span>
+            <span class="role">Client account</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content" data-ai-chatbot>
+
+      <!-- The AI backend does not exist. This must be unmissable. -->
+      <div class="ai-banner">
+        <span class="ai-icon"><i class="bi bi-cpu" aria-hidden="true"></i></span>
+        <div class="ai-body">
+          <p class="ai-title">Planning Assistant Preview <span class="ai-preview-tag">
+            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i> Preview</span></p>
+          <p>The Python chatbot service has <strong>not been built</strong>. The conversation below is scripted preview data — it never took place. You can type and send messages to see the interface work, but <strong>no reply is generated</strong>: the assistant returns a fixed notice saying it is not connected.</p>
+        </div>
+      </div>
+
+      <div class="chat-layout">
+        <section class="chat-shell glass-card">
+          <div class="chat-head">
+            <span class="ch-avatar" aria-hidden="true"><i class="bi bi-stars"></i></span>
+            <div class="ch-body">
+              <p class="ch-name">Eventora Planning Assistant</p>
+              <p class="ch-state">Not connected — preview interface</p>
+            </div>
+            <span class="demo-tag muted">Demo</span>
+          </div>
+
+          <!-- FUTURE PHP: the thread is rebuilt from chatbot_logs
+               SELECT sender_type, message_text, created_at
+               FROM chatbot_logs
+               WHERE session_id = :session_id AND user_id = :user_id
+               ORDER BY created_at ASC;
+               sender_type distinguishes the user row from the bot row. -->
+          <div class="chat-window" data-chat-window>
+          <div class="chat-msg bot">
+            <div class="cm-text">Hello. I can help you plan an event on Eventora — finding vendors, estimating a budget, or explaining how booking works. What are you planning?</div>
+            <span class="cm-time">10:02</span>
+          </div>
+          <div class="chat-msg user">
+            <div class="cm-text">I'm planning a wedding in Hyderabad for about 250 guests.</div>
+            <span class="cm-time">10:02</span>
+          </div>
+          <div class="chat-msg bot">
+            <div class="cm-text">A wedding that size usually needs a venue, catering, decoration, photography and often mehndi. Do you have a total budget in mind?</div>
+            <span class="cm-time">10:03</span>
+          </div>
+          <div class="chat-msg user">
+            <div class="cm-text">Around 500,000 rupees.</div>
+            <span class="cm-time">10:03</span>
+          </div>
+          <div class="chat-msg bot">
+            <div class="cm-text">That works for Hyderabad at 250 guests. A common split is roughly a third on the venue, a quarter on catering, and the rest across photography, decoration and mehndi. Would you like me to suggest vendors for each?</div>
+            <span class="cm-time">10:03</span>
+          </div>
+          <div class="chat-msg user">
+            <div class="cm-text">Yes, show me photographers first.</div>
+            <span class="cm-time">10:04</span>
+          </div>
+          <div class="chat-msg bot">
+            <div class="cm-text">There are 3 photography vendors serving Hyderabad in the marketplace. The highest rated is Lens &amp; Light Studio at 4.9 from 31 reviews, with full-day coverage at Rs. 110,000. You can see all of them on the Find Vendors page.</div>
+            <span class="cm-time">10:04</span>
+          </div>
+          </div>
+
+          <div class="chat-foot">
+            <div class="chat-input-row">
+              <label for="chat-input" class="visually-hidden">Message the planning assistant</label>
+              <textarea id="chat-input" data-chat-input rows="1"
+                        placeholder="Ask about planning your event…"></textarea>
+              <button type="button" class="chat-send" data-chat-send aria-label="Send message" disabled>
+                <i class="bi bi-send" aria-hidden="true"></i>
+              </button>
+            </div>
+            <!-- FUTURE AI: POST /api/chat.php { message, session_id }
+                 PHP writes both rows to chatbot_logs, calls the Python service and
+                 returns the reply. Python is never exposed to the browser. -->
+            <p class="chat-note">Your message will be echoed into the thread, but no answer can be
+               generated — the assistant service does not exist yet.</p>
+          </div>
+        </section>
+
+        <aside>
+          <section class="dash-panel glass-card mb-3">
+            <div class="dash-section-head"><h2>Suggested prompts</h2></div>
+            <div class="prompt-list">
+            <button type="button" class="prompt-chip"
+                    data-chat-prompt="Help me plan a wedding">
+              <i class="bi bi-heart" aria-hidden="true"></i> Help me plan a wedding
+            </button>
+            <button type="button" class="prompt-chip"
+                    data-chat-prompt="Find vendors within my budget">
+              <i class="bi bi-search" aria-hidden="true"></i> Find vendors within my budget
+            </button>
+            <button type="button" class="prompt-chip"
+                    data-chat-prompt="Help me plan a birthday event">
+              <i class="bi bi-balloon" aria-hidden="true"></i> Help me plan a birthday event
+            </button>
+            <button type="button" class="prompt-chip"
+                    data-chat-prompt="What services do I need?">
+              <i class="bi bi-list-check" aria-hidden="true"></i> What services do I need?
+            </button>
+            <button type="button" class="prompt-chip"
+                    data-chat-prompt="Help me estimate my event budget">
+              <i class="bi bi-calculator" aria-hidden="true"></i> Help me estimate my event budget
+            </button>
+            <button type="button" class="prompt-chip"
+                    data-chat-prompt="How does booking work?">
+              <i class="bi bi-question-circle" aria-hidden="true"></i> How does booking work?
+            </button>
+            </div>
+          </section>
+
+          <section class="dash-panel glass-card mb-3">
+            <div class="dash-section-head"><h2>Quick actions</h2></div>
+            <div class="quick-actions">
+              <a href="../client/create-event.html" class="quick-action">
+                <i class="bi bi-plus-circle" aria-hidden="true"></i> New Event</a>
+              <a href="recommendation.html" class="quick-action">
+                <i class="bi bi-stars" aria-hidden="true"></i> Recommendations</a>
+              <a href="../pages/vendors.html" class="quick-action">
+                <i class="bi bi-search" aria-hidden="true"></i> Find Vendors</a>
+              <a href="../client/bookings.html" class="quick-action">
+                <i class="bi bi-journal-check" aria-hidden="true"></i> Bookings</a>
+            </div>
+          </section>
+
+          <section class="dash-panel glass-card">
+            <div class="dash-section-head"><h2>What is stored</h2></div>
+            <p class="panel-note"><code>chatbot_logs</code> holds <code>user_id</code>,
+               <code>session_id</code>, <code>sender_type</code>, <code>message_text</code> and
+               <code>created_at</code> — one row per message. Intent, response time and model name
+               have <strong>no column</strong> in Database v1.0 and are not stored, which is why none
+               is shown here.</p>
+          </section>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

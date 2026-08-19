@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendor Details | Eventora — AI-Powered Event Planning</title>
+  <meta name="description" content="View vendor services, pricing, capacity, ratings and reviews, then start a booking against one of your events." />
+
+  <!-- Official Eventora favicon — assets/images/ -->
+  <link rel="icon" href="../assets/images/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0d0919" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+</head>
+<body class="inner-page">
+  <div class="auth-glow glow-primary" aria-hidden="true"></div>
+  <div class="auth-glow glow-gold" aria-hidden="true"></div>
+
+<header class="eventora-navbar">
+    <div class="container-xl">
+      <a href="../index.html" class="brand-mark">Eventora</a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="vendors.html" class="is-active">Find Vendors</a></li>
+          <li><a href="../index.html#categories">Categories</a></li>
+          <li><a href="../index.html#ai-planner">AI Planner</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-eventora btn-ghost btn-sm">Log In</a>
+        <a href="register.html" class="btn-eventora btn-primary btn-sm">Register</a>
+      </div>
+      <button type="button" class="navbar-toggler-custom" data-nav-toggle aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation">☰</button>
+    </div>
+    <nav id="mobile-menu" class="mobile-menu" data-mobile-menu aria-label="Mobile">
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="vendors.html">Find Vendors</a></li>
+        <li><a href="../index.html#categories">Categories</a></li>
+        <li><a href="../index.html#ai-planner">AI Planner</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Log In</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main data-vendor-detail>
+    <section class="page-hero">
+      <div class="container-xl">
+        <nav class="breadcrumb-row" aria-label="Breadcrumb">
+          <a href="../index.html">Home</a><span class="sep">/</span>
+          <a href="vendors.html">Find Vendors</a><span class="sep">/</span>
+          <span data-crumb>Vendor</span>
+        </nav>
+
+        <div class="demo-notice reveal">
+          <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+          <p><strong>Sample vendor profile.</strong> Eventora has not launched. The services, prices,
+             ratings and reviews on this page are invented demo records used to build and test the
+             platform. No real business is represented.</p>
+        </div>
+
+        <div class="demo-notice reveal" data-not-found hidden>
+          <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+          <p><strong>Vendor not found.</strong> No demo vendor matches that ID, so the first one is
+             shown instead.
+             <!-- FUTURE BACKEND: PHP should return a real 404 page here. --></p>
+        </div>
+
+        <!-- ================================================================
+             VENDOR HEADER — vendor_profiles
+             ================================================================ -->
+        <div class="vendor-hero glass-card reveal">
+          <div class="vendor-hero-inner">
+            <div class="vendor-identity">
+              <div class="vendor-badges">
+                <span class="badge-pill verified" data-v-verified></span>
+                <span class="demo-tag">Demo profile</span>
+              </div>
+              <p class="vendor-category" data-v-category></p>
+              <h1 data-v-name></h1>
+              <div class="vendor-meta">
+                <span><i class="bi bi-geo-alt" aria-hidden="true"></i> <span data-v-city></span></span>
+                <span><i class="bi bi-star-fill" aria-hidden="true"></i>
+                  <span class="rating-value" data-v-rating></span>
+                  <span data-v-reviews></span></span>
+              </div>
+            </div>
+
+            <div class="vendor-hero-actions">
+              <button type="button" class="btn-save" data-save-vendor aria-pressed="false"
+                      aria-label="Save this vendor"><i class="bi bi-heart" aria-hidden="true"></i></button>
+              <a href="#services" class="btn-eventora btn-primary">View Services</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-layout">
+          <!-- ==============================================================
+               MAIN COLUMN
+               ============================================================== -->
+          <div>
+            <section class="detail-block glass-card reveal">
+              <h2>About this vendor</h2>
+              <p data-v-description></p>
+              <ul class="quick-facts" data-v-facts></ul>
+            </section>
+
+            <!-- Gallery placeholders: services.image_url is empty until vendors
+                 upload portfolios through the vendor dashboard. -->
+            <section class="detail-block glass-card reveal">
+              <h2>Portfolio</h2>
+              <p>No portfolio images have been uploaded yet. Vendors add these from their dashboard.</p>
+              <div class="gallery-grid mt-3">
+                <div class="gallery-tile"><i class="bi bi-image" aria-hidden="true"></i></div>
+                <div class="gallery-tile"><i class="bi bi-image" aria-hidden="true"></i></div>
+                <div class="gallery-tile"><i class="bi bi-image" aria-hidden="true"></i></div>
+                <div class="gallery-tile"><i class="bi bi-image" aria-hidden="true"></i></div>
+              </div>
+            </section>
+
+            <!-- ============================================================
+                 SERVICES — bookings reference services.service_id, so this is
+                 where a booking actually starts.
+                 ============================================================ -->
+            <section class="detail-block glass-card reveal" id="services">
+              <h2>Services &amp; pricing</h2>
+              <p>Bookings are made against a specific service, not the business as a whole.</p>
+              <div class="mt-4" data-v-services></div>
+            </section>
+
+            <!-- ============================================================
+                 REVIEWS — reviews + review_summaries
+                 ============================================================ -->
+            <section class="detail-block glass-card reveal" id="reviews">
+              <h2>Ratings &amp; reviews</h2>
+
+              <div class="review-summary">
+                <div class="review-summary-head">
+                  <i class="bi bi-stars" aria-hidden="true"></i>
+                  <h4>AI review summary</h4>
+                  <span class="demo-tag">Preview — not yet generated</span>
+                </div>
+                <p data-v-summary></p>
+                <!-- FUTURE AI: the Python NLP module writes this to
+                     review_summaries.summary_text and it is read from there. -->
+                <a href="../ai/review-summary.html" class="btn-eventora btn-ghost mt-2"
+                   data-v-summary-link>
+                  <i class="bi bi-file-text" aria-hidden="true"></i> Full review analysis
+                </a>
+              </div>
+
+              <div class="rating-overview">
+                <div class="rating-score">
+                  <span class="score" data-v-score></span>
+                  <span class="stars" data-v-stars></span>
+                  <span class="total" data-v-total></span>
+                </div>
+                <div class="rating-bars" data-v-bars></div>
+              </div>
+
+              <div data-v-reviewlist></div>
+            </section>
+          </div>
+
+          <!-- ==============================================================
+               BOOKING SIDEBAR
+               ============================================================== -->
+          <aside class="booking-cta glass-card reveal">
+            <p class="from-label">Starting from</p>
+            <p class="from-price" data-v-from></p>
+
+            <a href="#services" class="btn-eventora btn-primary">Choose a Service</a>
+            <a href="faq.html" class="btn-eventora btn-outline-gold">How booking works</a>
+
+            <ul class="quick-facts">
+              <li><i class="bi bi-calendar-check" aria-hidden="true"></i>
+                <span>Every booking belongs to one of <strong>your events</strong></span></li>
+              <li><i class="bi bi-check2-circle" aria-hidden="true"></i>
+                <span>Payment unlocks only after the vendor <strong>accepts</strong></span></li>
+              <li><i class="bi bi-chat-square-text" aria-hidden="true"></i>
+                <span>Leave a review once the booking is <strong>completed</strong></span></li>
+            </ul>
+
+            <p class="booking-note">Eventora has not launched — no real booking can be placed yet.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         SIMILAR VENDORS
+         ================================================================== -->
+    <section class="section flush-top">
+      <div class="container-xl">
+        <div class="section-heading center reveal">
+          <span class="eyebrow">Similar Vendors</span>
+          <h2>Others in this category.</h2>
+        </div>
+        <div class="vendor-grid" data-v-similar></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================================
+       BOOKING MODAL — step 1 of the wizard.
+       N.3: clicking Book does NOT create a bookings row. The client must
+       first choose or create the event the booking will belong to. Nothing
+       is written until the final confirm step, so bookings.event_id can
+       never be violated by an abandoned wizard.
+       ==================================================================== -->
+  <div class="eventora-modal" data-booking-modal role="dialog" aria-modal="true"
+       aria-labelledby="booking-modal-title">
+    <div class="modal-veil" data-modal-close></div>
+    <div class="modal-panel glass-card">
+      <button type="button" class="modal-close" data-modal-close aria-label="Close">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+
+      <p class="modal-eyebrow">Step 1 of 5</p>
+      <h3 id="booking-modal-title">Which event is this for?</h3>
+      <p class="modal-lede">You are booking <strong data-modal-service></strong>. Every Eventora
+         booking belongs to an event, so pick one or create a new one.</p>
+
+      <!-- FUTURE BACKEND: replace with the signed-in client's own events —
+           SELECT event_id, event_name, event_date FROM events
+           WHERE client_id = :client_id AND status = 'planning'
+           If the client has none, show only the "create new event" option. -->
+      <div class="event-options">
+        <button type="button" class="event-option">
+          <span class="event-icon"><i class="bi bi-calendar-event" aria-hidden="true"></i></span>
+          <span>
+            <span class="event-name">Sample Wedding <span class="demo-tag muted">Demo</span></span>
+            <span class="event-when">15 December 2026 · Hyderabad · 250 guests</span>
+          </span>
+        </button>
+        <button type="button" class="event-option">
+          <span class="event-icon"><i class="bi bi-calendar-event" aria-hidden="true"></i></span>
+          <span>
+            <span class="event-name">Sample Corporate Dinner <span class="demo-tag muted">Demo</span></span>
+            <span class="event-when">5 February 2027 · Hyderabad · 80 guests</span>
+          </span>
+        </button>
+      </div>
+
+      <div class="modal-divider">or</div>
+
+      <a href="../client/create-event.html" class="btn-eventora btn-primary btn-block">Create a New Event</a>
+
+      <ul class="modal-steps">
+        <li><span>2.</span> Confirm the service and booking date</li>
+        <li><span>3.</span> Review the total and platform commission</li>
+        <li><span>4.</span> Send the request — the vendor accepts or rejects</li>
+        <li><span>5.</span> Pay once the booking is accepted</li>
+      </ul>
+
+      <p class="booking-note">Demo mode — you are not signed in, so these are sample events and
+         nothing will be saved.</p>
+    </div>
+  </div>
+
+<footer class="eventora-footer">
+    <div class="container-xl">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="brand-mark">Eventora</span>
+          <p>AI-powered event management connecting clients and vendors across Hyderabad, Jamshoro, and beyond.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Platform</h5>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="vendors.html">Find Vendors</a></li>
+            <li><a href="../index.html#categories">Categories</a></li>
+            <li><a href="../index.html#ai-planner">AI Planner</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="vendors.html#become-a-vendor">Become a Vendor</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Account</h5>
+          <ul>
+            <li><a href="login.html">Log In</a></li>
+            <li><a href="register.html">Register</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Eventora. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Eventora on Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" aria-label="Eventora on Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" aria-label="Eventora on WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FUTURE BACKEND: this data block is the stand-in for
+       SELECT ... FROM vendor_profiles WHERE vendor_id = ?
+       PHP will render the page directly and this block disappears. It is
+       data, not executable code. -->
+  <script type="application/json" id="demo-vendor-data">
+{
+ "vendors": [
+  {
+   "vendor_id": 1,
+   "business_name": "Riverside Banquet Hall",
+   "category": "venue",
+   "category_label": "Venue",
+   "icon": "bi-building",
+   "city": "Hyderabad",
+   "address": "Main Road, Hyderabad",
+   "starting_price": 180000,
+   "avg_rating": 4.8,
+   "review_count": 42,
+   "capacity": 600,
+   "is_verified": true,
+   "description": "Riverside Banquet Hall is a venue business serving Hyderabad and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 42 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    78,
+    16,
+    4,
+    1,
+    1
+   ],
+   "services": [
+    {
+     "service_id": 11,
+     "title": "Main Hall Booking",
+     "description": "Air-conditioned main hall with stage, seating and parking for the full event day.",
+     "base_price": 180000,
+     "capacity": 600,
+     "is_available": true
+    },
+    {
+     "service_id": 12,
+     "title": "Garden Lawn Package",
+     "description": "Open-air lawn setup with lighting and covered seating \u2014 best for evening functions.",
+     "base_price": 135000,
+     "capacity": 360,
+     "is_available": true
+    },
+    {
+     "service_id": 13,
+     "title": "Full Venue with Catering",
+     "description": "Complete hall booking bundled with an in-house catering menu and service staff.",
+     "base_price": 288000,
+     "capacity": 600,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 5,
+     "text": "Good quality overall and fair pricing. A couple of small details were missed but they were sorted quickly on the day."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 5,
+     "text": "Very professional and easy to coordinate with. Guests commented on how well organised everything felt."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 4,
+     "text": "Delivered what was promised. Setup took a little longer than expected but the final result was worth it."
+    }
+   ]
+  },
+  {
+   "vendor_id": 2,
+   "business_name": "Golden Spoon Catering",
+   "category": "catering",
+   "category_label": "Catering",
+   "icon": "bi-egg-fried",
+   "city": "Hyderabad",
+   "address": "Main Road, Hyderabad",
+   "starting_price": 85000,
+   "avg_rating": 4.6,
+   "review_count": 58,
+   "capacity": 400,
+   "is_verified": true,
+   "description": "Golden Spoon Catering is a catering business serving Hyderabad and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 58 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    64,
+    24,
+    8,
+    3,
+    1
+   ],
+   "services": [
+    {
+     "service_id": 21,
+     "title": "Standard Menu",
+     "description": "Three-course menu with two mains, rice, bread and dessert. Serving staff included.",
+     "base_price": 85000,
+     "capacity": 400,
+     "is_available": true
+    },
+    {
+     "service_id": 22,
+     "title": "Premium Buffet",
+     "description": "Extended buffet with five mains, BBQ counter, salads and a dessert table.",
+     "base_price": 128000,
+     "capacity": 400,
+     "is_available": true
+    },
+    {
+     "service_id": 23,
+     "title": "Live Cooking Stations",
+     "description": "On-site live counters for BBQ, karahi and chaat, prepared in front of guests.",
+     "base_price": 170000,
+     "capacity": 280,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 5,
+     "text": "Very professional and easy to coordinate with. Guests commented on how well organised everything felt."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 5,
+     "text": "Delivered what was promised. Setup took a little longer than expected but the final result was worth it."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 4,
+     "text": "Responsive to questions before the event and flexible when we changed the guest count late."
+    }
+   ]
+  },
+  {
+   "vendor_id": 3,
+   "business_name": "Lens & Light Studio",
+   "category": "photography",
+   "category_label": "Photography",
+   "icon": "bi-camera",
+   "city": "Hyderabad",
+   "address": "Main Road, Hyderabad",
+   "starting_price": 65000,
+   "avg_rating": 4.9,
+   "review_count": 31,
+   "capacity": 0,
+   "is_verified": true,
+   "description": "Lens & Light Studio is a photography business serving Hyderabad and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 31 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    78,
+    16,
+    4,
+    1,
+    1
+   ],
+   "services": [
+    {
+     "service_id": 31,
+     "title": "Half-Day Coverage",
+     "description": "Four hours of coverage, one photographer, edited digital gallery within two weeks.",
+     "base_price": 65000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 32,
+     "title": "Full-Day Coverage",
+     "description": "Full event day, two photographers, edited gallery plus a printed album.",
+     "base_price": 110000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 33,
+     "title": "Cinematic Film Package",
+     "description": "Photography plus a cinematic highlights film and a full-length ceremony edit.",
+     "base_price": 156000,
+     "capacity": 0,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 5,
+     "text": "Delivered what was promised. Setup took a little longer than expected but the final result was worth it."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 5,
+     "text": "Responsive to questions before the event and flexible when we changed the guest count late."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 4,
+     "text": "Solid experience from booking to delivery. Would consider them again for a future event."
+    }
+   ]
+  },
+  {
+   "vendor_id": 4,
+   "business_name": "Bloom Decor House",
+   "category": "decoration",
+   "category_label": "Decoration",
+   "icon": "bi-flower1",
+   "city": "Hyderabad",
+   "address": "Main Road, Hyderabad",
+   "starting_price": 45000,
+   "avg_rating": 4.4,
+   "review_count": 27,
+   "capacity": 0,
+   "is_verified": true,
+   "description": "Bloom Decor House is a decoration business serving Hyderabad and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 27 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    64,
+    24,
+    8,
+    3,
+    1
+   ],
+   "services": [
+    {
+     "service_id": 41,
+     "title": "Stage & Backdrop",
+     "description": "Custom stage design, backdrop, seating and floral arrangement for the main setup.",
+     "base_price": 45000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 42,
+     "title": "Floral Package",
+     "description": "Fresh floral arrangements for stage, entrance, walkway and guest tables.",
+     "base_price": 58000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 43,
+     "title": "Full Venue Styling",
+     "description": "Complete styling \u2014 entrance, stage, table settings, lighting and walkway decor.",
+     "base_price": 86000,
+     "capacity": 0,
+     "is_available": false
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Responsive to questions before the event and flexible when we changed the guest count late."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Solid experience from booking to delivery. Would consider them again for a future event."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Everything was arranged exactly as discussed and the team arrived well before time. Communication was clear throughout."
+    }
+   ]
+  },
+  {
+   "vendor_id": 5,
+   "business_name": "Sound Circle Entertainment",
+   "category": "dj",
+   "category_label": "DJ",
+   "icon": "bi-music-note-beamed",
+   "city": "Hyderabad",
+   "address": "Main Road, Hyderabad",
+   "starting_price": 30000,
+   "avg_rating": 4.2,
+   "review_count": 19,
+   "capacity": 0,
+   "is_verified": false,
+   "description": "Sound Circle Entertainment is a dj business serving Hyderabad and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 19 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    52,
+    30,
+    12,
+    4,
+    2
+   ],
+   "services": [
+    {
+     "service_id": 51,
+     "title": "Sound System & DJ",
+     "description": "Four hours of DJ services with a full sound system and wireless microphones.",
+     "base_price": 30000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 52,
+     "title": "DJ with Lighting & MC",
+     "description": "Extended DJ set with stage lighting, effects and an event MC for the evening.",
+     "base_price": 54000,
+     "capacity": 0,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Solid experience from booking to delivery. Would consider them again for a future event."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Everything was arranged exactly as discussed and the team arrived well before time. Communication was clear throughout."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Good quality overall and fair pricing. A couple of small details were missed but they were sorted quickly on the day."
+    }
+   ]
+  },
+  {
+   "vendor_id": 6,
+   "business_name": "Henna Atelier",
+   "category": "mehndi",
+   "category_label": "Mehndi",
+   "icon": "bi-brush",
+   "city": "Hyderabad",
+   "address": "Main Road, Hyderabad",
+   "starting_price": 18000,
+   "avg_rating": 4.7,
+   "review_count": 36,
+   "capacity": 0,
+   "is_verified": true,
+   "description": "Henna Atelier is a mehndi business serving Hyderabad and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 36 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    78,
+    16,
+    4,
+    1,
+    1
+   ],
+   "services": [
+    {
+     "service_id": 61,
+     "title": "Bridal Mehndi",
+     "description": "Full bridal mehndi for hands and feet with a detailed traditional design.",
+     "base_price": 18000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 62,
+     "title": "Family Package",
+     "description": "Bridal mehndi plus simpler designs for up to ten family members.",
+     "base_price": 29000,
+     "capacity": 0,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 5,
+     "text": "Everything was arranged exactly as discussed and the team arrived well before time. Communication was clear throughout."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 5,
+     "text": "Good quality overall and fair pricing. A couple of small details were missed but they were sorted quickly on the day."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 4,
+     "text": "Very professional and easy to coordinate with. Guests commented on how well organised everything felt."
+    }
+   ]
+  },
+  {
+   "vendor_id": 7,
+   "business_name": "Milestone Event Planners",
+   "category": "event-planner",
+   "category_label": "Event Planner",
+   "icon": "bi-clipboard2-check",
+   "city": "Hyderabad",
+   "address": "Main Road, Hyderabad",
+   "starting_price": 120000,
+   "avg_rating": 4.5,
+   "review_count": 23,
+   "capacity": 0,
+   "is_verified": true,
+   "description": "Milestone Event Planners is a event planner business serving Hyderabad and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 23 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    64,
+    24,
+    8,
+    3,
+    1
+   ],
+   "services": [
+    {
+     "service_id": 71,
+     "title": "Day-of Coordination",
+     "description": "On-site coordination for the event day \u2014 vendor management and timeline control.",
+     "base_price": 120000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 72,
+     "title": "Full Event Management",
+     "description": "End-to-end planning from vendor selection and budgeting through to the event day.",
+     "base_price": 264000,
+     "capacity": 0,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Good quality overall and fair pricing. A couple of small details were missed but they were sorted quickly on the day."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Very professional and easy to coordinate with. Guests commented on how well organised everything felt."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Delivered what was promised. Setup took a little longer than expected but the final result was worth it."
+    }
+   ]
+  },
+  {
+   "vendor_id": 8,
+   "business_name": "Indus View Marquee",
+   "category": "venue",
+   "category_label": "Venue",
+   "icon": "bi-building",
+   "city": "Jamshoro",
+   "address": "Main Road, Jamshoro",
+   "starting_price": 140000,
+   "avg_rating": 4.3,
+   "review_count": 16,
+   "capacity": 450,
+   "is_verified": true,
+   "description": "Indus View Marquee is a venue business serving Jamshoro and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 16 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    52,
+    30,
+    12,
+    4,
+    2
+   ],
+   "services": [
+    {
+     "service_id": 81,
+     "title": "Main Hall Booking",
+     "description": "Air-conditioned main hall with stage, seating and parking for the full event day.",
+     "base_price": 140000,
+     "capacity": 450,
+     "is_available": true
+    },
+    {
+     "service_id": 82,
+     "title": "Garden Lawn Package",
+     "description": "Open-air lawn setup with lighting and covered seating \u2014 best for evening functions.",
+     "base_price": 105000,
+     "capacity": 270,
+     "is_available": true
+    },
+    {
+     "service_id": 83,
+     "title": "Full Venue with Catering",
+     "description": "Complete hall booking bundled with an in-house catering menu and service staff.",
+     "base_price": 224000,
+     "capacity": 450,
+     "is_available": false
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Very professional and easy to coordinate with. Guests commented on how well organised everything felt."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Delivered what was promised. Setup took a little longer than expected but the final result was worth it."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Responsive to questions before the event and flexible when we changed the guest count late."
+    }
+   ]
+  },
+  {
+   "vendor_id": 9,
+   "business_name": "Campus Caterers",
+   "category": "catering",
+   "category_label": "Catering",
+   "icon": "bi-egg-fried",
+   "city": "Jamshoro",
+   "address": "Main Road, Jamshoro",
+   "starting_price": 52000,
+   "avg_rating": 4.1,
+   "review_count": 21,
+   "capacity": 250,
+   "is_verified": false,
+   "description": "Campus Caterers is a catering business serving Jamshoro and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 21 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    52,
+    30,
+    12,
+    4,
+    2
+   ],
+   "services": [
+    {
+     "service_id": 91,
+     "title": "Standard Menu",
+     "description": "Three-course menu with two mains, rice, bread and dessert. Serving staff included.",
+     "base_price": 52000,
+     "capacity": 250,
+     "is_available": true
+    },
+    {
+     "service_id": 92,
+     "title": "Premium Buffet",
+     "description": "Extended buffet with five mains, BBQ counter, salads and a dessert table.",
+     "base_price": 78000,
+     "capacity": 250,
+     "is_available": true
+    },
+    {
+     "service_id": 93,
+     "title": "Live Cooking Stations",
+     "description": "On-site live counters for BBQ, karahi and chaat, prepared in front of guests.",
+     "base_price": 104000,
+     "capacity": 175,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Delivered what was promised. Setup took a little longer than expected but the final result was worth it."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Responsive to questions before the event and flexible when we changed the guest count late."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Solid experience from booking to delivery. Would consider them again for a future event."
+    }
+   ]
+  },
+  {
+   "vendor_id": 10,
+   "business_name": "Frame Story Photography",
+   "category": "photography",
+   "category_label": "Photography",
+   "icon": "bi-camera",
+   "city": "Jamshoro",
+   "address": "Main Road, Jamshoro",
+   "starting_price": 40000,
+   "avg_rating": 4.6,
+   "review_count": 14,
+   "capacity": 0,
+   "is_verified": true,
+   "description": "Frame Story Photography is a photography business serving Jamshoro and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 14 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    64,
+    24,
+    8,
+    3,
+    1
+   ],
+   "services": [
+    {
+     "service_id": 101,
+     "title": "Half-Day Coverage",
+     "description": "Four hours of coverage, one photographer, edited digital gallery within two weeks.",
+     "base_price": 40000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 102,
+     "title": "Full-Day Coverage",
+     "description": "Full event day, two photographers, edited gallery plus a printed album.",
+     "base_price": 68000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 103,
+     "title": "Cinematic Film Package",
+     "description": "Photography plus a cinematic highlights film and a full-length ceremony edit.",
+     "base_price": 96000,
+     "capacity": 0,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 5,
+     "text": "Responsive to questions before the event and flexible when we changed the guest count late."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 5,
+     "text": "Solid experience from booking to delivery. Would consider them again for a future event."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 4,
+     "text": "Everything was arranged exactly as discussed and the team arrived well before time. Communication was clear throughout."
+    }
+   ]
+  },
+  {
+   "vendor_id": 11,
+   "business_name": "Petal & Drape",
+   "category": "decoration",
+   "category_label": "Decoration",
+   "icon": "bi-flower1",
+   "city": "Jamshoro",
+   "address": "Main Road, Jamshoro",
+   "starting_price": 36000,
+   "avg_rating": 3.9,
+   "review_count": 11,
+   "capacity": 0,
+   "is_verified": false,
+   "description": "Petal & Drape is a decoration business serving Jamshoro and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 11 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    42,
+    32,
+    17,
+    6,
+    3
+   ],
+   "services": [
+    {
+     "service_id": 111,
+     "title": "Stage & Backdrop",
+     "description": "Custom stage design, backdrop, seating and floral arrangement for the main setup.",
+     "base_price": 36000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 112,
+     "title": "Floral Package",
+     "description": "Fresh floral arrangements for stage, entrance, walkway and guest tables.",
+     "base_price": 47000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 113,
+     "title": "Full Venue Styling",
+     "description": "Complete styling \u2014 entrance, stage, table settings, lighting and walkway decor.",
+     "base_price": 68000,
+     "capacity": 0,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Solid experience from booking to delivery. Would consider them again for a future event."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Everything was arranged exactly as discussed and the team arrived well before time. Communication was clear throughout."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Good quality overall and fair pricing. A couple of small details were missed but they were sorted quickly on the day."
+    }
+   ]
+  },
+  {
+   "vendor_id": 12,
+   "business_name": "Northern Star Events",
+   "category": "event-planner",
+   "category_label": "Event Planner",
+   "icon": "bi-clipboard2-check",
+   "city": "Sukkur",
+   "address": "Main Road, Sukkur",
+   "starting_price": 95000,
+   "avg_rating": 4.4,
+   "review_count": 18,
+   "capacity": 0,
+   "is_verified": true,
+   "description": "Northern Star Events is a event planner business serving Sukkur and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 18 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    64,
+    24,
+    8,
+    3,
+    1
+   ],
+   "services": [
+    {
+     "service_id": 121,
+     "title": "Day-of Coordination",
+     "description": "On-site coordination for the event day \u2014 vendor management and timeline control.",
+     "base_price": 95000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 122,
+     "title": "Full Event Management",
+     "description": "End-to-end planning from vendor selection and budgeting through to the event day.",
+     "base_price": 209000,
+     "capacity": 0,
+     "is_available": false
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Everything was arranged exactly as discussed and the team arrived well before time. Communication was clear throughout."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Good quality overall and fair pricing. A couple of small details were missed but they were sorted quickly on the day."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Very professional and easy to coordinate with. Guests commented on how well organised everything felt."
+    }
+   ]
+  },
+  {
+   "vendor_id": 13,
+   "business_name": "Royal Court Banquet",
+   "category": "venue",
+   "category_label": "Venue",
+   "icon": "bi-building",
+   "city": "Sukkur",
+   "address": "Main Road, Sukkur",
+   "starting_price": 160000,
+   "avg_rating": 4.7,
+   "review_count": 29,
+   "capacity": 700,
+   "is_verified": true,
+   "description": "Royal Court Banquet is a venue business serving Sukkur and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 29 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    78,
+    16,
+    4,
+    1,
+    1
+   ],
+   "services": [
+    {
+     "service_id": 131,
+     "title": "Main Hall Booking",
+     "description": "Air-conditioned main hall with stage, seating and parking for the full event day.",
+     "base_price": 160000,
+     "capacity": 700,
+     "is_available": true
+    },
+    {
+     "service_id": 132,
+     "title": "Garden Lawn Package",
+     "description": "Open-air lawn setup with lighting and covered seating \u2014 best for evening functions.",
+     "base_price": 120000,
+     "capacity": 420,
+     "is_available": true
+    },
+    {
+     "service_id": 133,
+     "title": "Full Venue with Catering",
+     "description": "Complete hall booking bundled with an in-house catering menu and service staff.",
+     "base_price": 256000,
+     "capacity": 700,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 5,
+     "text": "Good quality overall and fair pricing. A couple of small details were missed but they were sorted quickly on the day."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 5,
+     "text": "Very professional and easy to coordinate with. Guests commented on how well organised everything felt."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 4,
+     "text": "Delivered what was promised. Setup took a little longer than expected but the final result was worth it."
+    }
+   ]
+  },
+  {
+   "vendor_id": 14,
+   "business_name": "Spice Route Catering",
+   "category": "catering",
+   "category_label": "Catering",
+   "icon": "bi-egg-fried",
+   "city": "Sukkur",
+   "address": "Main Road, Sukkur",
+   "starting_price": 70000,
+   "avg_rating": 4.2,
+   "review_count": 24,
+   "capacity": 350,
+   "is_verified": true,
+   "description": "Spice Route Catering is a catering business serving Sukkur and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 24 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    52,
+    30,
+    12,
+    4,
+    2
+   ],
+   "services": [
+    {
+     "service_id": 141,
+     "title": "Standard Menu",
+     "description": "Three-course menu with two mains, rice, bread and dessert. Serving staff included.",
+     "base_price": 70000,
+     "capacity": 350,
+     "is_available": true
+    },
+    {
+     "service_id": 142,
+     "title": "Premium Buffet",
+     "description": "Extended buffet with five mains, BBQ counter, salads and a dessert table.",
+     "base_price": 105000,
+     "capacity": 350,
+     "is_available": true
+    },
+    {
+     "service_id": 143,
+     "title": "Live Cooking Stations",
+     "description": "On-site live counters for BBQ, karahi and chaat, prepared in front of guests.",
+     "base_price": 140000,
+     "capacity": 244,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Very professional and easy to coordinate with. Guests commented on how well organised everything felt."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Delivered what was promised. Setup took a little longer than expected but the final result was worth it."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Responsive to questions before the event and flexible when we changed the guest count late."
+    }
+   ]
+  },
+  {
+   "vendor_id": 15,
+   "business_name": "Rhythm & Beats DJ",
+   "category": "dj",
+   "category_label": "DJ",
+   "icon": "bi-music-note-beamed",
+   "city": "Larkana",
+   "address": "Main Road, Larkana",
+   "starting_price": 26000,
+   "avg_rating": 4.0,
+   "review_count": 9,
+   "capacity": 0,
+   "is_verified": false,
+   "description": "Rhythm & Beats DJ is a dj business serving Larkana and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 9 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    42,
+    32,
+    17,
+    6,
+    3
+   ],
+   "services": [
+    {
+     "service_id": 151,
+     "title": "Sound System & DJ",
+     "description": "Four hours of DJ services with a full sound system and wireless microphones.",
+     "base_price": 26000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 152,
+     "title": "DJ with Lighting & MC",
+     "description": "Extended DJ set with stage lighting, effects and an event MC for the evening.",
+     "base_price": 47000,
+     "capacity": 0,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Delivered what was promised. Setup took a little longer than expected but the final result was worth it."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Responsive to questions before the event and flexible when we changed the guest count late."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Solid experience from booking to delivery. Would consider them again for a future event."
+    }
+   ]
+  },
+  {
+   "vendor_id": 16,
+   "business_name": "Heritage Hall Larkana",
+   "category": "venue",
+   "category_label": "Venue",
+   "icon": "bi-building",
+   "city": "Larkana",
+   "address": "Main Road, Larkana",
+   "starting_price": 110000,
+   "avg_rating": 4.1,
+   "review_count": 13,
+   "capacity": 380,
+   "is_verified": true,
+   "description": "Heritage Hall Larkana is a venue business serving Larkana and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 13 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    52,
+    30,
+    12,
+    4,
+    2
+   ],
+   "services": [
+    {
+     "service_id": 161,
+     "title": "Main Hall Booking",
+     "description": "Air-conditioned main hall with stage, seating and parking for the full event day.",
+     "base_price": 110000,
+     "capacity": 380,
+     "is_available": true
+    },
+    {
+     "service_id": 162,
+     "title": "Garden Lawn Package",
+     "description": "Open-air lawn setup with lighting and covered seating \u2014 best for evening functions.",
+     "base_price": 82000,
+     "capacity": 228,
+     "is_available": true
+    },
+    {
+     "service_id": 163,
+     "title": "Full Venue with Catering",
+     "description": "Complete hall booking bundled with an in-house catering menu and service staff.",
+     "base_price": 176000,
+     "capacity": 380,
+     "is_available": false
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Responsive to questions before the event and flexible when we changed the guest count late."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Solid experience from booking to delivery. Would consider them again for a future event."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Everything was arranged exactly as discussed and the team arrived well before time. Communication was clear throughout."
+    }
+   ]
+  },
+  {
+   "vendor_id": 17,
+   "business_name": "Bridal Henna Collective",
+   "category": "mehndi",
+   "category_label": "Mehndi",
+   "icon": "bi-brush",
+   "city": "Larkana",
+   "address": "Main Road, Larkana",
+   "starting_price": 15000,
+   "avg_rating": 4.5,
+   "review_count": 17,
+   "capacity": 0,
+   "is_verified": true,
+   "description": "Bridal Henna Collective is a mehndi business serving Larkana and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 17 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    64,
+    24,
+    8,
+    3,
+    1
+   ],
+   "services": [
+    {
+     "service_id": 171,
+     "title": "Bridal Mehndi",
+     "description": "Full bridal mehndi for hands and feet with a detailed traditional design.",
+     "base_price": 15000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 172,
+     "title": "Family Package",
+     "description": "Bridal mehndi plus simpler designs for up to ten family members.",
+     "base_price": 24000,
+     "capacity": 0,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Solid experience from booking to delivery. Would consider them again for a future event."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Everything was arranged exactly as discussed and the team arrived well before time. Communication was clear throughout."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Good quality overall and fair pricing. A couple of small details were missed but they were sorted quickly on the day."
+    }
+   ]
+  },
+  {
+   "vendor_id": 18,
+   "business_name": "Desert Rose Decor",
+   "category": "decoration",
+   "category_label": "Decoration",
+   "icon": "bi-flower1",
+   "city": "Mirpurkhas",
+   "address": "Main Road, Mirpurkhas",
+   "starting_price": 33000,
+   "avg_rating": 4.3,
+   "review_count": 12,
+   "capacity": 0,
+   "is_verified": false,
+   "description": "Desert Rose Decor is a decoration business serving Mirpurkhas and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 12 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    52,
+    30,
+    12,
+    4,
+    2
+   ],
+   "services": [
+    {
+     "service_id": 181,
+     "title": "Stage & Backdrop",
+     "description": "Custom stage design, backdrop, seating and floral arrangement for the main setup.",
+     "base_price": 33000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 182,
+     "title": "Floral Package",
+     "description": "Fresh floral arrangements for stage, entrance, walkway and guest tables.",
+     "base_price": 43000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 183,
+     "title": "Full Venue Styling",
+     "description": "Complete styling \u2014 entrance, stage, table settings, lighting and walkway decor.",
+     "base_price": 63000,
+     "capacity": 0,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Everything was arranged exactly as discussed and the team arrived well before time. Communication was clear throughout."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Good quality overall and fair pricing. A couple of small details were missed but they were sorted quickly on the day."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Very professional and easy to coordinate with. Guests commented on how well organised everything felt."
+    }
+   ]
+  },
+  {
+   "vendor_id": 19,
+   "business_name": "Sunrise Photography Co.",
+   "category": "photography",
+   "category_label": "Photography",
+   "icon": "bi-camera",
+   "city": "Mirpurkhas",
+   "address": "Main Road, Mirpurkhas",
+   "starting_price": 38000,
+   "avg_rating": 4.0,
+   "review_count": 8,
+   "capacity": 0,
+   "is_verified": false,
+   "description": "Sunrise Photography Co. is a photography business serving Mirpurkhas and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 8 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    42,
+    32,
+    17,
+    6,
+    3
+   ],
+   "services": [
+    {
+     "service_id": 191,
+     "title": "Half-Day Coverage",
+     "description": "Four hours of coverage, one photographer, edited digital gallery within two weeks.",
+     "base_price": 38000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 192,
+     "title": "Full-Day Coverage",
+     "description": "Full event day, two photographers, edited gallery plus a printed album.",
+     "base_price": 65000,
+     "capacity": 0,
+     "is_available": true
+    },
+    {
+     "service_id": 193,
+     "title": "Cinematic Film Package",
+     "description": "Photography plus a cinematic highlights film and a full-length ceremony edit.",
+     "base_price": 91000,
+     "capacity": 0,
+     "is_available": true
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Good quality overall and fair pricing. A couple of small details were missed but they were sorted quickly on the day."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Very professional and easy to coordinate with. Guests commented on how well organised everything felt."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Delivered what was promised. Setup took a little longer than expected but the final result was worth it."
+    }
+   ]
+  },
+  {
+   "vendor_id": 20,
+   "business_name": "Grand Union Caterers",
+   "category": "catering",
+   "category_label": "Catering",
+   "icon": "bi-egg-fried",
+   "city": "Mirpurkhas",
+   "address": "Main Road, Mirpurkhas",
+   "starting_price": 60000,
+   "avg_rating": 4.4,
+   "review_count": 20,
+   "capacity": 300,
+   "is_verified": true,
+   "description": "Grand Union Caterers is a catering business serving Mirpurkhas and the surrounding area. This is a demo profile created to build and test the Eventora marketplace \u2014 the description, pricing and reviews below are sample content, not a real business listing.",
+   "review_summary": "Across 20 sample reviews, clients most often mention punctuality, clear communication and value for money. Setup time is the most common criticism.",
+   "rating_breakdown": [
+    64,
+    24,
+    8,
+    3,
+    1
+   ],
+   "services": [
+    {
+     "service_id": 201,
+     "title": "Standard Menu",
+     "description": "Three-course menu with two mains, rice, bread and dessert. Serving staff included.",
+     "base_price": 60000,
+     "capacity": 300,
+     "is_available": true
+    },
+    {
+     "service_id": 202,
+     "title": "Premium Buffet",
+     "description": "Extended buffet with five mains, BBQ counter, salads and a dessert table.",
+     "base_price": 90000,
+     "capacity": 300,
+     "is_available": true
+    },
+    {
+     "service_id": 203,
+     "title": "Live Cooking Stations",
+     "description": "On-site live counters for BBQ, karahi and chaat, prepared in front of guests.",
+     "base_price": 120000,
+     "capacity": 210,
+     "is_available": false
+    }
+   ],
+   "reviews": [
+    {
+     "who": "Sample client",
+     "when": "3 weeks ago",
+     "rating": 4,
+     "text": "Very professional and easy to coordinate with. Guests commented on how well organised everything felt."
+    },
+    {
+     "who": "Sample client",
+     "when": "2 months ago",
+     "rating": 4,
+     "text": "Delivered what was promised. Setup took a little longer than expected but the final result was worth it."
+    },
+    {
+     "who": "Sample client",
+     "when": "4 months ago",
+     "rating": 3,
+     "text": "Responsive to questions before the event and flexible when we changed the guest count late."
+    }
+   ]
+  }
+ ]
+}
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>
